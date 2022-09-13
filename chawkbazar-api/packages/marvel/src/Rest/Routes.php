@@ -3,8 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 use Marvel\Http\Controllers\AddressController;
+use Marvel\Http\Controllers\ApprovalTokenController;
 use Marvel\Http\Controllers\AttributeController;
 use Marvel\Http\Controllers\AttributeValueController;
+use Marvel\Http\Controllers\CompanyController;
+use Marvel\Http\Controllers\DNIDocumentController;
+use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\ProductController;
 use Marvel\Http\Controllers\SettingsController;
 use Marvel\Http\Controllers\UserController;
@@ -137,6 +141,19 @@ Route::group(
         Route::apiResource('withdraws', WithdrawController::class, [
             'only' => ['store', 'index', 'show']
         ]);
+        Route::apiResource('dni-document', DNIDocumentController::class, [
+            'only' => ['index','show','store', 'update', 'destroy']
+        ]);
+        Route::apiResource('legal-representative', LegalRepresentativeController::class, [
+            'only' => ['index','show','store', 'update', 'destroy']
+        ]);
+        Route::apiResource('company', CompanyController::class, [
+            'only' => ['index','show','store', 'update', 'destroy']
+        ]);
+        Route::apiResource('approval-tokens', ApprovalTokenController::class, [
+            'only' => ['index','show','store', 'update', 'destroy']
+        ]);
+        Route::get('company/{id}/approve','Marvel\Http\Controllers\CompanyController@approveWithToken');
         Route::post('staffs', 'Marvel\Http\Controllers\ShopController@addStaff');
         Route::delete('staffs/{id}', 'Marvel\Http\Controllers\ShopController@deleteStaff');
         Route::get('staffs', 'Marvel\Http\Controllers\UserController@staffs');

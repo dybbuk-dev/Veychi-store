@@ -666,6 +666,34 @@ export declare type RegisterInput = {
   permission: Permission;
 };
 
+export declare type dni_documentInput = {
+  DNI:Scalars["String"];
+  DNI_document_path:Scalars["String"];
+}
+
+export declare type LegalRepresentativeInput = {
+  name:Scalars["String"];
+  phone:Scalars["String"];
+}
+
+export declare type CompanyInput = {
+  name:Scalars["String"];
+  line_of_business:Scalars["String"];
+  physical_address:Scalars["String"];
+  fiscal_address:Scalars["String"];
+  tax_country:Scalars["String"];
+  business_phone:Scalars["String"];
+  products_description:Scalars["String"];
+  user_id:Scalars["Int"];
+  legal_representative:LegalRepresentativeInput,
+  dni_document:dni_documentInput
+}
+
+export declare interface CompanyUpdate extends CompanyInput {
+  id:Scalars["Int"];
+
+};
+
 export type ChangePasswordInput = {
   oldPassword: Scalars["String"];
   newPassword: Scalars["String"];
