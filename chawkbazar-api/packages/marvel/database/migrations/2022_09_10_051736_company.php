@@ -25,8 +25,6 @@ class Company extends Migration
             $table->string('tax_country')->nullable();
             $table->string('business_phone')->nullable();
             $table->string('products_description')->nullable();
-            $table->boolean("isApproved")->default(false);
-            $table->bigInteger("approval_token_id")->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('user_id')
                 ->references('id')
@@ -37,9 +35,6 @@ class Company extends Migration
             $table->foreign('dni_document_id')
                 ->references('id')
                 ->on('dni_document');
-            $table->foreign('approval_token_id')
-                ->references('id')
-                ->on('approval_tokens');
         });
     }
 

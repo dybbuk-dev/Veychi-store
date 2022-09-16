@@ -100,4 +100,14 @@ class Shop extends Model
     {
         return $this->belongsToMany(Category::class, 'category_shop');
     }
+    public function approvalToken(): hasOne
+    {
+        return $this->hasOne(ApprovalTokens::class, 'id','approval_token_id');
+    }
+
+
+    public function country(): hasOne
+    {
+        return $this->hasOne(Countries::class, 'id','country_id');
+    }
 }

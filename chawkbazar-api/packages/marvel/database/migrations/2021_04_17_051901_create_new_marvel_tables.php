@@ -61,15 +61,24 @@ class CreateNewMarvelTables extends Migration
             $table->id();
             $table->unsignedBigInteger('owner_id');
             $table->foreign('owner_id')->references('id')->on('users');
+            $table->bigInteger("approval_token_id")->unsigned()->nullable();
+            $table->bigInteger("country_id")->unsigned()->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->json('cover_image')->nullable();
             $table->json('logo')->nullable();
+            $table->unsignedFloat('rating',3)->nullable();
             $table->boolean('is_active')->default(false);
             $table->json('address')->nullable();
             $table->json('settings')->nullable();
             $table->timestamps();
+            $table->foreign('approval_token_id')
+                ->references('id')
+                ->on('approval_tokens');
+            $table->foreign('country_id')
+                ->references('id')
+                ->on('countries');
         });
         Schema::create('balances', function (Blueprint $table) {
             $table->id();

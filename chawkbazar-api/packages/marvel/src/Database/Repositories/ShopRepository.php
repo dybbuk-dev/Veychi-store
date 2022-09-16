@@ -3,7 +3,7 @@
 
 namespace Marvel\Database\Repositories;
 
-use Illuminate\Support\Facades\Log;
+use Marvel\Database\Models\ApprovalTokens;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\Shop;
 use Marvel\Enums\Permission;
@@ -22,6 +22,7 @@ class ShopRepository extends BaseRepository
         'name'        => 'like',
         'is_active',
         'categories.slug',
+        'country_id'
     ];
 
     /**
@@ -32,9 +33,9 @@ class ShopRepository extends BaseRepository
         'description',
         'cover_image',
         'logo',
-        'is_active',
         'address',
         'settings',
+        'country_id'
     ];
 
 
@@ -108,5 +109,20 @@ class ShopRepository extends BaseRepository
             $balance['shop_id'] = $shop_id;
             Balance::create($balance);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function approveShop($request, $shop){
+        $approvalToken=ApprovalTokens::where('token',$request->token)->first();
+        if($approvalToken){
+            $shop->is_active=true;
+            $shop->approval_token_id=$approvalToken->id;
+            $shop->save();
+            return $shop;
+        }
+        throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
+
     }
 }

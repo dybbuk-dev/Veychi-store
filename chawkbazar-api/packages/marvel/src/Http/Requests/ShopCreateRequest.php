@@ -33,6 +33,7 @@ class ShopCreateRequest extends FormRequest
             'is_active'              => ['boolean'],
             'description'            => ['nullable', 'string'],
             'admin_commission_rate'  => ['nullable', 'numeric'],
+            'country_id'             =>['nullable','numeric'],
             'total_earnings'         => ['nullable', 'numeric'],
             'withdrawn_amount'       => ['nullable', 'numeric'],
             'current_balance'        => ['nullable', 'numeric'],

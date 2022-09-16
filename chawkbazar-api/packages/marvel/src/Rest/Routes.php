@@ -7,6 +7,8 @@ use Marvel\Http\Controllers\ApprovalTokenController;
 use Marvel\Http\Controllers\AttributeController;
 use Marvel\Http\Controllers\AttributeValueController;
 use Marvel\Http\Controllers\CompanyController;
+use Marvel\Http\Controllers\CountryController;
+use Marvel\Http\Controllers\CustomerReviewsController;
 use Marvel\Http\Controllers\DNIDocumentController;
 use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\ProductController;
@@ -87,13 +89,17 @@ Route::apiResource('settings', SettingsController::class, [
 
 
 Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], function () {
+    Route::post('products/review','Marvel\Http\Controllers\ProductController@addReview');
     Route::apiResource('orders', OrderController::class, [
         'only' => ['index', 'show', 'store']
     ]);
+
     Route::get('orders/tracking-number/{tracking_number}', 'Marvel\Http\Controllers\OrderController@findByTrackingNumber');
     Route::apiResource('attachments', AttachmentController::class, [
         'only' => ['store', 'update', 'destroy']
     ]);
+
+
     Route::post('orders/checkout/verify', 'Marvel\Http\Controllers\CheckoutController@verify');
     Route::get('me', 'Marvel\Http\Controllers\UserController@me');
     Route::put('users/{id}', 'Marvel\Http\Controllers\UserController@update');
@@ -131,7 +137,9 @@ Route::get('export-products/{shop_id}', 'Marvel\Http\Controllers\ProductControll
 Route::get('export-variation-options/{shop_id}', 'Marvel\Http\Controllers\ProductController@exportVariableOptions');
 Route::post('import-attributes', 'Marvel\Http\Controllers\AttributeController@importAttributes');
 Route::get('export-attributes/{shop_id}', 'Marvel\Http\Controllers\AttributeController@exportAttributes');
-
+Route::apiResource('dni-document', DNIDocumentController::class, [
+    'only' => ['store']
+]);
 Route::group(
     ['middleware' => ['permission:' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
@@ -142,7 +150,7 @@ Route::group(
             'only' => ['store', 'index', 'show']
         ]);
         Route::apiResource('dni-document', DNIDocumentController::class, [
-            'only' => ['index','show','store', 'update', 'destroy']
+            'only' => ['index','show', 'update', 'destroy']
         ]);
         Route::apiResource('legal-representative', LegalRepresentativeController::class, [
             'only' => ['index','show','store', 'update', 'destroy']
@@ -153,7 +161,10 @@ Route::group(
         Route::apiResource('approval-tokens', ApprovalTokenController::class, [
             'only' => ['index','show','store', 'update', 'destroy']
         ]);
-        Route::get('company/{id}/approve','Marvel\Http\Controllers\CompanyController@approveWithToken');
+        Route::apiResource('countries', CountryController::class, [
+            'only' => ['index','show']
+        ]);
+        Route::get('shop/{id}/approve','Marvel\Http\Controllers\ShopController@approveWithToken');
         Route::post('staffs', 'Marvel\Http\Controllers\ShopController@addStaff');
         Route::delete('staffs/{id}', 'Marvel\Http\Controllers\ShopController@deleteStaff');
         Route::get('staffs', 'Marvel\Http\Controllers\UserController@staffs');
@@ -161,7 +172,9 @@ Route::group(
     }
 );
 
-
+Route::apiResource('reviews', CustomerReviewsController::class, [
+    'only' => ['index','show']
+]);
 Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sanctum']], function () {
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
@@ -185,6 +198,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::apiResource('settings', SettingsController::class, [
         'only' => ['store']
     ]);
+
     Route::apiResource('users', UserController::class);
     Route::post('users/block-user', 'Marvel\Http\Controllers\UserController@banUser');
     Route::post('users/unblock-user', 'Marvel\Http\Controllers\UserController@activeUser');
@@ -193,4 +207,5 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::post('approve-shop', 'Marvel\Http\Controllers\ShopController@approveShop');
     Route::post('disapprove-shop', 'Marvel\Http\Controllers\ShopController@disApproveShop');
     Route::post('approve-withdraw', 'Marvel\Http\Controllers\WithdrawController@approveWithdraw');
+
 });

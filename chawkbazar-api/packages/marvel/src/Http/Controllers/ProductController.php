@@ -16,6 +16,7 @@ use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Type;
 use Marvel\Database\Models\VariationOption;
 use Marvel\Exceptions\MarvelException;
+use Marvel\Http\Requests\CustomerReviewProductRequest;
 use Marvel\Http\Requests\ProductCreateRequest;
 use Marvel\Http\Requests\ProductUpdateRequest;
 
@@ -38,7 +39,7 @@ class ProductController extends CoreController
     public function index(Request $request)
     {
         $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute'])->paginate($limit);
+        return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute','customerReviews'])->paginate($limit);
     }
 
     /**
@@ -97,6 +98,10 @@ class ProductController extends CoreController
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         }
+    }
+    public function addReview(CustomerReviewProductRequest $request){
+
+        return $this->repository->addReview($request);
     }
 
     /**

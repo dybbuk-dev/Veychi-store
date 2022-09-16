@@ -66,6 +66,10 @@ class ImportDemoData extends Command
         $address_sql = file_get_contents($address_path);
         DB::statement($address_sql);
 
+        $countries_path = public_path('sql/countries.sql');
+        $countries_sql = file_get_contents($countries_path);
+        DB::statement($countries_sql);
+
         $model_has_permissions_path = public_path('sql/model_has_permissions.sql');
         $model_has_permissions_sql = file_get_contents($model_has_permissions_path);
         DB::statement($model_has_permissions_sql);

@@ -3,6 +3,7 @@
 namespace Marvel\Database\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Marvel\Database\Models\ApprovalTokens;
@@ -85,6 +86,7 @@ class CompanyRepository extends BaseRepository
       try{
           DB::beginTransaction();
           $data=$request->only($this->dataArray);
+          $data['user_id']=Auth::id();
           $company->update($data);
           DB::commit();
 
@@ -95,17 +97,7 @@ class CompanyRepository extends BaseRepository
       }
     }
 
-    public function approveCompany($request,$company){
-        $approvalToken=ApprovalTokens::where('token',$request->token)->first();
-        if($approvalToken){
-            $company->isApproved=true;
-            $company->approval_token_id=$approvalToken->id;
-            $company->save();
-            return $company;
-        }
-        return $company;
 
-    }
     public function boot()
     {
         try {

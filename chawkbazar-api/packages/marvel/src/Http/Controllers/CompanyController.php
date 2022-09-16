@@ -52,11 +52,7 @@ class CompanyController extends CoreController
         return $this->repository->saveCompany($request);
     }
 
-    public function approveWithToken(Request $request,$id){
-        $company=$this->repository->findOrFail($id);
-        return $this->repository->approveCompany($request,$company);
 
-    }
 
     /**
      * Display the specified resource.

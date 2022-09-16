@@ -4,7 +4,9 @@
 namespace Marvel\Database\Repositories;
 
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Marvel\Database\Models\CustomerReviews;
 use Marvel\Database\Models\Product;
 use Marvel\Enums\ProductType;
 use Marvel\Exceptions\MarvelException;
@@ -96,7 +98,17 @@ class ProductRepository extends BaseRepository
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
         }
     }
-
+    public function addReview($request){
+        $review=CustomerReviews::create([
+            'comment'=>$request->comment,
+            'score'=>$request->score,
+            'user_id'=>Auth::id()
+        ]);
+        $product=$this->findOrFail($request->product_id);
+        $product->customerReviews()->attach($review->id);
+        $product->save();
+        return $this->with('customerReviews')->findOrFail($product->id);
+    }
     public function updateProduct($request, $id)
     {
         try {

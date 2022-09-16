@@ -4,6 +4,7 @@ namespace Marvel\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Marvel\Database\Repositories\CompanyRepository;
 use Marvel\Database\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
 use Marvel\Database\Models\User;
@@ -28,9 +29,10 @@ use Marvel\Exceptions\MarvelException;
 class UserController extends CoreController
 {
     public $repository;
-
-    public function __construct(UserRepository $repository)
+    public $companyRepository;
+    public function __construct(UserRepository $repository,CompanyRepository $companyRepository)
     {
+        $this->companyRepository=$companyRepository;
         $this->repository = $repository;
     }
 
@@ -141,16 +143,23 @@ class UserController extends CoreController
 
     public function register(UserCreateRequest $request)
     {
+
         $permissions = [Permission::CUSTOMER];
         if (isset($request->permission)) {
             $permissions[] = isset($request->permission->value) ? $request->permission->value : $request->permission;
         }
+
         $user = $this->repository->create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        if(in_array(Permission::STORE_OWNER,$permissions,true)){
+            $data=new Request($request->company);
+            $data->merge(['user_id'=>$user->id]);
+            $this->companyRepository->saveCompany($data);
+        }
         $user->givePermissionTo($permissions);
 
         return ["token" => $user->createToken('auth_token')->plainTextToken, "permissions" => $user->getPermissionNames()];

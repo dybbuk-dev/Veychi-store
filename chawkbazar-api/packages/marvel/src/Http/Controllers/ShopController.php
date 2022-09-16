@@ -2,9 +2,11 @@
 
 namespace Marvel\Http\Controllers;
 
+use Http\Client\Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Marvel\Database\Models\Balance;
@@ -42,7 +44,7 @@ class ShopController extends CoreController
 
     public function fetchShops(Request $request)
     {
-        return $this->repository->withCount(['orders', 'products'])->with(['owner.profile'])->where('id', '!=', null);
+        return $this->repository->withCount(['orders', 'products'])->with(['owner.profile','country'])->where('id', '!=', null);
     }
 
 
@@ -59,6 +61,16 @@ class ShopController extends CoreController
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         }
+    }
+
+    public function approveWithToken(Request $request,$id){
+            $shop=$this->repository->where([
+                ['id',"=",$id],
+                ['owner_id',"=",Auth::id()]
+            ])->firstOrFail();
+            return $this->repository->approveShop($request,$shop);
+
+
     }
 
     /**
@@ -143,6 +155,7 @@ class ShopController extends CoreController
         } catch (\Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
+
         $shop->is_active = true;
         $shop->save();
         $balance = Balance::firstOrNew(['shop_id' => $id]);

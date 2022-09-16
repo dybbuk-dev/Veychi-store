@@ -150,4 +150,8 @@ class Product extends Model
             ->where('orders.parent_id', '=', null)
             ->sum('order_quantity');
     }
+    public function customerReviews():BelongsToMany
+    {
+        return $this->belongsToMany(CustomerReviews::class,'product_has_customer_review','customer_review_id','product_id','id');
+    }
 }

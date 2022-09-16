@@ -34,6 +34,7 @@ class UserCreateRequest extends FormRequest
             'shop_id' => ['nullable', 'exists:Marvel\Database\Models\Shop,id'],
             'profile'  => ['array'],
             'address'  => ['array'],
+            'company'  => ['nullable','array']
             // 'shop'  => ['array'],
         ];
     }
