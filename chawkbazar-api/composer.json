@@ -19,10 +19,11 @@
         "laravel/framework": "^8.12",
         "laravel/socialite": "^5.2",
         "laravel/tinker": "^2.5",
+        "league/csv": "^9.8",
+        "marvel/shop": "dev-master",
         "messagebird/php-rest-api": "^2.0",
         "omnipay/common": "dev-master",
         "omnipay/stripe": "dev-master",
-        "marvel/shop": "dev-master",
         "twilio/sdk": "^6.25"
     },
     "require-dev": {

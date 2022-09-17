@@ -6,12 +6,21 @@ namespace Marvel\Database\Repositories;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use League\Csv\CannotInsertRecord;
 use Marvel\Database\Models\Shop;
 use Marvel\Enums\Permission;
 use Marvel\Exceptions\MarvelException;
 use Prettus\Repository\Contracts\CacheableInterface;
 use Prettus\Repository\Traits\CacheableRepository;
 use Prettus\Repository\Eloquent\BaseRepository as Repository;
+use Illuminate\Database\Eloquent\Collection;
+use League\Csv\Writer;
+use Illuminate\Support\Facades\Schema;
+use SplTempFileObject;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 abstract class BaseRepository extends Repository implements CacheableInterface
 {
@@ -203,5 +212,41 @@ abstract class BaseRepository extends Repository implements CacheableInterface
         }
 
         return $data;
+    }
+
+    /**
+     * @Input Collection
+     * @param Collection $modelCollection
+     * @param $tableName
+     * @throws CannotInsertRecord
+     */
+    function arrayToCsv(Collection $modelCollection, $tableName=null,$fieldList=null){
+        $csv = Writer::createFromFileObject(new SplTempFileObject());
+        $fields = $tableName ? Schema::getColumnListing($tableName):$fieldList;
+        $csv->insertOne($fields);
+        foreach ($modelCollection as $data){
+            $csv->insertOne($data->toArray());
+        }
+        $flush_threshold = 1000;
+        $content_callback = function () use ($csv, $flush_threshold) {
+            foreach ($csv->chunk(1024) as $offset => $chunk) {
+                echo $chunk;
+                if ($offset % $flush_threshold === 0) {
+                    flush();
+                }
+            }
+        };
+        $response = new StreamedResponse();
+        $response->headers->set('Content-Encoding', 'none');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        if($tableName===null)$tableName=Str::uuid();
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $tableName.'.csv'
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Description', 'File Transfer');
+        $response->setCallback($content_callback);
+        return $response->send();
     }
 }

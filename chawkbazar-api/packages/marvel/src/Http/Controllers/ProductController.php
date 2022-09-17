@@ -299,4 +299,8 @@ class ProductController extends CoreController
             return true;
         }
     }
+    public function exportAllProducts(){
+        $fields=['id','name','description','price','sku','quantity','in_stock','status','unit','slug'];
+        $this->repository->arrayToCsv($this->repository->all($fields),null,$fields);
+    }
 }

@@ -4,6 +4,7 @@ namespace Marvel\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use League\Csv\CannotInsertRecord;
 use Marvel\Database\Repositories\CompanyRepository;
 use Marvel\Database\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
@@ -480,5 +481,13 @@ class UserController extends CoreController
         } catch (\Exception $e) {
             return response()->json(['error' => 'Invalid gateway.'], 422);
         }
+    }
+
+    /**
+     * @throws CannotInsertRecord
+     */
+    public function exportUsersAndOrders(){
+        $fields=['name','email','status','customer_contact','total','tracking_number','amount'];
+        return $this->repository->arrayToCsv(User::join('orders','users.id',"=",'orders.customer_id')->get($fields),null,$fields);
     }
 }

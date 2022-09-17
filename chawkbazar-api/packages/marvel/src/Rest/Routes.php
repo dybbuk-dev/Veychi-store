@@ -176,6 +176,7 @@ Route::apiResource('reviews', CustomerReviewsController::class, [
     'only' => ['index','show']
 ]);
 Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sanctum']], function () {
+    Route::get('product/export','Marvel\Http\Controllers\ProductController@exportAllProducts');
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
     ]);
@@ -202,6 +203,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::apiResource('users', UserController::class);
     Route::post('users/block-user', 'Marvel\Http\Controllers\UserController@banUser');
     Route::post('users/unblock-user', 'Marvel\Http\Controllers\UserController@activeUser');
+    Route::get('users/export','Marvel\Http\Controllers\UserController@exportUsersAndOrders');
     Route::apiResource('taxes', TaxController::class);
     Route::apiResource('shippings', ShippingController::class);
     Route::post('approve-shop', 'Marvel\Http\Controllers\ShopController@approveShop');
@@ -209,3 +211,6 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::post('approve-withdraw', 'Marvel\Http\Controllers\WithdrawController@approveWithdraw');
 
 });
+//todo:delete
+Route::get('export/users','Marvel\Http\Controllers\UserController@exportUsersAndOrders');
+Route::get('export/products','Marvel\Http\Controllers\ProductController@exportAllProducts');
