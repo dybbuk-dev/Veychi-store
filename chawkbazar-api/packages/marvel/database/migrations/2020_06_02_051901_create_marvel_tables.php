@@ -94,7 +94,8 @@ class CreateMarvelTables extends Migration
             $table->id();
             $table->string('name');
             $table->integer('serial');
-            $table->string('color')->nullable();;
+            $table->boolean('requires_proof_voucher')->default(false);
+            $table->string('color')->nullable();
             $table->timestamps();
         });
 

@@ -44,9 +44,8 @@ class User extends Authenticatable
     protected static function boot()
     {
         parent::boot();
-        // Order by updated_at desc
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('orders.updated_at', 'desc');
+            $builder->orderBy('updated_at', 'desc');
         });
     }
 

@@ -71,6 +71,7 @@ Route::apiResource('order-status', OrderStatusController::class, [
     'only' => ['index', 'show']
 ]);
 
+
 Route::apiResource('attributes', AttributeController::class, [
     'only' => ['index', 'show']
 ]);
@@ -115,6 +116,16 @@ Route::get('popular-products', 'Marvel\Http\Controllers\AnalyticsController@popu
 Route::group(
     ['middleware' => ['permission:' . Permission::STAFF . '|' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
+        Route::get('orders/export/all',[OrderController::class,'allOrdersInStore']);
+        Route::apiResource('orders',OrderController::class,[
+            'only'=>[
+                'update',
+                'destroy'
+            ]
+        ]);
+        Route::put('orders',[OrderController::class,'update']);
+        Route::patch('orders',[OrderController::class,'update']);
+        Route::delete('orders',[OrderController::class,'destroy']);
         Route::get('analytics', 'Marvel\Http\Controllers\AnalyticsController@analytics');
         Route::apiResource('products', ProductController::class, [
             'only' => ['store', 'update', 'destroy']
@@ -125,9 +136,8 @@ Route::group(
         Route::apiResource('attribute-values', AttributeValueController::class, [
             'only' => ['store', 'update', 'destroy']
         ]);
-        Route::apiResource('orders', OrderController::class, [
-            'only' => ['update', 'destroy']
-        ]);
+
+
     }
 );
 
@@ -158,9 +168,7 @@ Route::group(
         Route::apiResource('company', CompanyController::class, [
             'only' => ['index','show','store', 'update', 'destroy']
         ]);
-        Route::apiResource('approval-tokens', ApprovalTokenController::class, [
-            'only' => ['index','show','store', 'update', 'destroy']
-        ]);
+
         Route::apiResource('countries', CountryController::class, [
             'only' => ['index','show']
         ]);
@@ -179,6 +187,9 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::get('product/export','Marvel\Http\Controllers\ProductController@exportAllProducts');
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
+    ]);
+    Route::apiResource('approval-tokens', ApprovalTokenController::class, [
+        'only' => ['index','show','store', 'update', 'destroy']
     ]);
     Route::apiResource('withdraws', WithdrawController::class, [
         'only' => ['update', 'destroy']
@@ -203,7 +214,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::apiResource('users', UserController::class);
     Route::post('users/block-user', 'Marvel\Http\Controllers\UserController@banUser');
     Route::post('users/unblock-user', 'Marvel\Http\Controllers\UserController@activeUser');
-    Route::get('users/export','Marvel\Http\Controllers\UserController@exportUsersAndOrders');
+    Route::get('users/export/all','Marvel\Http\Controllers\UserController@exportUsersAndOrders');
     Route::apiResource('taxes', TaxController::class);
     Route::apiResource('shippings', ShippingController::class);
     Route::post('approve-shop', 'Marvel\Http\Controllers\ShopController@approveShop');

@@ -488,6 +488,6 @@ class UserController extends CoreController
      */
     public function exportUsersAndOrders(){
         $fields=['name','email','status','customer_contact','total','tracking_number','amount'];
-        return $this->repository->arrayToCsv(User::join('orders','users.id',"=",'orders.customer_id')->get($fields),null,$fields);
+        return $this->repository->arrayToCsv(User::join('orders','users.id',"=",'orders.customer_id')->withoutGlobalScope('order')->get($fields),null,$fields);
     }
 }
