@@ -17,7 +17,6 @@ use Marvel\Events\OrderCreated;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\OrderCreateRequest;
 use Marvel\Http\Requests\OrderUpdateRequest;
-use Marvel\Database\Models\Shop;
 
 
 class OrderController extends CoreController
