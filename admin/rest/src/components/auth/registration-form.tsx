@@ -13,12 +13,30 @@ import Link from "@components/ui/link";
 import { allowedRoles, hasAccess, setAuthCredentials } from "@utils/auth-utils";
 import { Permission } from "@ts-types/generated";
 import { useRegisterMutation } from "@data/user/use-register.mutation";
+type dni_document = {
+	DNI:string,
+	DNI_document_path:string
+}
+
+type LegalRepresentative = {
+	name:string
+	phone:string
+}
 
 type FormValues = {
 	name: string;
 	email: string;
 	password: string;
 	permission: Permission;
+	physical_address:string,
+	fiscal_address:string,
+	tax_country:string,
+	business_phone:string,
+	products_description:string,
+	line_of_business:string,
+	user_id:number,
+	legal_representative:LegalRepresentative,
+	dni_document:dni_document
 };
 const registrationFormSchema = yup.object().shape({
 	name: yup.string().required("form:error-name-required"),
@@ -28,6 +46,14 @@ const registrationFormSchema = yup.object().shape({
 		.required("form:error-email-required"),
 	password: yup.string().required("form:error-password-required"),
 	permission: yup.string().default("store_owner").oneOf(["store_owner"]),
+	line_of_business:yup.string().required().max(191),
+	physical_address:yup.string().required().max(191),
+	fiscal_address:yup.string().required().max(191),
+	tax_country:yup.string().required().max(191),
+	business_phone:yup.string().required().max(191),
+	products_description:yup.string().required().max(191),
+	legal_representative:yup.object().required(),
+	dni_document:yup.object().required()
 });
 const RegistrationForm = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -47,12 +73,27 @@ const RegistrationForm = () => {
 	const router = useRouter();
 	const { t } = useTranslation();
 
-	async function onSubmit({ name, email, password, permission }: FormValues) {
+	async function onSubmit({ name, email, password, permission,line_of_business,
+								physical_address,
+								fiscal_address,
+								tax_country,
+								business_phone,
+								products_description,
+								legal_representative,
+								dni_document }: FormValues) {
 		registerUser(
 			{
 				variables: {
 					name,
 					email,
+					line_of_business,
+					physical_address,
+					fiscal_address,
+					tax_country,
+					business_phone,
+					products_description,
+					legal_representative,
+					dni_document,
 					password,
 					permission,
 				},
@@ -86,28 +127,87 @@ const RegistrationForm = () => {
 	return (
 		<>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate>
-				<Input
-					label={t("form:input-label-name")}
-					{...register("name")}
-					variant="outline"
-					className="mb-4"
-					error={t(errors?.name?.message!)}
-				/>
-				<Input
-					label={t("form:input-label-email")}
-					{...register("email")}
-					type="email"
-					variant="outline"
-					className="mb-4"
-					error={t(errors?.email?.message!)}
-				/>
-				<PasswordInput
-					label={t("form:input-label-password")}
-					{...register("password")}
-					error={t(errors?.password?.message!)}
-					variant="outline"
-					className="mb-4"
-				/>
+				<div className="flex justify-between pl-10 pr-10 gap-10">
+					<div className="w-screen">
+						<Input
+							label={t("form:input-label-name")}
+							{...register("name")}
+							variant="outline"
+							className="mb-4"
+							error={t(errors?.name?.message!)}
+						/>
+						<Input
+							label={t("form:input-label-email")}
+							{...register("email")}
+							type="email"
+							variant="outline"
+							className="mb-4"
+							error={t(errors?.email?.message!)}
+						/>
+						<Input
+							label={t("form:input-label-line-of-business")}
+							{...register("line_of_business")}
+							type="text"
+							variant="outline"
+							className="mb-4"
+							error={t(errors.line_of_business?.message!)}
+						/>
+						<Input
+							label={t("form:input-label-physical-address")}
+							{...register("physical_address")}
+							type="text"
+							variant="outline"
+							className="mb-4"
+							error={t(errors.physical_address?.message!)}
+						/>
+					</div>
+					<div className="w-screen">
+
+						<Input
+							label={t("form:input-label-fiscal-address")}
+							{...register("fiscal_address")}
+							type="text"
+							variant="outline"
+							className="mb-4"
+							error={t(errors.fiscal_address?.message!)}
+						/>
+						<Input
+							label={t("form:input-label-tax-country")}
+							{...register("tax_country")}
+							type="text"
+							variant="outline"
+							className="mb-4"
+							error={t(errors.tax_country?.message!)}
+						/>
+						<Input
+							label={t("form:input-label-business-phone")}
+							{...register("business_phone")}
+							type="text"
+							variant="outline"
+							className="mb-4"
+							error={t(errors.business_phone?.message!)}
+						/>
+					</div>
+					<div className="w-screen">
+						<Input
+							label={t("form:input-label-products-description")}
+							{...register("products_description")}
+							type="text"
+							variant="outline"
+							className="mb-4"
+							error={t(errors.products_description?.message!)}
+						/>
+						<PasswordInput
+							label={t("form:input-label-password")}
+							{...register("password")}
+							error={t(errors?.password?.message!)}
+							variant="outline"
+							className="mb-4"
+						/>
+					</div>
+				</div>
+
+
 				<Button className="w-full" loading={loading} disabled={loading}>
 					{t("form:text-register")}
 				</Button>

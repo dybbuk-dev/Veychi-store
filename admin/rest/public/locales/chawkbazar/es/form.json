@@ -1,4 +1,5 @@
 {
+
   "form-title-create-product": "Crear nuevo producto",
   "form-title-edit-product": "Editar producto",
   "form-title-product-type": "tipo de producto",
@@ -43,6 +44,7 @@
   "item-description-add": "Agregar",
   "product-description-help-text": "la descripción de su producto y la información necesaria desde aquí",
   "input-label-line-of-business": "Giro",
+  "input-label-products-description": "Descripción general de sus productos",
   "input-label-physical-address": "Dirección física",
   "input-label-fiscal-address": "Dirección fiscal",
   "input-label-tax-country": "Pais de impuestos",

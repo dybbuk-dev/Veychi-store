@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Marvel\Database\Models\ApprovalTokens;
 use Marvel\Database\Models\Company;
 use Marvel\Database\Models\DniDocument;
 use Marvel\Database\Models\LegalRepresentative;

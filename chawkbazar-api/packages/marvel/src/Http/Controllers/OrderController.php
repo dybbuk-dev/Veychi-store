@@ -17,6 +17,7 @@ use Marvel\Events\OrderCreated;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\OrderCreateRequest;
 use Marvel\Http\Requests\OrderUpdateRequest;
+use Marvel\Database\Models\Shop;
 
 
 class OrderController extends CoreController
@@ -175,5 +176,12 @@ class OrderController extends CoreController
         } catch (\Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
+    }
+    public function allOrdersInStore(Request $request){
+        $fields=['id','tracking_number','amount','total'];
+
+        $shop=Shop::where('owner_id',"=",$request->user()->id)->firstOrFail()->id;
+
+        $this->repository->arrayToCsv($this->repository->where('shop_id',$shop)->get($fields),null,$fields);
     }
 }

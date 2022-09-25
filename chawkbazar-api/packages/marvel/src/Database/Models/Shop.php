@@ -23,6 +23,7 @@ class Shop extends Model
         'address' => 'json',
         'settings' => 'json',
     ];
+    protected $fillable=['approval_token_id'];
 
     /**
      * Return the sluggable configuration array for this model.
