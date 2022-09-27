@@ -5,6 +5,7 @@ namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Marvel\Http\Controllers\CompanyController;
 
 class ApprovalTokens extends Model
@@ -19,8 +20,8 @@ class ApprovalTokens extends Model
     /**
      * @return BelongsTo
      */
-    public function company(): BelongsTo
+    public function shops(): HasMany
     {
-        return $this->belongsTo(Company::class, 'approval_token_id');
+        return $this->hasMany(Shop::class, 'approval_token_id');
     }
 }

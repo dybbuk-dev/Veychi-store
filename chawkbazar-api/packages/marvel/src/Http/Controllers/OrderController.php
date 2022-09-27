@@ -176,4 +176,11 @@ class OrderController extends CoreController
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
     }
+    public function allOrdersInStore(Request $request){
+        $fields=['id','tracking_number','amount','total'];
+
+        $shop=Shop::where('owner_id',"=",$request->user()->id)->firstOrFail()->id;
+
+        $this->repository->arrayToCsv($this->repository->where('shop_id',$shop)->get($fields),null,$fields);
+    }
 }

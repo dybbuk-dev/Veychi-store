@@ -42,22 +42,16 @@ class AttachmentController extends CoreController
      */
     public function store(AttachmentRequest $request)
     {
-        $urls = [];
-        foreach ($request->attachment as $media) {
-            $attachment = new Attachment;
-            $attachment->save();
-            $attachment->addMedia($media)->toMediaCollection();
-            foreach ($attachment->getMedia() as $image) {
-                $converted_url = [
-                    'thumbnail' => $image->getUrl('thumbnail'),
-                    'original' => $image->getUrl(),
-                    'id' => $attachment->id
-                ];
-            }
-            $urls[] = $converted_url;
-        }
-        return $urls;
+        $listing= new Attachment();
+         $listing->addMultipleMediaFromRequest(['attachment'])
+            ->each(function ($fileAdder) {
+                $fileAdder->toMediaCollection();
+            });
+         $listing->save();
+         return $listing;
     }
+
+
 
     /**
      * Display the specified resource.

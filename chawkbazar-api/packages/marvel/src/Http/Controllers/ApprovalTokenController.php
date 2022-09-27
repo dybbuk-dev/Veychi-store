@@ -19,12 +19,12 @@ class ApprovalTokenController extends CoreController
 
    public function index(Request $request){
        $limit = $request->limit ?: 15;
-       return $this->repository->paginate($limit);
+       return $this->repository->with('shops')->paginate($limit);
    }
 
    public function show($id){
        try {
-           return $this->repository->findOrFail($id);
+           return $this->repository->with('shops')->findOrFail($id);
        }
        catch (Exception $ex) {
            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
