@@ -4,6 +4,7 @@ namespace Marvel\Database\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerReviews extends Model
@@ -19,5 +20,8 @@ class CustomerReviews extends Model
 
     public function productsHasReview():BelongsToMany{
         return $this->belongsToMany(Product::class,'product_has_customer_review','product_id','customer_review_id','id');
+    }
+    public function user():HasOne{
+        return $this->hasOne(User::class,'id','user_id');
     }
 }

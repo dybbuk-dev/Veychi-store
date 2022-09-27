@@ -5,6 +5,7 @@ namespace Marvel\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Marvel\Database\Repositories\CustomerReviewsRepository;
+use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\CustomerReviewProductRequest;
 
 class CustomerReviewsController extends Controller
@@ -40,12 +41,19 @@ class CustomerReviewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws MarvelException
      */
     public function store(CustomerReviewProductRequest $request)
     {
-        return $this->repository->addReview($request);
+        try {
+            return $this->repository->addReview($request);
+        } catch (\Exception $e) {
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR');
+        }
+
+
     }
 
     /**
@@ -56,8 +64,12 @@ class CustomerReviewsController extends Controller
      */
     public function show($id)
     {
+        try {
+            return $this->repository->with('productsHasReview')->findOrFail($id);
+        } catch (\Exception $e) {
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+        }
 
-        return $this->repository->with('productsHasReview')->findOrFail($id);
     }
 
 

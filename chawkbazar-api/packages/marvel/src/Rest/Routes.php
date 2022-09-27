@@ -11,6 +11,7 @@ use Marvel\Http\Controllers\CountryController;
 use Marvel\Http\Controllers\CustomerReviewsController;
 use Marvel\Http\Controllers\DNIDocumentController;
 use Marvel\Http\Controllers\LegalRepresentativeController;
+use Marvel\Http\Controllers\MarketingController;
 use Marvel\Http\Controllers\ProductController;
 use Marvel\Http\Controllers\SettingsController;
 use Marvel\Http\Controllers\UserController;
@@ -187,6 +188,9 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::get('product/export','Marvel\Http\Controllers\ProductController@exportAllProducts');
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
+    ]);
+    Route::apiResource('marketing', MarketingController::class, [
+        'only' => ['index','show','store', 'update', 'destroy']
     ]);
     Route::apiResource('approval-tokens', ApprovalTokenController::class, [
         'only' => ['index','show','store', 'update', 'destroy']

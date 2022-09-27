@@ -39,7 +39,9 @@ class ProductController extends CoreController
     public function index(Request $request)
     {
         $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute','customerReviews'])->paginate($limit);
+        return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute','customerReviews'=>function($q){
+            return $q->with('user');
+        }])->paginate($limit);
     }
 
     /**
@@ -68,7 +70,9 @@ class ProductController extends CoreController
         try {
             $limit = isset($request->limit) ? $request->limit : 10;
             $product = $this->repository
-                ->with(['type', 'shop', 'categories', 'tags', 'variations.attribute.values', 'variation_options'])
+                ->with(['type', 'shop', 'customerReviews'=>function($q){
+                    return $q->with('user');
+                },'categories', 'tags', 'variations.attribute.values', 'variation_options'])
                 ->findOneByFieldOrFail('slug', $slug);
             $product->related_products = $this->repository->fetchRelated($slug, $limit);
             return $product;

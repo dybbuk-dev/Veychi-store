@@ -2,8 +2,10 @@
 
 namespace Marvel\Database\Repositories;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Marvel\Database\Models\Company;
 use Marvel\Database\Models\DniDocument;
 use Marvel\Exceptions\MarvelException;
@@ -28,7 +30,8 @@ class DNIDocumentRepository extends BaseRepository
      */
     public function save($request){
         $document = $request->file('DNI_document');
-        $DNI_document_path = $document->storePubliclyAs('DNI-files', 'attributes-' . Auth::id() . '.' . $document->getClientOriginalExtension(), 'public');
+
+        $DNI_document_path = $document->storePubliclyAs('DNI-files', 'DNI-' . Str::slug(Carbon::now(),'_') . '.' . $document->getClientOriginalExtension(), 'public');
         return DniDocument::create([
             'DNI' => $request->DNI,
             'DNI_document_path' => $DNI_document_path
