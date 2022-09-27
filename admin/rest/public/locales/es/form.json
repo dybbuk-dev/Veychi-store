@@ -43,6 +43,7 @@
   "item-description-add": "Agregar",
   "product-description-help-text": "la descripción de su producto y la información necesaria desde aquí",
   "input-label-logo": "Logo",
+  "input-label-products-description": "Descripción general de sus productos",
   "input-label-email": "Correo electrónico",
   "input-label-token": "Pon tu token que recibiste del correo electrónico",
   "input-label-password": "Contraseña",

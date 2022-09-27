@@ -13,7 +13,24 @@ type FormValues = {
   name: string;
   email: string;
   password: string;
+  line_of_business:string,
+  physical_address:string,
+  fiscal_address:string,
+  tax_country:string,
+  business_phone:string,
+  products_description:string,
+  legal_representative:LegalRepresentative,
+  dni_document:dni_document
 };
+type dni_document = {
+  DNI:string,
+  DNI_document_path:string
+}
+
+type LegalRepresentative = {
+  name:string
+  phone:string
+}
 
 const defaultValues = {
   email: "",
