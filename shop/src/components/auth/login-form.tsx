@@ -220,7 +220,7 @@ const LoginForm: React.FC<Props> = ({ layout = "modal" }) => {
           onClick={handleOtpLogin}
         >
           <MobileIcon className="h-5 ltr:mr-2 rtl:ml-2 text-light" />
-          {t('text-login-mobile')}
+          {t("text-login-mobile")}
         </Button>
       </div>
 
@@ -234,6 +234,12 @@ const LoginForm: React.FC<Props> = ({ layout = "modal" }) => {
           {t("common:text-register")}
         </button>
       </div>
+      <a
+        className="text-sm sm:text-base block text-body text-center mt-2 mb-1"
+        href="/admin/es/register"
+      >
+        {t("common:text-register-admin")}
+      </a>
     </div>
   );
 };

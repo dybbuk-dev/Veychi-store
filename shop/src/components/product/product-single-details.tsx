@@ -34,7 +34,11 @@ type Props = {
   product: Product;
 };
 
-const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
+const ProductSingleDetails: React.FC<Props> = ({
+  product,
+}: {
+  product: any;
+}) => {
   const { t } = useTranslation();
   const { width } = useWindowSize();
   const { addItemToCart } = useCart();
@@ -86,6 +90,18 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
       pauseOnHover: true,
       draggable: true,
     });
+  }
+
+  function getReviewStar() {
+    if (product?.customer_reviews?.length > 0) {
+      const stars = product?.customer_reviews?.map((review: any) =>
+        parseInt(review.score)
+      );
+      return (
+        stars.reduce((a: any, b: any) => a + b, 0) / stars.length
+      ).toFixed();
+    }
+    return 0;
   }
 
   function handleAttribute(attribute: any) {
@@ -191,6 +207,14 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
         <div className="pb-7 border-b border-gray-300">
           <h2 className="text-heading text-lg md:text-xl lg:text-2xl 2xl:text-3xl font-bold hover:text-black mb-3.5">
             {product?.name}
+          </h2>
+          <h2 className="text-heading text-md md:text-lg lg:text-xl 2xl:text-2xl font-bold hover:text-black mb-3.5 flex gap-1">
+            <img
+              src="/assets/images/products/star.svg"
+              className="w-5"
+              alt=""
+            />
+            <p>{getReviewStar()}</p>
           </h2>
           <p className="text-body text-sm lg:text-base leading-6 lg:leading-8">
             {product?.description}

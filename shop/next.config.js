@@ -10,6 +10,7 @@ module.exports = withPWA({
   i18n,
   images: {
     domains: [
+      "veychi.com",
       "127.0.0.1",
       "localhost",
       "googleusercontent.com",
@@ -24,7 +25,7 @@ module.exports = withPWA({
       "chawkbazarlaravel.s3.ap-southeast-1.amazonaws.com",
       "picsum.photos",
       "cdninstagram.com",
-      "scontent.cdninstagram.com"
+      "scontent.cdninstagram.com",
     ],
   },
 

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useMeQuery } from "@data/user/use-me.query";
 import ShopCard from "@components/shop/shop-card";
 import NoShopSvg from "../../../public/no-shop.svg";
-import CompanyForm from "@components/company/company-form";
+// import CompanyForm from "@components/company/company-form";
 export default function OwnerDashboard() {
   const { t } = useTranslation();
   const { data, isLoading: loading, error } = useMeQuery();
@@ -19,7 +19,7 @@ export default function OwnerDashboard() {
           {t("common:sidebar-nav-item-my-shops")}
         </h1>
       </div>
-        <CompanyForm/>
+      {/* <CompanyForm/> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-5 gap-5">
         {data?.shops?.map((myShop: any, idx: number) => (
           <ShopCard shop={myShop} key={idx} />

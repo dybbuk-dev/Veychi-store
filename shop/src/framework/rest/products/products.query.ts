@@ -77,6 +77,7 @@ export const useProductsQuery = (options: ProductsQueryOptionsType) => {
 
 export const fetchProduct = async (slug: string) => {
   const { data } = await ProductService.findOne(slug);
+  // console.log(data);
   return data;
 };
 

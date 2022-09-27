@@ -6,6 +6,7 @@ interface Props {
   className?: string;
   btnProps: React.ButtonHTMLAttributes<any>;
   isAuthorized: boolean;
+  children: React.ReactNode;
 }
 
 const AuthMenu: React.FC<Props> = ({

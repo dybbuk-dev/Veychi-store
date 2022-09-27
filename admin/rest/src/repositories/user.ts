@@ -7,6 +7,7 @@ import {
   ForgetPasswordInput,
   VerifyForgetPasswordTokenInput,
   ResetPasswordInput,
+  FormValues,
 } from "@ts-types/generated";
 import http from "@utils/api/http";
 import Base from "./base";
@@ -24,8 +25,9 @@ class User extends Base<CreateUser, UpdateUser> {
     return http.post(url);
   };
 
-  register = async (url: string, variables: RegisterInput) => {
-    return this.http<RegisterInput>(url, "post", variables);
+  register = async (url: string, variables: FormValues.RootObject) => {
+    console.log(variables);
+    return this.http<FormValues.RootObject>(url, "post", variables);
   };
 
   changePassword = async (url: string, variables: ChangePasswordInput) => {

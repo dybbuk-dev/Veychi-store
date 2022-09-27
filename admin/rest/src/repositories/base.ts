@@ -17,8 +17,14 @@ export default class Base<C, U> {
     return this.http(url, "get");
   };
 
-  create = async (url: string, variables: C) => {
-    return this.http<C>(url, "post", variables);
+  create = async (url: string, variables: C, activationToken?: string) => {
+    if (!activationToken) return this.http<C>(url, "post", variables);
+    const { data } = await this.http<C>(url, "post", variables);
+    await this.http<C>(
+      (process.env.NEXT_PUBLIC_REST_API_ENDPOINT as string) +
+        `/shop/${data.id}/aprove?token=${activationToken}`,
+      "post"
+    );
   };
 
   update = async (url: string, variables: U) => {
