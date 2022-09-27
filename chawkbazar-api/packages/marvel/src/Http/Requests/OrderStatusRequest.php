@@ -22,7 +22,8 @@ class OrderStatusRequest extends FormRequest
         return [
             'name'   => 'required|unique:order_status,name,' . $this->id,
             'serial' => 'required|integer|unique:order_status,serial,' . $this->id,
-            'color' => ['nullable', 'string']
+            'color' => ['nullable', 'string'],
+            'requires_proof_voucher'=>['nullable','boolean']
         ];
     }
 

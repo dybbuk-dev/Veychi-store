@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Marvel\Database\Models\Order;
+use Marvel\Database\Models\OrderStatus;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\User;
 use Marvel\Database\Repositories\OrderRepository;
@@ -135,17 +136,29 @@ class OrderController extends CoreController
         $user = $request->user();
         if (isset($order->shop_id)) {
             if ($this->repository->hasPermission($user, $order->shop_id)) {
-                return $this->changeOrderStatus($order, $request->status);
+                return $this->changeOrderStatus($order, $request->status,$request->id_proof_voucher_media);
             }
         } else if ($user->hasPermissionTo(Permission::SUPER_ADMIN)) {
-            return $this->changeOrderStatus($order, $request->status);
+            return $this->changeOrderStatus($order, $request->status,$request->id_proof_voucher_media);
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         }
     }
 
-    public function changeOrderStatus($order, $status)
+    /**
+     * @throws MarvelException
+     */
+    public function changeOrderStatus($order, $status, $voucher)
     {
+        //id_proof_voucher_media
+        $status_in_repository=OrderStatus::find($status);
+        if($status_in_repository->requires_proof_voucher){
+            if($voucher){
+                $order->id_proof_voucher_media=$voucher;
+            }else{
+                throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
+            }
+        }
         $order->status = $status;
         $order->save();
         try {

@@ -98,6 +98,11 @@ class CreateMarvelTables extends Migration
             $table->string('color')->nullable();
             $table->timestamps();
         });
+        Schema::create('attachments', function (Blueprint $table) {
+            $table->id();
+            $table->string('url')->default('');
+            $table->timestamps();
+        });
 
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
@@ -118,10 +123,12 @@ class CreateMarvelTables extends Migration
             $table->unsignedBigInteger('logistics_provider')->nullable();
             $table->double('delivery_fee')->nullable();
             $table->string('delivery_time')->nullable();
+            $table->unsignedBigInteger('id_proof_voucher_media')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('status')->references('id')->on('order_status');
             $table->foreign('customer_id')->references('id')->on('users');
+            $table->foreign('id_proof_voucher_media')->references('id')->on('attachments');
         });
 
         Schema::create('order_product', function (Blueprint $table) {
@@ -231,11 +238,7 @@ class CreateMarvelTables extends Migration
             $table->boolean('is_active')->default(1);
         });
 
-        Schema::create('attachments', function (Blueprint $table) {
-            $table->id();
-            $table->string('url')->default('');
-            $table->timestamps();
-        });
+
     }
 
     /**

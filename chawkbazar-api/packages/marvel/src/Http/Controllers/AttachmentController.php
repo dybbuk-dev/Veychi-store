@@ -30,7 +30,7 @@ class AttachmentController extends CoreController
      */
     public function index(Request $request)
     {
-        return $this->repository->paginate();
+        return $this->repository->with('media')->paginate();
     }
 
     /**
@@ -44,10 +44,10 @@ class AttachmentController extends CoreController
     {
         $listing= new Attachment();
          $listing->addMultipleMediaFromRequest(['attachment'])
-            ->each(function ($fileAdder) {
+            ->each(function ($fileAdder){
                 $fileAdder->toMediaCollection();
             });
-         $listing->save();
+        $listing->save();
          return $listing;
     }
 
@@ -62,7 +62,7 @@ class AttachmentController extends CoreController
     public function show($id)
     {
         try {
-            $this->repository->findOrFail($id);
+          return  $this->repository->with('media')->findOrFail($id)->media[0];
         } catch (\Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }

@@ -2,10 +2,12 @@
 
 namespace Marvel\Database\Repositories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Marvel\Database\Models\Company;
 use Marvel\Database\Models\DniDocument;
 use Marvel\Database\Models\LegalRepresentative;
@@ -44,21 +46,41 @@ class CompanyRepository extends BaseRepository
      */
     public function saveCompany($request)
     {
+        $data = $request->only($this->dataArray);
         try {
+            if(!array_key_exists("id",$request->dni_document)){
+                $dni_document_path = Storage::put("public/".Str::slug(Carbon::now())."-".$request->dni_document["DNI"]."jpg",base64_decode($request->dni_document["DNI_image"]));
+                   $document= DniDocument::create([
+                        'DNI'=>$request->dni_document["DNI"],
+                        'DNI_document_path'=>$dni_document_path
+                    ]);
+                $data['dni_document_id'] =$document->id;
+            }
+            else{
+                $data['dni_document_id'] = $request->dni_document['id'];
+            }
             if(!array_key_exists("id",$request->legal_representative)){
+               $dni_legal_representative = $request->legal_representative["dni_document"];
+               $dni_legal_representative["DNI_document_path"] =  Storage::put("public/".Str::slug(Carbon::now())."-".$dni_legal_representative["DNI"]."jpg",base64_decode($dni_legal_representative["DNI_image"]));
+               $dni_document = DniDocument::create([
+                  'DNI'=>  $dni_legal_representative["DNI"],
+                   "DNI_document_path"=> $dni_legal_representative["DNI_document_path"]
+               ]);
+
+               // $request->legal_representative['dni_document']["id"]
                 $legal_representative = LegalRepresentative::create([
                     'name' => $request->legal_representative['name'],
                     'phone' => $request->legal_representative['phone'],
-                    'dni_document_id' => $request->legal_representative['dni_document']["id"]
+                    'dni_document_id' =>$dni_document->id
                 ]);
                 $legal_representative=$legal_representative->id;
             }else{
                 $legal_representative=$request->legal_representative["id"];
             }
 
-            $data = $request->only($this->dataArray);
+
             $data['legal_representative_id'] = $legal_representative;
-            $data['dni_document_id'] = $request->dni_document['id'];
+
 
 
             $company= $this->create($data);
