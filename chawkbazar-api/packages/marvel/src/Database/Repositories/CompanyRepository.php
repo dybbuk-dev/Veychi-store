@@ -49,7 +49,8 @@ class CompanyRepository extends BaseRepository
         $data = $request->only($this->dataArray);
         try {
             if(!array_key_exists("id",$request->dni_document)){
-                $dni_document_path = Storage::put("public/".Str::slug(Carbon::now())."-".$request->dni_document["DNI"]."jpg",base64_decode($request->dni_document["DNI_image"]));
+
+                $dni_document_path =  $this->base64ImageResolver($request->dni_document["DNI_image"],Str::slug(Carbon::now())."-".$request->dni_document["DNI"]);
                    $document= DniDocument::create([
                         'DNI'=>$request->dni_document["DNI"],
                         'DNI_document_path'=>$dni_document_path
@@ -61,7 +62,7 @@ class CompanyRepository extends BaseRepository
             }
             if(!array_key_exists("id",$request->legal_representative)){
                $dni_legal_representative = $request->legal_representative["dni_document"];
-               $dni_legal_representative["DNI_document_path"] =  Storage::put("public/".Str::slug(Carbon::now())."-".$dni_legal_representative["DNI"]."jpg",base64_decode($dni_legal_representative["DNI_image"]));
+               $dni_legal_representative["DNI_document_path"] =   $this->base64ImageResolver($dni_legal_representative["DNI_image"],Str::slug(Carbon::now())."-".$dni_legal_representative["DNI"]);
                $dni_document = DniDocument::create([
                   'DNI'=>  $dni_legal_representative["DNI"],
                    "DNI_document_path"=> $dni_legal_representative["DNI_document_path"]

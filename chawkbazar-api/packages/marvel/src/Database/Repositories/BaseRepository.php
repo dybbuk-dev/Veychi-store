@@ -6,6 +6,7 @@ namespace Marvel\Database\Repositories;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use League\Csv\CannotInsertRecord;
 use Marvel\Database\Models\Shop;
@@ -166,7 +167,16 @@ abstract class BaseRepository extends Repository implements CacheableInterface
     {
         return $this->model;
     }
-
+    public function base64ImageResolver($image_64,$imageName): string
+    {
+        $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+        $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+        $image = str_replace($replace, '', $image_64);
+        $image = str_replace(' ', '+', $image);
+        $imageName = $imageName.'.'.$extension;
+        Storage::disk('public')->put($imageName, base64_decode($image));
+        return  Storage::url($imageName);
+    }
     public function hasPermission($user, $shop_id)
     {
         try {
