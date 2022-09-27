@@ -59,13 +59,6 @@
     },
     "incremental": true
   },
-  "include": [
-    "next-env.d.ts",
-    "additional.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "additional.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/components/shops/shop-sidebar-map.jsx"],
+  "exclude": ["node_modules"]
 }

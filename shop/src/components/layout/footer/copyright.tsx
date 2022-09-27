@@ -1,7 +1,7 @@
-import Container from "@components/ui/container";
-import { siteSettings } from "@settings/site.settings";
-import { useTranslation } from "next-i18next";
-import { Image } from "@components/ui/image";
+import Container from '@components/ui/container';
+import { siteSettings } from '@settings/site.settings';
+import { useTranslation } from 'next-i18next';
+import { Image } from '@components/ui/image';
 
 interface CopyrightProps {
   payment?: {
@@ -15,19 +15,20 @@ interface CopyrightProps {
 }
 const year = new Date().getFullYear();
 const Copyright: React.FC<CopyrightProps> = ({ payment }) => {
-  const { t } = useTranslation("footer");
+  const { t } = useTranslation('footer');
   return (
     <div className="border-t border-gray-300 pt-5 pb-16 sm:pb-20 md:pb-5 mb-2 sm:mb-0">
       <Container className="flex flex-col-reverse md:flex-row text-center md:justify-between">
         <p className="text-body text-xs md:text-[13px] lg:text-sm leading-6">
-          {t("text-copyright")} &copy; {year}&nbsp;
+          {t('text-copyright')} &copy; {year}&nbsp; Veychi&nbsp;
           <a
             className="font-semibold text-gray-700 transition-colors duration-200 ease-in-out hover:text-body"
-            href={siteSettings.author.websiteUrl}
+            href={'https://desarrollosmoyan.com/'}
+            target="_blank"
           >
-            {siteSettings.author.name}
+            Diseñado y Desarrollado por Desarrollos Moyan
           </a>
-          &nbsp; {t("text-all-rights-reserved")}
+          &nbsp; {t('text-all-rights-reserved')}
         </p>
 
         {payment && (
@@ -37,7 +38,11 @@ const Copyright: React.FC<CopyrightProps> = ({ payment }) => {
                 className="mb-2 md:mb-0 transition hover:opacity-80"
                 key={`payment-list--key${item.id}`}
               >
-                <a href={item.path ? item.path : "/#"} target="_blank" rel="noreferrer">
+                <a
+                  href={item.path ? item.path : '/#'}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <Image
                     src={item.image}
                     alt={t(`${item.name}`)}
