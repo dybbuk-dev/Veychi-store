@@ -117,7 +117,7 @@ Route::get('popular-products', 'Marvel\Http\Controllers\AnalyticsController@popu
 Route::group(
     ['middleware' => ['permission:' . Permission::STAFF . '|' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
-        Route::get('orders/export/all',[OrderController::class,'allOrdersInStore']);
+        Route::get('orders/export/{id}/all',[OrderController::class,'allOrdersInStore']);
         Route::apiResource('orders',OrderController::class,[
             'only'=>[
                 'update',

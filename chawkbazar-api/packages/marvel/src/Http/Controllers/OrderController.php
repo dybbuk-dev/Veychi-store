@@ -7,10 +7,13 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use League\Csv\CannotInsertRecord;
 use Marvel\Database\Models\Order;
 use Marvel\Database\Models\OrderStatus;
 use Marvel\Database\Models\Settings;
+use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\User;
 use Marvel\Database\Repositories\OrderRepository;
 use Marvel\Enums\Permission;
@@ -18,6 +21,7 @@ use Marvel\Events\OrderCreated;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\OrderCreateRequest;
 use Marvel\Http\Requests\OrderUpdateRequest;
+use Omnipay\Common\Http\Exception;
 
 
 class OrderController extends CoreController
@@ -189,11 +193,28 @@ class OrderController extends CoreController
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
     }
-    public function allOrdersInStore(Request $request){
-        $fields=['id','tracking_number','amount','total'];
 
-        $shop=Shop::where('owner_id',"=",$request->user()->id)->firstOrFail()->id;
+    /**
+     * @throws MarvelException
+     * @throws CannotInsertRecord
+     */
+    public function allOrdersInStore(Request $request, $id){
+        try{
+            $fields=['id','tracking_number','amount','total'];
+            $shop=Shop::where([
+                ['owner_id',"=",$request->user()->id],
+                ['id',"=",$id],
+                ['is_active',"=",1]
+            ])->firstOrFail();
+            $data= DB::table('orders')->where('shop_id',$shop->id)->get($fields);
+            $collection_data=new Collection();
+            foreach ($data as $reg)$collection_data->add(new Collection($reg));
+            if($data) $this->repository->arrayToCsv($collection_data,null,$fields);
+        }catch (Exception $ex){
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+        }
 
-        $this->repository->arrayToCsv($this->repository->where('shop_id',$shop)->get($fields),null,$fields);
+
+
     }
 }
