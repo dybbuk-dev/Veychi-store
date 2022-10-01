@@ -1,10 +1,10 @@
-import { RegisterInput } from "@ts-types/generated";
+import { FormValues } from "@ts-types/generated";
 import { useMutation } from "react-query";
 import User from "@repositories/user";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
 
 export interface IRegisterVariables {
-  variables: RegisterInput;
+  variables: FormValues.RootObject;
 }
 
 export const useRegisterMutation = () => {

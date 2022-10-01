@@ -18,6 +18,7 @@
   "label-name": "Nombre",
   "label-email": "Correo electrónico",
   "label-password": "Contraseña",
+  "label-password-star": "Contraseña*",
   "label-old-password": "Contraseña anterior",
   "label-new-password": "Nueva contraseña",
   "label-subject": "Asunto",

@@ -23,6 +23,7 @@ import { getIcon } from "@utils/get-icon";
 import SelectInput from "@components/ui/select-input";
 import * as socialIcons from "@components/icons/social";
 import omit from "lodash/omit";
+import { useState } from "react";
 
 const socialIcon = [
   {
@@ -108,6 +109,8 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
     name: "settings.socials",
   });
 
+  const [activationToken, setActivationToken] = useState<string>("");
+
   function onSubmit(values: FormValues) {
     const settings = {
       ...values?.settings,
@@ -146,6 +149,7 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
             },
           },
         },
+        activationToken,
       });
     }
   }
@@ -368,6 +372,45 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
                 )
               )}
             </div>
+            <div>
+              {fields.map(
+                (item: ShopSocialInput & { id: string }, index: number) => (
+                  <div
+                    className="border-b border-dashed border-border-200 first:border-t last:border-b-0 first:mt-5 md:first:mt-10 py-5 md:py-8"
+                    key={item.id}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
+                      <div className="sm:col-span-2">
+                        <Label>{t("form:input-label-select-platform")}</Label>
+                        <SelectInput
+                          name={`settings.socials.${index}.icon` as const}
+                          control={control}
+                          options={updatedIcons}
+                          isClearable={true}
+                          defaultValue={item?.icon!}
+                        />
+                      </div>
+                      <Input
+                        className="sm:col-span-2"
+                        label={t("form:input-label-url")}
+                        variant="outline"
+                        {...register(`settings.socials.${index}.url` as const)}
+                        defaultValue={item.url!} // make sure to set up defaultValue
+                      />
+                      <button
+                        onClick={() => {
+                          remove(index);
+                        }}
+                        type="button"
+                        className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                      >
+                        {t("form:button-label-remove")}
+                      </button>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
             <Button
               type="button"
               onClick={() => append({ icon: "", url: "" })}
@@ -375,6 +418,23 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
             >
               {t("form:button-label-add-social")}
             </Button>
+          </Card>
+        </div>
+        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+          <Description
+            title="Validación de la tienda"
+            details="Si cuenta con un token de activación, puede colocarlo aquí para validar su tienda automáticamente."
+            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          />
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <Input
+              onChange={(e) => {
+                setActivationToken(e.target.value);
+              }}
+              label="Token de activación"
+              variant="outline"
+              className="mb-5"
+            />
           </Card>
         </div>
 

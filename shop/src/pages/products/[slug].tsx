@@ -2,6 +2,7 @@ import Container from "@components/ui/container";
 import { getLayout } from "@components/layout/layout";
 import Subscription from "@components/common/subscription";
 import ProductSingleDetails from "@components/product/product-single-details";
+import ProductReviews from "@components/product/product-reviews";
 import Divider from "@components/ui/divider";
 import Breadcrumb from "@components/common/breadcrumb";
 import { useRouter } from "next/router";
@@ -29,6 +30,7 @@ export default function ProductPage({ product }: any) {
           <Breadcrumb />
         </div>
         <ProductSingleDetails product={product} />
+        <ProductReviews product={product} />
         <RelatedProducts
           products={product?.related_products}
           currentProductId={product?.id}

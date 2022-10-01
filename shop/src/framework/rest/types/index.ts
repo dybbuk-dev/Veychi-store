@@ -144,6 +144,35 @@ export declare type Variation = {
   id: string;
   options?: any;
 };
+
+export declare module Reviews {
+  export interface Pivot {
+    customer_review_id: number;
+    product_id: number;
+  }
+
+  export interface User {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at?: any;
+    created_at: Date;
+    updated_at: Date;
+    is_active: number;
+    shop_id?: any;
+  }
+
+  export interface CustomerReview {
+    id: number;
+    comment: string;
+    user_id: number;
+    score: string;
+    deleted_at?: any;
+    pivot: Pivot;
+    user: User;
+  }
+}
+
 export declare type Product = {
   id?: number | string;
   name?: string;
@@ -177,6 +206,7 @@ export declare type Product = {
   updated_at?: Date;
   orders_count?: number;
   sold: number;
+  customer_reviews?: Reviews.CustomerReview[];
 };
 
 export declare type Tag = {

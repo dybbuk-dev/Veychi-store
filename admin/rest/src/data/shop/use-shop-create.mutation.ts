@@ -10,6 +10,7 @@ export interface IShopCreateVariables {
   variables: {
     input: ShopInput;
   };
+  activationToken: string;
 }
 
 export const useCreateShopMutation = () => {
@@ -17,8 +18,8 @@ export const useCreateShopMutation = () => {
   const router = useRouter();
 
   return useMutation(
-    ({ variables: { input } }: IShopCreateVariables) =>
-      Shop.create(API_ENDPOINTS.SHOPS, input),
+    ({ variables: { input }, activationToken }: IShopCreateVariables) =>
+      Shop.create(API_ENDPOINTS.SHOPS, input, activationToken),
     {
       onSuccess: () => {
         const { permissions } = getAuthCredentials();

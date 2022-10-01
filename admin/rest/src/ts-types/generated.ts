@@ -664,32 +664,34 @@ export declare type RegisterInput = {
   name: Scalars["String"];
   shop_id?: Scalars["Int"];
   permission: Permission;
-  /* company implementation */
-  line_of_business:Scalars["String"];
-  physical_address:Scalars["String"];
-  fiscal_address:Scalars["String"];
-  tax_country:Scalars["String"];
-  business_phone:Scalars["String"];
-  products_description:Scalars["String"];
-  user_id:Scalars["Int"];
-  legal_representative:LegalRepresentativeInput,
-  dni_document:dni_documentInput
 };
 
 export declare type dni_documentInput = {
-  DNI:Scalars["String"];
-  DNI_document_path:Scalars["String"];
-}
+  DNI: Scalars["String"];
+  DNI_document_path: Scalars["String"];
+};
 
 export declare type LegalRepresentativeInput = {
-  name:Scalars["String"];
-  phone:Scalars["String"];
-}
-
-
-export declare interface CompanyUpdate extends RegisterInput {
-  id:Scalars["Int"];
+  name: Scalars["String"];
+  phone: Scalars["String"];
 };
+
+export declare type CompanyInput = {
+  name: Scalars["String"];
+  line_of_business: Scalars["String"];
+  physical_address: Scalars["String"];
+  fiscal_address: Scalars["String"];
+  tax_country: Scalars["String"];
+  business_phone: Scalars["String"];
+  products_description: Scalars["String"];
+  user_id: Scalars["Int"];
+  legal_representative: LegalRepresentativeInput;
+  dni_document: dni_documentInput;
+};
+
+export declare interface CompanyUpdate extends CompanyInput {
+  id: Scalars["Int"];
+}
 
 export type ChangePasswordInput = {
   oldPassword: Scalars["String"];
@@ -1023,3 +1025,40 @@ export declare type TypeSettingsInput = {
   layoutType?: Maybe<Scalars["String"]>;
   productCard?: Maybe<Scalars["String"]>;
 };
+
+export module FormValues {
+  export interface DniDocument {
+    DNI: string;
+    DNI_image: string;
+  }
+
+  export interface LegalRepresentative {
+    dni_document: DniDocument;
+    name: string;
+    phone: string;
+  }
+
+  export interface DniDocument2 {
+    DNI: string;
+    DNI_image: string;
+  }
+
+  export interface Company {
+    name: string;
+    line_of_business: string;
+    physical_address: string;
+    tax_country: string;
+    business_phone: string;
+    products_description: string;
+    legal_representative: LegalRepresentative;
+    dni_document: DniDocument2;
+  }
+
+  export interface RootObject {
+    name: string;
+    email: string;
+    password: string;
+    permission: Permission;
+    company: Company;
+  }
+}
