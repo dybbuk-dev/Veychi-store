@@ -4,11 +4,13 @@
 namespace Marvel\Database\Repositories;
 
 use Exception;
+use Ignited\LaravelOmnipay\Facades\OmnipayFacade as Omnipay;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use League\Csv\CannotInsertRecord;
+use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\Shop;
 use Marvel\Enums\Permission;
 use Marvel\Exceptions\MarvelException;
@@ -223,6 +225,33 @@ abstract class BaseRepository extends Repository implements CacheableInterface
 
         return $data;
     }
+    /**
+     * @param $request
+     * @return mixed
+     */
+    protected function capturePayment($request)
+    {
+        try {
+            $settings = Settings::first();
+            $currency = $settings['options']['currency'];
+        } catch (\Throwable $th) {
+            $currency = 'USD';
+        }
+        $amount = round($request['paid_total'], 2);
+        $payment_info = array(
+            'amount'   => $amount,
+            'currency' => $currency,
+        );
+
+        if (Omnipay::getGateway() === 'STRIPE') {
+            $payment_info['token'] = $request['token'];
+        } else {
+            $payment_info['card'] = Omnipay::creditCard($request['card']);
+        }
+
+        $transaction = Omnipay::purchase($payment_info);
+        return $transaction->send();
+    }
 
     /**
      * @Input Collection
@@ -237,7 +266,7 @@ abstract class BaseRepository extends Repository implements CacheableInterface
         foreach ($modelCollection as $data){
             $csv->insertOne($data->toArray());
         }
-        $flush_threshold = 1000;
+        $flush_threshold = 10000;
         $content_callback = function () use ($csv, $flush_threshold) {
             foreach ($csv->chunk(1024) as $offset => $chunk) {
                 echo $chunk;

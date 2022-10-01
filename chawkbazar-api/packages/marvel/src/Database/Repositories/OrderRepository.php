@@ -119,33 +119,7 @@ class OrderRepository extends BaseRepository
         }
     }
 
-    /**
-     * @param $request
-     * @return mixed
-     */
-    protected function capturePayment($request)
-    {
-        try {
-            $settings = Settings::first();
-            $currency = $settings['options']['currency'];
-        } catch (\Throwable $th) {
-            $currency = 'USD';
-        }
-        $amount = round($request['paid_total'], 2);
-        $payment_info = array(
-            'amount'   => $amount,
-            'currency' => $currency,
-        );
-        if (Omnipay::getGateway() === 'STRIPE') {
-            $payment_info['token'] = $request['token'];
-        } else {
-            $payment_info['card'] = Omnipay::creditCard($request['card']);
-        }
 
-        $transaction =
-            Omnipay::purchase($payment_info);
-        return $transaction->send();
-    }
 
     /**
      * @param $request

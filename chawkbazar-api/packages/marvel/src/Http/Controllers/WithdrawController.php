@@ -4,11 +4,15 @@
 namespace Marvel\Http\Controllers;
 
 use Exception;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Marvel\Database\Models\Balance;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\User;
 use Marvel\Database\Models\Withdraw;
 use Marvel\Database\Repositories\WithdrawRepository;
 use Marvel\Enums\Permission;
@@ -160,5 +164,34 @@ class WithdrawController extends CoreController
         $withdraw->save();
 
         return $withdraw;
+    }
+
+    /**
+     * @throws MarvelException
+     */
+    public function exportWithdraws(Request $request, $id){
+        try{
+            $shop=Shop::findOrFail($id);
+            $fields=["name","amount","status","created_at","email","bank","account"];
+            $collection_data=new Collection();
+            $raw_data= DB::select("SELECT
+        shops.`name`,
+        withdraws.amount,
+        withdraws.status,
+        withdraws.created_at,
+   	balances.payment_info->> '$.email'  AS email,
+	balances.payment_info->> '$.bank'  AS bank,
+	balances.payment_info->> '$.account'  AS 'account'
+    FROM
+        shops
+        INNER JOIN withdraws ON shops.id = withdraws.shop_id
+        INNER JOIN balances ON shops.id = balances.shop_id
+        AND shops.id = :SHOP_ID",["SHOP_ID"=>$shop->id]);
+            foreach ($raw_data as $raw_datum) $collection_data->add(new Collection($raw_datum));
+            $this->repository->arrayToCsv($collection_data,null,$fields);
+        }catch (Exception $ex){
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+        }
+
     }
 }

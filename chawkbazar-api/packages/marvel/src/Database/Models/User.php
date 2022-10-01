@@ -29,7 +29,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'is_active', 'shop_id'
+        'name', 'email', 'password', 'is_active', 'shop_id','salary', 'contract'
     ];
 
     /**
@@ -38,7 +38,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token',"premium"
     ];
 
     protected static function boot()

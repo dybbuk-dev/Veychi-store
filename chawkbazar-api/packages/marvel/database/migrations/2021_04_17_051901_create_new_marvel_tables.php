@@ -93,6 +93,7 @@ class CreateNewMarvelTables extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
+            $table->boolean('premium')->nullable()->default(false);
             $table->unsignedBigInteger('shop_id')->nullable();
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
         });

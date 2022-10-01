@@ -2,10 +2,14 @@
 
 namespace Marvel\Database\Repositories;
 
+use Carbon\Carbon;
+use Ignited\LaravelOmnipay\Facades\OmnipayFacade as Omnipay;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Marvel\Database\Models\User;
+use Marvel\Enums\PaymentGatewayType;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Spatie\Permission\Models\Permission;
 use Marvel\Enums\Permission as UserPermission;
@@ -17,6 +21,7 @@ use Marvel\Database\Models\Address;
 use Marvel\Database\Models\Profile;
 use Marvel\Database\Models\Shop;
 use Marvel\Exceptions\MarvelException;
+use Spatie\Permission\Models\Role;
 
 class UserRepository extends BaseRepository
 {
@@ -34,7 +39,9 @@ class UserRepository extends BaseRepository
     protected $dataArray = [
         'name',
         'email',
-        'shop_id'
+        'shop_id',
+        'salary',
+        'contract'
     ];
 
     /**
@@ -100,6 +107,10 @@ class UserRepository extends BaseRepository
                     Profile::create($profile);
                 }
             }
+            if(isset($request->contract)){
+              $request["contract"]=$this
+                    ->base64ImageResolver($request->contract,Str::slug(Carbon::now()."-".$request->name."-contract"));
+            }
             $user->update($request->only($this->dataArray));
             $user->profile = $user->profile;
             $user->address = $user->address;
@@ -120,4 +131,45 @@ class UserRepository extends BaseRepository
             return false;
         }
     }
+
+    /**
+     * @throws MarvelException
+     */
+    private function makePremium($userId){
+        $user=User::findOrFail($userId);
+        $user->premium=true;
+        $user->save();
+        return $user;
+    }
+
+    /**
+     * @throws MarvelException
+     */
+    public function premiumSubscription($request)
+    {
+        $price=env('PREMIUM_PRICE_USD');
+        if (!$request->user()->hasPermissionTo(UserPermission::STORE_OWNER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
+        if($request->user()->premium)throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+        $request['paid_total']=$request->amount;
+        $request["total"]=$price;
+        $request['tracking_number'] = Str::random(12);
+        $request['customer_id'] = $request->user()->id;
+        try{
+            Omnipay::setGateway(PaymentGatewayType::STRIPE);
+            $response= $this->capturePayment($request);
+            if($response->isRedirect()) return $response->getRedirectResponse();
+            if($response->isSuccessful()){
+                $payment_id = $response->getTransactionReference();
+                $request['payment_id'] = $payment_id;
+                return $this->makePremium($request->user()->id);
+            }
+        }catch (\Exception $ex){
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+        }
+        throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.PAYMENT_FAILED');
+
+    }
+
+
+
 }

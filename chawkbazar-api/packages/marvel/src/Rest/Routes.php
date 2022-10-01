@@ -14,6 +14,8 @@ use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\MarketingController;
 use Marvel\Http\Controllers\ProductController;
 use Marvel\Http\Controllers\SettingsController;
+use Marvel\Http\Controllers\TicketCommentsController;
+use Marvel\Http\Controllers\TicketController;
 use Marvel\Http\Controllers\UserController;
 use Marvel\Http\Controllers\TypeController;
 use Marvel\Http\Controllers\OrderController;
@@ -100,7 +102,12 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     Route::apiResource('attachments', AttachmentController::class, [
         'only' => ['store', 'update', 'destroy']
     ]);
-
+    Route::resource('issue-tickets',TicketController::class,[
+        'only'=>['index', 'show', 'update', 'destroy','store']
+    ]);
+    Route::resource('issue-ticket-comment',TicketCommentsController::class,[
+        'only'=>['index', 'show', 'update', 'delete','store']
+    ]);
 
     Route::post('orders/checkout/verify', 'Marvel\Http\Controllers\CheckoutController@verify');
     Route::get('me', 'Marvel\Http\Controllers\UserController@me');
@@ -124,6 +131,13 @@ Route::group(
                 'destroy'
             ]
         ]);
+        Route::resource('tickets',TicketController::class,[
+            'only'=>['index', 'show', 'update', 'destroy','store']
+        ]);
+        Route::resource('ticket-comment',TicketCommentsController::class,[
+            'only'=>['index', 'show', 'update', 'destroy','store']
+        ]);
+        Route::post('users/premium/purchase','Marvel\Http\Controllers\UserController@makePremium');
         Route::put('orders',[OrderController::class,'update']);
         Route::patch('orders',[OrderController::class,'update']);
         Route::delete('orders',[OrderController::class,'destroy']);
@@ -157,6 +171,7 @@ Route::group(
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy']
         ]);
+
         Route::apiResource('withdraws', WithdrawController::class, [
             'only' => ['store', 'index', 'show']
         ]);
@@ -195,6 +210,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::apiResource('approval-tokens', ApprovalTokenController::class, [
         'only' => ['index','show','store', 'update', 'destroy']
     ]);
+    Route::get('withdraws/export/{id}/all','Marvel\Http\Controllers\WithdrawController@exportWithdraws');
     Route::apiResource('withdraws', WithdrawController::class, [
         'only' => ['update', 'destroy']
     ]);

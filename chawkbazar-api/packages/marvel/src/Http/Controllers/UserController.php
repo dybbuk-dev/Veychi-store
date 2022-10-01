@@ -149,18 +149,25 @@ class UserController extends CoreController
         if (isset($request->permission)) {
             $permissions[] = isset($request->permission->value) ? $request->permission->value : $request->permission;
         }
-
-        $user = $this->repository->create([
+        $user=[
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-        ]);
+        ];
+        if(in_array(Permission::STAFF,$permissions,true)){
+            if(isset($request->salary))$user["salary"]= $request->salary;
+            if(isset($request->contract))$user["contract"]=$this->repository
+                ->base64ImageResolver($request->contract,Str::slug(Carbon::now()."-".$request->name."-contract"));
+
+        }
+        $user = $this->repository->create($user);
 
         if(in_array(Permission::STORE_OWNER,$permissions,true)){
             $data=new Request($request->company);
             $data->merge(['user_id'=>$user->id]);
             $this->companyRepository->saveCompany($data);
         }
+
         $user->givePermissionTo($permissions);
 
         return ["token" => $user->createToken('auth_token')->plainTextToken, "permissions" => $user->getPermissionNames()];
@@ -483,6 +490,12 @@ class UserController extends CoreController
         }
     }
 
+    /**
+     * @throws MarvelException
+     */
+    public function makePremium(Request $request){
+       return $this->repository->premiumSubscription($request);
+    }
     /**
      * @throws CannotInsertRecord
      */
