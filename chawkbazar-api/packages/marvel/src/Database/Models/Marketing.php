@@ -8,7 +8,7 @@ class Marketing extends Model
 {
     public $timestamps=false;
     protected $table="marketing_images";
-    protected $fillable=['url','area'];
+    protected $fillable=['url','area','text'];
 
 
 }

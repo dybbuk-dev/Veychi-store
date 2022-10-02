@@ -15,4 +15,10 @@ final class Permission extends Enum
     public const STORE_OWNER = 'store_owner';
     public const STAFF = 'staff';
     public const CUSTOMER = 'customer';
+    public const SHAREHOLDER= 'shareholder';
+    public const CEO = 'CEO';
+    public const MANAGER_RH = 'manager_rh';
+    public const MARKETING = 'marketing';
+    public const MANAGEMENT = 'management';
+    public const LEGAL = 'legal';
 }

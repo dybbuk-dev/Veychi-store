@@ -12,7 +12,9 @@ use Marvel\Http\Controllers\CustomerReviewsController;
 use Marvel\Http\Controllers\DNIDocumentController;
 use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\MarketingController;
+use Marvel\Http\Controllers\PrivacyPolicyController;
 use Marvel\Http\Controllers\ProductController;
+use Marvel\Http\Controllers\SalariesController;
 use Marvel\Http\Controllers\SettingsController;
 use Marvel\Http\Controllers\TicketCommentsController;
 use Marvel\Http\Controllers\TicketController;
@@ -199,10 +201,16 @@ Route::group(
 Route::apiResource('reviews', CustomerReviewsController::class, [
     'only' => ['index','show']
 ]);
-Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sanctum']], function () {
+Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN.'|'.Permission::SHAREHOLDER.'|'. Permission::CEO.'|'. Permission::MANAGER_RH.'|'. Permission::MARKETING.'|'. Permission::MANAGEMENT.'|'. Permission::LEGAL, 'auth:sanctum']], function () {
     Route::get('product/export','Marvel\Http\Controllers\ProductController@exportAllProducts');
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
+    ]);
+    Route::apiResource('privacy-policy', PrivacyPolicyController::class,[
+        'only' => ['index','show','store', 'update', 'destroy']
+    ]);
+    Route::apiResource('salaries', SalariesController::class,[
+        'only' => ['index','show','store', 'update', 'destroy']
     ]);
     Route::apiResource('marketing', MarketingController::class, [
         'only' => ['index','show','store', 'update', 'destroy']
@@ -242,6 +250,3 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN, 'auth:sa
     Route::post('approve-withdraw', 'Marvel\Http\Controllers\WithdrawController@approveWithdraw');
 
 });
-//todo:delete
-Route::get('export/users','Marvel\Http\Controllers\UserController@exportUsersAndOrders');
-Route::get('export/products','Marvel\Http\Controllers\ProductController@exportAllProducts');

@@ -100,7 +100,13 @@ class ShopServiceProvider extends ServiceProvider
     public function givePermissionToSuperAdmin()
     {
         Gate::before(function ($user, $ability) {
-            return $user->hasPermissionTo(Permission::SUPER_ADMIN) ? true : null;
+            return $user->hasPermissionTo(Permission::SUPER_ADMIN)||
+            $user->user()->hasPermissionTo(Permission::CEO)||
+            $user->user()->hasPermissionTo(Permission::MANAGEMENT)||
+            $user->user()->hasPermissionTo(Permission::LEGAL)||
+            $user->user()->hasPermissionTo(Permission::MANAGER_RH)||
+            $user->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+            $user->user()->hasPermissionTo(Permission::MARKETING) ? true : null;
         });
     }
 

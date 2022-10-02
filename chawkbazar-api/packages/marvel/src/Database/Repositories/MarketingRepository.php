@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use http\Env\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Marvel\Database\Models\Marketing;
 use Marvel\Exceptions\MarvelException;
@@ -24,7 +25,7 @@ class MarketingRepository extends BaseRepository
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $dataArray = [];
 
     public function model(): string
     {
@@ -38,8 +39,17 @@ class MarketingRepository extends BaseRepository
         $url=$this->base64ImageResolver($request->image,Str::slug(Carbon::now()."-".$request->area));
         return $this->create([
             'url'=> $url,
-            'area'=>$request->area
+            'area'=>$request->area,
+            'text'=>$request->text,
         ]);
+    }
+
+    private function validationFields(){
+        return [
+            'url'=>"required",
+            'area'=>'required|max:191',
+            'text'=>'nullable'
+        ];
     }
 
     /**
@@ -50,10 +60,13 @@ class MarketingRepository extends BaseRepository
      */
     public function updateMarketing($request, Model $marketing):Model{
         try{
+            $validation = Validator::make($request->all(),$this->validationFields());
+            if($validation->fails())throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
             Storage::delete($marketing->url);
             $url=Storage::put($marketing->url,$request->image);
             $marketing->url=$url;
             $marketing->area=$request->area;
+            $marketing->text-=$request->text;
             $marketing->save();
             return $marketing;
         }catch (Exception $ex){

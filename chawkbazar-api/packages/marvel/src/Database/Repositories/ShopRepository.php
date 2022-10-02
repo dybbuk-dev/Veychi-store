@@ -82,9 +82,17 @@ class ShopRepository extends BaseRepository
             if (isset($request['categories'])) {
                 $shop->categories()->sync($request['categories']);
             }
+
             if (isset($request['balance'])) {
                 if (isset($request['balance']['admin_commission_rate']) && $shop->balance->admin_commission_rate !== $request['balance']['admin_commission_rate']) {
-                    if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
+                    if ( ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
+                        $request->user()->hasPermissionTo(Permission::CEO)||
+                        $request->user()->hasPermissionTo(Permission::MANAGEMENT)||
+                        $request->user()->hasPermissionTo(Permission::LEGAL)||
+                        $request->user()->hasPermissionTo(Permission::MANAGER_RH)||
+                        $request->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+                        $request->user()->hasPermissionTo(Permission::MARKETING))
+                    ) {
                         $this->updateBalance($request['balance'], $id);
                     }
                 } else {

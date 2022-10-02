@@ -26,9 +26,21 @@ class AnalyticsController extends CoreController
     public function analytics(Request $request)
     {
         $user = $request->user();
-        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN) || $user->hasPermissionTo(Permission::STORE_OWNER))) {
+        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $user->hasPermissionTo(Permission::CEO)||
+                $user->hasPermissionTo(Permission::MANAGEMENT)||
+                $user->hasPermissionTo(Permission::LEGAL)||
+                $user->hasPermissionTo(Permission::MANAGER_RH)||
+                $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                $user->hasPermissionTo(Permission::MARKETING))) {
             $totalRevenueQuery = DB::table('orders')->whereDate('created_at', '>', Carbon::now()->subDays(30));
-            if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 $totalRevenue = $totalRevenueQuery->where('parent_id', null)->sum('paid_total');
             } else {
                 $totalRevenue = $totalRevenueQuery->where('shop_id', '=', $user->id)->sum('paid_total');
@@ -36,18 +48,36 @@ class AnalyticsController extends CoreController
 
             $todaysRevenueQuery = DB::table('orders')->whereDate('created_at', '>', Carbon::now()->subDays(1));
 
-            if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 $todaysRevenue = $todaysRevenueQuery->where('parent_id', null)->sum('paid_total');
             } else {
                 $todaysRevenue = $todaysRevenueQuery->where('shop_id', '=', $user->id)->sum('paid_total');
             }
             $totalOrdersQuery = DB::table('orders')->whereDate('created_at', '>', Carbon::now()->subDays(30));
-            if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 $totalOrders = $totalOrdersQuery->where('parent_id', null)->count();
             } else {
                 $totalOrders = $totalOrdersQuery->where('shop_id', '=', $user->id)->count();
             }
-            if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 $totalShops = Shop::count();
             } else {
                 $totalShops = Shop::where('owner_id', '=', $user->id)->count();
@@ -58,7 +88,13 @@ class AnalyticsController extends CoreController
                 DB::table('orders')->selectRaw(
                     "sum(paid_total) as total, DATE_FORMAT(created_at,'%M') as month"
                 )->whereYear('created_at', date('Y'));
-            if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 $totalYearSaleByMonth = $totalYearSaleByMonthQuery->where('parent_id', null)->groupBy('month')->get();
             } else {
                 $totalYearSaleByMonth = $totalYearSaleByMonthQuery->where('shop_id', '=', $user->id)->groupBy('month')->get();

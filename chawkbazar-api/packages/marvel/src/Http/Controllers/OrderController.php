@@ -48,7 +48,13 @@ class OrderController extends CoreController
     public function fetchOrders(Request $request)
     {
         $user = $request->user();
-        if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN) && (!isset($request->shop_id) || $request->shop_id === 'undefined')) {
+        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $user->hasPermissionTo(Permission::CEO)||
+                $user->hasPermissionTo(Permission::MANAGEMENT)||
+                $user->hasPermissionTo(Permission::LEGAL)||
+                $user->hasPermissionTo(Permission::MANAGER_RH)||
+                $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                $user->hasPermissionTo(Permission::MARKETING)) && (!isset($request->shop_id) || $request->shop_id === 'undefined')) {
             return $this->repository->with('children')->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
         } else if ($this->repository->hasPermission($user, $request->shop_id)) {
             if ($user && $user->hasPermissionTo(Permission::STORE_OWNER)) {
@@ -86,7 +92,13 @@ class OrderController extends CoreController
         } catch (\Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
-        if ($user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+        if (($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+            $user->hasPermissionTo(Permission::CEO)||
+            $user->hasPermissionTo(Permission::MANAGEMENT)||
+            $user->hasPermissionTo(Permission::LEGAL)||
+            $user->hasPermissionTo(Permission::MANAGER_RH)||
+            $user->hasPermissionTo(Permission::SHAREHOLDER)||
+            $user->hasPermissionTo(Permission::MARKETING))) {
             return $order;
         } elseif (isset($order->shop_id)) {
             if ($this->repository->hasPermission($user, $order->shop_id)) {
@@ -142,7 +154,13 @@ class OrderController extends CoreController
             if ($this->repository->hasPermission($user, $order->shop_id)) {
                 return $this->changeOrderStatus($order, $request->status,$request->id_proof_voucher_media);
             }
-        } else if ($user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+        } else if (($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+            $user->hasPermissionTo(Permission::CEO)||
+            $user->hasPermissionTo(Permission::MANAGEMENT)||
+            $user->hasPermissionTo(Permission::LEGAL)||
+            $user->hasPermissionTo(Permission::MANAGER_RH)||
+            $user->hasPermissionTo(Permission::SHAREHOLDER)||
+            $user->hasPermissionTo(Permission::MARKETING))) {
             return $this->changeOrderStatus($order, $request->status,$request->id_proof_voucher_media);
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');

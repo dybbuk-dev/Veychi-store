@@ -176,7 +176,13 @@ class UserController extends CoreController
     public function banUser(Request $request)
     {
         $user = $request->user();
-        if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN) && $user->id != $request->id) {
+        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $user->hasPermissionTo(Permission::CEO)||
+                $user->hasPermissionTo(Permission::MANAGEMENT)||
+                $user->hasPermissionTo(Permission::LEGAL)||
+                $user->hasPermissionTo(Permission::MANAGER_RH)||
+                $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                $user->hasPermissionTo(Permission::MARKETING)) && $user->id != $request->id) {
             $banUser =  User::find($request->id);
             $banUser->is_active = false;
             $banUser->save();
@@ -188,7 +194,13 @@ class UserController extends CoreController
     public function activeUser(Request $request)
     {
         $user = $request->user();
-        if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN) && $user->id != $request->id) {
+        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $user->hasPermissionTo(Permission::CEO)||
+                $user->hasPermissionTo(Permission::MANAGEMENT)||
+                $user->hasPermissionTo(Permission::LEGAL)||
+                $user->hasPermissionTo(Permission::MANAGER_RH)||
+                $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                $user->hasPermissionTo(Permission::MARKETING)) && $user->id != $request->id) {
             $activeUser =  User::find($request->id);
             $activeUser->is_active = true;
             $activeUser->save();

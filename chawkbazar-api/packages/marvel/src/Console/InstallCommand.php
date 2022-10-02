@@ -39,6 +39,12 @@ class InstallCommand extends Command
         Permission::firstOrCreate(['name' => UserPermission::CUSTOMER]);
         Permission::firstOrCreate(['name' => UserPermission::STORE_OWNER]);
         Permission::firstOrCreate(['name' => UserPermission::STAFF]);
+        Permission::firstOrCreate(['name' => UserPermission::CEO]);
+        Permission::firstOrCreate(['name' => UserPermission::MANAGEMENT]);
+        Permission::firstOrCreate(['name' => UserPermission::LEGAL]);
+        Permission::firstOrCreate(['name' => UserPermission::MANAGER_RH]);
+        Permission::firstOrCreate(['name' => UserPermission::SHAREHOLDER]);
+        Permission::firstOrCreate(['name' => UserPermission::MARKETING]);
 
         try {
             if ($this->confirm('Do you want to create an admin?')) {
@@ -81,6 +87,12 @@ class InstallCommand extends Command
                         UserPermission::SUPER_ADMIN,
                         UserPermission::STORE_OWNER,
                         UserPermission::CUSTOMER,
+                        UserPermission::CEO,
+                        UserPermission::MANAGEMENT,
+                        UserPermission::LEGAL,
+                        UserPermission::MANAGER_RH,
+                        UserPermission::SHAREHOLDER,
+                        UserPermission::MARKETING
                     ]
                 );
                 $this->info('User Creation Successful!');

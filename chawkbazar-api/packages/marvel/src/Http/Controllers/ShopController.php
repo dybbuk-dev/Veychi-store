@@ -84,7 +84,13 @@ class ShopController extends CoreController
         $shop = $this->repository
             ->with(['categories', 'owner'])
             ->withCount(['orders', 'products']);
-        if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->shops->contains('slug', $slug))) {
+        if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $request->user()->hasPermissionTo(Permission::CEO)||
+                $request->user()->hasPermissionTo(Permission::MANAGEMENT)||
+                $request->user()->hasPermissionTo(Permission::LEGAL)||
+                $request->user()->hasPermissionTo(Permission::MANAGER_RH)||
+                $request->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+                $request->user()->hasPermissionTo(Permission::MARKETING)|| $request->user()->shops->contains('slug', $slug))) {
             $shop = $shop->with('balance');
         }
         try {
@@ -111,7 +117,13 @@ class ShopController extends CoreController
     public function updateShop(Request $request)
     {
         $id = $request->id;
-        if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
+        if (($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $request->user()->hasPermissionTo(Permission::CEO)||
+                $request->user()->hasPermissionTo(Permission::MANAGEMENT)||
+                $request->user()->hasPermissionTo(Permission::LEGAL)||
+                $request->user()->hasPermissionTo(Permission::MANAGER_RH)||
+                $request->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+                $request->user()->hasPermissionTo(Permission::MARKETING)) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
             return $this->repository->updateShop($request, $id);
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
@@ -133,7 +145,13 @@ class ShopController extends CoreController
     public function deleteShop(Request $request)
     {
         $id = $request->id;
-        if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
+        if (($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $request->user()->hasPermissionTo(Permission::CEO)||
+                $request->user()->hasPermissionTo(Permission::MANAGEMENT)||
+                $request->user()->hasPermissionTo(Permission::LEGAL)||
+                $request->user()->hasPermissionTo(Permission::MANAGER_RH)||
+                $request->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+                $request->user()->hasPermissionTo(Permission::MARKETING)) || ($request->user()->hasPermissionTo(Permission::STORE_OWNER) && ($request->user()->shops->contains($id)))) {
             try {
                 $shop = $this->repository->findOrFail($id);
             } catch (\Exception $e) {

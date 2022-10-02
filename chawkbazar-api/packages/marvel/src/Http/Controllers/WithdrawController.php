@@ -50,13 +50,25 @@ class WithdrawController extends CoreController
         if ($shop_id) {
             if ($user->shops->contains('id', $shop_id)) {
                 return $this->repository->with(['shop'])->where('shop_id', '=', $shop_id);
-            } elseif ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            } elseif ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 return $this->repository->with(['shop'])->where('amount', '!=', null);
             } else {
                 throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
             }
         } else {
-            if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+            if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $user->hasPermissionTo(Permission::CEO)||
+                    $user->hasPermissionTo(Permission::MANAGEMENT)||
+                    $user->hasPermissionTo(Permission::LEGAL)||
+                    $user->hasPermissionTo(Permission::MANAGER_RH)||
+                    $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $user->hasPermissionTo(Permission::MARKETING))) {
                 return $this->repository->with(['shop'])->where('id', '!=', null);
             } else {
                 throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
@@ -111,7 +123,13 @@ class WithdrawController extends CoreController
         } catch (\Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
-        if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN) || $request->user()->shops->contains('id', $withdraw->shop_id))) {
+        if ($request->user() && (($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
+                    $request->user()->hasPermissionTo(Permission::CEO)||
+                    $request->user()->hasPermissionTo(Permission::MANAGEMENT)||
+                    $request->user()->hasPermissionTo(Permission::LEGAL)||
+                    $request->user()->hasPermissionTo(Permission::MANAGER_RH)||
+                    $request->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+                    $request->user()->hasPermissionTo(Permission::MARKETING)) || $request->user()->shops->contains('id', $withdraw->shop_id))) {
             return $withdraw;
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
@@ -138,7 +156,13 @@ class WithdrawController extends CoreController
      */
     public function destroy(Request $request, $id)
     {
-        if ($request->user() && $request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
+        if ($request->user() && $request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
+            $request->user()->hasPermissionTo(Permission::CEO)||
+            $request->user()->hasPermissionTo(Permission::MANAGEMENT)||
+            $request->user()->hasPermissionTo(Permission::LEGAL)||
+            $request->user()->hasPermissionTo(Permission::MANAGER_RH)||
+            $request->user()->hasPermissionTo(Permission::SHAREHOLDER)||
+            $request->user()->hasPermissionTo(Permission::MARKETING)) {
             try {
                 return $this->repository->findOrFail($id)->delete();
             } catch (\Exception $e) {

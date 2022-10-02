@@ -189,7 +189,14 @@ abstract class BaseRepository extends Repository implements CacheableInterface
         if (!$shop->is_active) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SHOP_NOT_APPROVED');
         }
-        if ($user && $user->hasPermissionTo(Permission::SUPER_ADMIN)) {
+        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                $user->hasPermissionTo(Permission::CEO)||
+                        $user->hasPermissionTo(Permission::MANAGEMENT)||
+                        $user->hasPermissionTo(Permission::LEGAL)||
+                        $user->hasPermissionTo(Permission::MANAGER_RH)||
+                        $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                        $user->hasPermissionTo(Permission::MARKETING))
+        ) {
             return true;
         } elseif ($user &&  $user->hasPermissionTo(Permission::STORE_OWNER)) {
             if ($shop->owner_id === $user->id) {
