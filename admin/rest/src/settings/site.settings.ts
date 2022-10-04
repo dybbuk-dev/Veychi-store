@@ -5,7 +5,7 @@ export const siteSettings = {
   name: 'ChawkBazar',
   description: '',
   logo: {
-    url: '/logo.svg',
+    url: '/logo.webp',
     alt: 'ChawkBazar',
     href: '/',
     width: 128,
@@ -125,6 +125,16 @@ export const siteSettings = {
             href: ROUTES.WITHDRAWS,
             label: 'sidebar-nav-item-withdraws',
             icon: 'WithdrawIcon',
+          },
+        ],
+      },
+      {
+        label: 'Gestión',
+        children: [
+          {
+            href: ROUTES.ADMINISTRATORS,
+            label: 'sidebar-nav-item-admins',
+            icon: 'UsersIcon',
           },
         ],
       },

@@ -11,10 +11,6 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ROUTES } from '@utils/routes';
 import { SortOrder } from '@ts-types/generated';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import moment from 'moment';
-import { saveXLSXData } from '../withdraws';
 
 export default function Customers() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,48 +41,22 @@ export default function Customers() {
   function handlePagination(current: any) {
     setPage(current);
   }
-  const handleExport = async () => {
-    try {
-      const tkn = Cookies.get('AUTH_CRED')!;
-      if (!tkn) return;
-      const { token } = JSON.parse(tkn);
-      const res = await axios.get(
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'users/export/all',
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        }
-      );
-      const dateNow = moment(new Date()).format('YYYY-DD-MM');
-      saveXLSXData!(res.data, `usuarios_${dateNow}.csv`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
       <Card className="flex flex-col md:flex-row items-center mb-8">
         <div className="md:w-1/4 mb-4 md:mb-0">
           <h1 className="text-lg font-semibold text-heading">
-            {t('form:input-label-customers')}
+            {t('form:input-label-administrators')}
           </h1>
         </div>
 
         <div className="w-full md:w-3/4 flex items-center ms-auto">
           <Search onSearch={handleSearch} />
-          <button
-            type="button"
-            onClick={handleExport}
-            className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-          >
-            Exportar
-          </button>
           <LinkButton
             href={`${ROUTES.USERS}/create`}
             className="h-12 ms-4 md:ms-6"
           >
-            <span>+ {t('form:button-label-add-customer')}</span>
+            <span>+ {t('form:button-label-add-administrator')}</span>
           </LinkButton>
         </div>
       </Card>
