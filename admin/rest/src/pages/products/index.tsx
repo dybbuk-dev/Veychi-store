@@ -9,7 +9,6 @@ import { useState } from 'react';
 import { useProductsQuery } from '@data/product/products.query';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import SortForm from '@components/common/sort-form';
 import CategoryTypeFilter from '@components/product/category-type-filter';
 import cn from 'classnames';
 import { ArrowDown } from '@components/icons/arrow-down';
@@ -17,6 +16,8 @@ import { ArrowUp } from '@components/icons/arrow-up';
 import { adminOnly } from '@utils/auth-utils';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { saveXLSXData } from '../withdraws';
+import moment from 'moment';
 
 export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,26 +49,24 @@ export default function ProductsPage() {
     sortedBy,
   });
   const handleExport = async () => {
-    const tkn = Cookies.get('AUTH_CRED')!;
-    if (true) return;
-    const { token } = JSON.parse(tkn);
-    const res = await axios({
-      method: 'GET',
-      url: 'https://dfe8-201-220-127-222.sa.ngrok.io/users/export/all',
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        authorization: 'Bearer ' + token,
-      },
-    });
-
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'test');
-    document.body.appendChild(link);
-    link.click();
+    try {
+      const tkn = Cookies.get('AUTH_CRED')!;
+      if (!tkn) return;
+      const { token } = JSON.parse(tkn);
+      const res = await axios.get(
+        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'product/export',
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        }
+      );
+      const dateNow = moment(new Date()).format('YYYY-DD-MM');
+      saveXLSXData!(res.data, `productos_${dateNow}.csv`);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -96,7 +95,7 @@ export default function ProductsPage() {
             onClick={handleExport}
             className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
           >
-            Export
+            Exportar
           </button>
 
           <button
