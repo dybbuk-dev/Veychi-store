@@ -101,12 +101,12 @@ class ShopServiceProvider extends ServiceProvider
     {
         Gate::before(function ($user, $ability) {
             return $user->hasPermissionTo(Permission::SUPER_ADMIN)||
-            $user->user()->hasPermissionTo(Permission::CEO)||
-            $user->user()->hasPermissionTo(Permission::MANAGEMENT)||
-            $user->user()->hasPermissionTo(Permission::LEGAL)||
-            $user->user()->hasPermissionTo(Permission::MANAGER_RH)||
-            $user->user()->hasPermissionTo(Permission::SHAREHOLDER)||
-            $user->user()->hasPermissionTo(Permission::MARKETING) ? true : null;
+            $user->hasPermissionTo(Permission::CEO)||
+            $user->hasPermissionTo(Permission::MANAGEMENT)||
+            $user->hasPermissionTo(Permission::LEGAL)||
+            $user->hasPermissionTo(Permission::MANAGER_RH)||
+            $user->hasPermissionTo(Permission::SHAREHOLDER)||
+            $user->hasPermissionTo(Permission::MARKETING) ? true : null;
         });
     }
 

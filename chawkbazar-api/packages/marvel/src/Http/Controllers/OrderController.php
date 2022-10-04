@@ -216,18 +216,25 @@ class OrderController extends CoreController
      * @throws MarvelException
      * @throws CannotInsertRecord
      */
-    public function allOrdersInStore(Request $request, $id){
+    public function allOrdersInStore(Request $request, $id=null){
+        if(!$request->user()->hasPermissionTo(Permission::STORE_OWNER))  throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         try{
-            $fields=['id','tracking_number','amount','total'];
-            $shop=Shop::where([
+            $whereClause=!is_null($id)?[
                 ['owner_id',"=",$request->user()->id],
                 ['id',"=",$id],
                 ['is_active',"=",1]
-            ])->firstOrFail();
-            $data= DB::table('orders')->where('shop_id',$shop->id)->get($fields);
+            ]:[
+                ['owner_id',"=",$request->user()->id],
+                ['is_active',"=",1]
+            ];
+            $fields=['id','tracking_number','amount','total'];
+            $shops=Shop::where($whereClause)->get();
             $collection_data=new Collection();
-            foreach ($data as $reg)$collection_data->add(new Collection($reg));
-            if($data) $this->repository->arrayToCsv($collection_data,null,$fields);
+            foreach ($shops as $shop) {
+                $data= DB::table('orders')->where('shop_id',$shop->id)->get($fields);
+                foreach ($data as $reg)$collection_data->add(new Collection($reg));
+            }
+            if($collection_data->count()>0) $this->repository->arrayToCsv($collection_data,null,$fields);
         }catch (Exception $ex){
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
