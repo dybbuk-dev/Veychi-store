@@ -20,6 +20,7 @@ class MarketingImages extends Migration
             $table->string('url');
             $table->string('area');
             $table->text('text')->nullable();
+            $table->string('text_position',20)->nullable();
         });
     }
 

@@ -206,6 +206,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN.'|'.Permi
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
     ]);
+    Route::get('orders/export/all',[OrderController::class,'allOrdersInStore']);
     Route::apiResource('privacy-policy', PrivacyPolicyController::class,[
         'only' => ['index','show','store', 'update', 'destroy']
     ]);
@@ -213,12 +214,13 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN.'|'.Permi
         'only' => ['index','show','store', 'update', 'destroy']
     ]);
     Route::apiResource('marketing', MarketingController::class, [
-        'only' => ['index','show','store', 'update', 'destroy']
+        'only' => ['index','show','store', 'destroy']
     ]);
+    Route::put('marketing','Marvel\Http\Controllers\MarketingController@update');
     Route::apiResource('approval-tokens', ApprovalTokenController::class, [
         'only' => ['index','show','store', 'update', 'destroy']
     ]);
-    Route::get('withdraws/export/{id}/all','Marvel\Http\Controllers\WithdrawController@exportWithdraws');
+    Route::get('withdraws/export/all','Marvel\Http\Controllers\WithdrawController@exportWithdraws');
     Route::apiResource('withdraws', WithdrawController::class, [
         'only' => ['update', 'destroy']
     ]);

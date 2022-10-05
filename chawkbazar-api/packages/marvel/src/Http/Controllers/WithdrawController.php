@@ -193,9 +193,8 @@ class WithdrawController extends CoreController
     /**
      * @throws MarvelException
      */
-    public function exportWithdraws(Request $request, $id){
+    public function exportWithdraws(Request $request){
         try{
-            $shop=Shop::findOrFail($id);
             $fields=["name","amount","status","created_at","email","bank","account"];
             $collection_data=new Collection();
             $raw_data= DB::select("SELECT
@@ -209,8 +208,7 @@ class WithdrawController extends CoreController
     FROM
         shops
         INNER JOIN withdraws ON shops.id = withdraws.shop_id
-        INNER JOIN balances ON shops.id = balances.shop_id
-        AND shops.id = :SHOP_ID",["SHOP_ID"=>$shop->id]);
+        INNER JOIN balances ON shops.id = balances.shop_id");
             foreach ($raw_data as $raw_datum) $collection_data->add(new Collection($raw_datum));
             $this->repository->arrayToCsv($collection_data,null,$fields);
         }catch (Exception $ex){
