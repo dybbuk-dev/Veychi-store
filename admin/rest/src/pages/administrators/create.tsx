@@ -1,3 +1,4 @@
+import AdministratorCreateForm from '@components/administrators/administrator-form';
 import Layout from '@components/layouts/admin';
 import CustomerCreateForm from '@components/user/user-form';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +13,7 @@ export default function CreateCustomerPage() {
           {t('form:form-title-create-administrator')}
         </h1>
       </div>
-      <CustomerCreateForm />
+      <AdministratorCreateForm />
     </>
   );
 }

@@ -1,9 +1,9 @@
-import { RegisterInput } from "@ts-types/generated";
-import { ROUTES } from "@utils/routes";
-import User from "@repositories/user";
-import { useRouter } from "next/router";
-import { useMutation, useQueryClient } from "react-query";
-import { API_ENDPOINTS } from "@utils/api/endpoints";
+import { RegisterInput } from '@ts-types/generated';
+import { ROUTES } from '@utils/routes';
+import User from '@repositories/user';
+import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from 'react-query';
+import { API_ENDPOINTS } from '@utils/api/endpoints';
 
 export interface IRegisterVariables {
   variables: RegisterInput;
@@ -15,10 +15,15 @@ export const useCreateUserMutation = () => {
 
   return useMutation(
     ({ variables }: IRegisterVariables) =>
-      User.register(API_ENDPOINTS.REGISTER, variables),
+      User.register(
+        API_ENDPOINTS.REGISTER,
+        variables.permission
+          ? { ...variables, permission: variables.permission.value }
+          : variables
+      ),
     {
       onSuccess: () => {
-        router.push(ROUTES.USERS);
+        router.push(ROUTES.ADMINISTRATORS);
       },
       // Always refetch after error or success:
       onSettled: () => {

@@ -39,6 +39,7 @@ import Typography from '@mui/material/Typography';
 import QRIcon from './qr-icon.png';
 import QRCode from 'react-qr-code';
 import ReactToPrint from 'react-to-print';
+import Swal from 'sweetalert2';
 
 export default function ShopPage() {
   const { t } = useTranslation();
@@ -49,7 +50,20 @@ export default function ShopPage() {
   } = useRouter();
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    const premiumStatus = localStorage.getItem('premium');
+    console.log(premiumStatus);
+    if (premiumStatus != '"true"')
+      return Swal.fire(
+        'Ups',
+        `Parece que aún no eres Premium.<br/>
+         * <a href='${
+           window.location.origin + '/es/chawkbazar-vendor-shop/premium-info'
+         }' style="color:#FFAF48">Hazte Premium</a> para poder generar tu QR!`,
+        'error'
+      );
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
   const { data, isLoading: loading, error } = useShopQuery(shop!.toString());
   const { price: totalEarnings } = usePrice(
@@ -376,7 +390,7 @@ const style = {
   p: 4,
 };
 
-function TransitionsModal({ handleClose, handleOpen, open, data }: any) {
+function TransitionsModal({ handleClose, open, data }: any) {
   console.log(data);
   const docRef = React.useRef(null);
 
@@ -384,20 +398,8 @@ function TransitionsModal({ handleClose, handleOpen, open, data }: any) {
     if (!data) return '';
     return 'https://www.veychi.com/shops/' + data.shop.slug;
   }, [data]);
-  const downloadQR = () => {
-    const pngUrl = docRef
-      .current!.canvas.current.toDataURL('image/png')
-      .replace('image/png', 'image/octet-stream');
-    let downloadLink = document.createElement('a');
-    downloadLink.href = pngUrl;
-    downloadLink.download = '123456.png';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  };
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

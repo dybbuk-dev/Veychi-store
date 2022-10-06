@@ -6,6 +6,7 @@ import { CloseIcon } from '@components/icons/close-icon';
 import Loader from '@components/ui/loader/loader';
 import { useTranslation } from 'next-i18next';
 import { useUploadMutation } from '@data/upload/use-upload.mutation';
+import axios from 'axios';
 
 const getPreviewImage = (value: any) => {
   let images: any[] = [];
@@ -26,14 +27,26 @@ export default function Uploader({ onChange, value, multiple }: any) {
         upload(
           acceptedFiles, // it will be an array of uploaded attachments
           {
-            onSuccess: (data) => {
+            onSuccess: async (data) => {
               let mergedData;
               if (multiple) {
                 mergedData = files.concat(data);
                 setFiles(files.concat(data));
               } else {
-                mergedData = data[0];
-                setFiles(data);
+                console.log(data);
+                if (Array.isArray(data)) {
+                  mergedData = data[0];
+                  setFiles(data);
+                } else {
+                  const res = await axios.get(
+                    'http://137.184.22.131' + '/attachments/' + data.id,
+                    { responseType: 'blob' }
+                  );
+                  /* console.log(res); */
+                  mergedData = data;
+                  console.log(res);
+                  setFiles([res.data!]);
+                }
               }
               if (onChange) {
                 onChange(mergedData);

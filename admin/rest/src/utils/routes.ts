@@ -22,7 +22,9 @@ export const ROUTES = {
   TAGS: '/tags',
   WITHDRAWS: '/withdraws',
   PROFILE_UPDATE: '/profile-update',
+  GET_PREMIUM: '/premium-info',
   LOGOUT: '/logout',
+  TICKETS: '/tickets',
   STAFFS: '/staffs',
   ADMINISTRATORS: '/administrators',
 };
