@@ -292,6 +292,7 @@ abstract class BaseRepository extends Repository implements CacheableInterface
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Description', 'File Transfer');
+        $response->headers->add(['Access-Control-Allow-Origin'=>'*']);
         $response->setCallback($content_callback);
         return $response->send();
     }

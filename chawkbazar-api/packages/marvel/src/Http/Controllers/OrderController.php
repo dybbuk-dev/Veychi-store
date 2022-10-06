@@ -216,21 +216,37 @@ class OrderController extends CoreController
      * @throws MarvelException
      * @throws CannotInsertRecord
      */
-    public function allOrdersInStore(Request $request, $id){
-        try{
-            $fields=['id','tracking_number','amount','total'];
-            $shop=Shop::where([
-                ['owner_id',"=",$request->user()->id],
-                ['id',"=",$id],
-                ['is_active',"=",1]
-            ])->firstOrFail();
-            $data= DB::table('orders')->where('shop_id',$shop->id)->get($fields);
+    public function allOrdersInStore(Request $request, $id=null){
+        $fields=['id','tracking_number','amount','total'];
+        if($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)){
+            $data= DB::table('orders')->get($fields);
             $collection_data=new Collection();
             foreach ($data as $reg)$collection_data->add(new Collection($reg));
-            if($data) $this->repository->arrayToCsv($collection_data,null,$fields);
-        }catch (Exception $ex){
-            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+            if($collection_data->count()>0) $this->repository->arrayToCsv($collection_data,null,$fields);
         }
+        if($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {
+            try{
+                $whereClause=!is_null($id)?[
+                    ['owner_id',"=",$request->user()->id],
+                    ['id',"=",$id],
+                    // ['is_active',"=",1]
+                ]:[
+                    ['owner_id',"=",$request->user()->id],
+                    // ['is_active',"=",1]
+                ];
+
+                $shops=Shop::where($whereClause)->get();
+                $collection_data=new Collection();
+                foreach ($shops as $shop) {
+                    $data= DB::table('orders')->where('shop_id',$shop->id)->get($fields);
+                    foreach ($data as $reg)$collection_data->add(new Collection($reg));
+                }
+                if($collection_data->count()>0) $this->repository->arrayToCsv($collection_data,null,$fields);
+            }catch (Exception $ex){
+                throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+            }
+        }
+
 
 
 

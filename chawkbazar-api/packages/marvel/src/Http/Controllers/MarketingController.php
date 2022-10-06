@@ -77,11 +77,18 @@ class MarketingController extends CoreController
      * @return Model
      * @throws MarvelException
      */
-    public function update(Request $request, int $id): Model
+    public function update(Request $request)
     {
         try {
-            $marketing=$this->repository->findOrFail($id);
-            return $this->repository->updateMarketing($request,$marketing);
+            $response=new Collection();
+            $images=$request->marketing_images;
+            foreach ($images as $image){
+                $req=new Request();
+                $req->merge($image);
+                if(is_null($req->id)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+             $response->add($this->repository->updateMarketing($req,$this->repository->findOrFail($req->id)));
+            }
+            return $response;
         } catch (Exception $ex) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
