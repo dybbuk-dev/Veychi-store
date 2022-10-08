@@ -17,10 +17,14 @@ class MarketingImages extends Migration
     {
         Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
-            $table->string('url');
-            $table->string('area');
+            $table->string('title',200);
+            $table->json('image');
+            $table->string('type');
             $table->text('text')->nullable();
             $table->string('text_position',20)->nullable();
+            $table->string('slug',25);
+            $table->string('subtitle',200)->nullable();
+            $table->string('subtitle_position',20)->nullable();
         });
     }
 

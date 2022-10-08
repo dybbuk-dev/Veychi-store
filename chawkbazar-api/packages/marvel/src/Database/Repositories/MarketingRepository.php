@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Marvel\Database\Models\Marketing;
 use Marvel\Exceptions\MarvelException;
 use Omnipay\Common\Http\Exception;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class MarketingRepository.
@@ -33,31 +34,46 @@ class MarketingRepository extends BaseRepository
     }
 
 
+    /**
+     * @throws MarvelException
+     * @throws ValidatorException
+     */
     public function createMarketing($request)
     {
         $validator=Validator::make($request->all(),[
+            'title'=>"required",
             'image'=>"required",
-            'area'=>'required|max:191',
+            'type'=>'required|max:191',
             'text'=>'nullable',
-            "text_position"=>'nullable|max:20'
+            "text_position"=>'nullable|max:20',
+            "slug"=>'nullable|max:191',
+            "subtitle"=>'nullable|max:200',
+            "subtitle_position"=>'nullable|max:20',
         ]);
-        if($validator->fails())   throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
-        $url=$this->base64ImageResolver($request->image,Str::slug(Carbon::now()."-".$request->area));
+        if($validator->fails())  throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+              return $this->create([
+                  'title'=>$request->title,
+                  'text'=>$request->text,
+                  'text_position'=>$request->text_position,
+                  'slug'=>$request->slug,
+                  'subtitle'=>$request->subtitle,
+                  'subtitle_position'=>$request->subtitle_position,
+                  'image'=>$request->image,
+                  'type'=>$request->type,
 
-        return $this->create([
-            'url'=> $url,
-            'area'=>$request->area,
-            'text'=>$request->text,
-            'text_position'=>$request->text_position
         ]);
     }
 
     private function validationFields(){
         return [
+            'title'=>"required",
             'image'=>"required",
-            'area'=>'required|max:191',
+            'type'=>'required|max:191',
             'text'=>'nullable',
-            'text_position'=>'nullable',
+            "text_position"=>'nullable|max:20',
+            "slug"=>'nullable|max:191',
+            "subtitle"=>'nullable|max:200',
+            "subtitle_position"=>'nullable|max:20',
             "id"=>'exists:marketing_images,id'
         ];
     }
@@ -72,12 +88,14 @@ class MarketingRepository extends BaseRepository
         try{
             $validation = Validator::make($request->all(),$this->validationFields());
             if($validation->fails())throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
-            Storage::delete($marketing->url);
-            $url=$this->base64ImageResolver($request->image,Str::slug(Carbon::now()."-".$request->area));
-            $marketing->url=$url;
-            $marketing->area=$request->area;
+            $marketing->title=$request->title;
+            $marketing->image=$request->image;
+            $marketing->type=$request->type;
             $marketing->text=$request->text;
             $marketing->text_position=$request->text_position;
+            $marketing->slug=$request->slug;
+            $marketing->subtitle=$request->subtitle;
+            $marketing->subtitle_position=$request->subtitle_position;
             $marketing->save();
             return $marketing;
         }catch (Exception $ex){

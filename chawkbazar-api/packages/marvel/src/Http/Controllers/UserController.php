@@ -45,7 +45,7 @@ class UserController extends CoreController
     public function index(Request $request)
     {
         $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->with(['profile', 'address'])->paginate($limit);
+        return $this->repository->with(['profile', 'address','permissions'])->paginate($limit);
     }
 
     /**
@@ -68,7 +68,7 @@ class UserController extends CoreController
     public function show($id)
     {
         try {
-            $user = $this->repository->with(['profile', 'address', 'shop', 'managed_shop'])->findOrFail($id);
+            $user = $this->repository->with(['profile', 'address',  'managed_shop','permissions'])->findOrFail($id);
             return $user;
         } catch (Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');

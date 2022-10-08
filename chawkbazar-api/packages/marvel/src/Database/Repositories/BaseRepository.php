@@ -3,6 +3,7 @@
 
 namespace Marvel\Database\Repositories;
 
+use Carbon\Carbon;
 use Exception;
 use Ignited\LaravelOmnipay\Facades\OmnipayFacade as Omnipay;
 use Illuminate\Http\JsonResponse;
@@ -168,6 +169,10 @@ abstract class BaseRepository extends Repository implements CacheableInterface
     public function getModel()
     {
         return $this->model;
+    }
+    public function binaryUploadResolver($field,$name){
+        $url=  Storage::disk(env('MEDIA_DISK'))->put(Str::slug(Carbon::now()."-".$name),$field);
+        return Storage::url($url);
     }
     public function base64ImageResolver($image_64,$imageName): string
     {
