@@ -53,7 +53,7 @@ export default function Customers() {
         <div className="w-full md:w-3/4 flex items-center ms-auto">
           <Search onSearch={handleSearch} />
           <LinkButton
-            href={`${ROUTES.USERS}/create`}
+            href={`${ROUTES.ADMINISTRATORS}/create`}
             className="h-12 ms-4 md:ms-6"
           >
             <span>+ {t('form:button-label-add-administrator')}</span>

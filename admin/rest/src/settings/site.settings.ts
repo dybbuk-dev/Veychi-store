@@ -69,6 +69,11 @@ export const siteSettings = {
             label: 'sidebar-nav-item-shippings',
             icon: 'ShippingsIcon',
           },
+          {
+            href: ROUTES.TICKETS,
+            label: 'sidebar-nav-item-tickets',
+            icon: 'WithdrawIcon',
+          },
         ],
       },
       {
@@ -129,11 +134,11 @@ export const siteSettings = {
         ],
       },
       {
-        label: 'Gestión',
+        label: 'RH',
         children: [
           {
             href: ROUTES.ADMINISTRATORS,
-            label: 'sidebar-nav-item-admins',
+            label: 'sidebar-nav-item-staff',
             icon: 'UsersIcon',
           },
         ],
@@ -166,7 +171,7 @@ export const siteSettings = {
       },
       {
         href: (shop: string) => `/${shop}${ROUTES.STAFFS}`,
-        label: 'sidebar-nav-item-staffs',
+        label: 'sidebar-nav-item-staff',
         icon: 'UsersIcon',
         permissions: adminAndOwnerOnly,
       },
@@ -174,6 +179,12 @@ export const siteSettings = {
         href: (shop: string) => `/${shop}${ROUTES.WITHDRAWS}`,
         label: 'sidebar-nav-item-withdraws',
         icon: 'AttributeIcon',
+        permissions: adminAndOwnerOnly,
+      },
+      {
+        href: (shop: string) => `/${shop}${ROUTES.GET_PREMIUM}`,
+        label: 'sidebar-nav-item-premium',
+        icon: 'CouponsIcon',
         permissions: adminAndOwnerOnly,
       },
     ],

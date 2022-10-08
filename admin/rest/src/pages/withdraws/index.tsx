@@ -36,7 +36,7 @@ export default function WithdrawsPage() {
       if (!tkn) return;
       const { token } = JSON.parse(tkn);
       const res = await axios.get(
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'withdraws/export/2/all',
+        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'withdraws/export/all',
         {
           headers: {
             Authorization: 'Bearer ' + token,

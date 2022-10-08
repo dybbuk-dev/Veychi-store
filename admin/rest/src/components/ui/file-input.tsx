@@ -1,5 +1,5 @@
-import Uploader from "@components/common/uploader";
-import { Controller } from "react-hook-form";
+import Uploader from '@components/common/uploader';
+import { Controller } from 'react-hook-form';
 
 interface FileInputProps {
   control: any;
@@ -8,6 +8,7 @@ interface FileInputProps {
 }
 
 const FileInput = ({ control, name, multiple = true }: FileInputProps) => {
+  console.log(multiple);
   return (
     <Controller
       control={control}

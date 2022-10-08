@@ -17,7 +17,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { fetchMe } from '@data/user/use-me.query';
 
-export default function Orders() {
+export default function Tickets() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
@@ -51,8 +51,7 @@ export default function Orders() {
       const { token } = JSON.parse(tkn);
       const res = await axios.get(queryStr, {
         headers: {
-          Authorization:
-            'Bearer ' + '4|DAWjJRO3aGhlM6uz8eX5mcqUIKCWXV2myL0tQyF8',
+          Authorization: 'Bearer ' + token,
         },
       });
       const dateNow = moment(new Date()).format('YYYY-DD-MM');
@@ -92,11 +91,11 @@ export default function Orders() {
   );
 }
 
-Orders.authenticate = {
+Tickets.authenticate = {
   permissions: adminOnly,
 };
 
-Orders.Layout = Layout;
+Tickets.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
