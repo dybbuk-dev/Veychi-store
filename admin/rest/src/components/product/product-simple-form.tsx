@@ -29,7 +29,7 @@ export default function ProductSimpleForm({ initialValues }: IProps) {
 
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
-          label={`${t("form:input-label-price")}*`}
+          label={`${t("form:input-label-price-internal")}*`}
           {...register("price")}
           type="number"
           error={t(errors.price?.message!)}

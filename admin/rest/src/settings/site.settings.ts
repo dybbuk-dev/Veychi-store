@@ -86,12 +86,12 @@ export const siteSettings = {
           },
           {
             href: ROUTES.BRANDS,
-            label: 'sidebar-nav-item-groups',
+            label: 'sidebar-nav-item-categories',
             icon: 'TypesIcon',
           },
           {
             href: ROUTES.CATEGORIES,
-            label: 'sidebar-nav-item-categories',
+            label: 'sidebar-nav-item-subcategories',
             icon: 'CategoriesIcon',
           },
           {
@@ -116,7 +116,7 @@ export const siteSettings = {
         children: [
           {
             href: ROUTES.USERS,
-            label: 'sidebar-nav-item-users',
+            label: 'sidebar-nav-item-customers-user',
             icon: 'UsersIcon',
           },
 

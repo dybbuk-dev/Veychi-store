@@ -51,8 +51,7 @@ export default function Orders() {
       const { token } = JSON.parse(tkn);
       const res = await axios.get(queryStr, {
         headers: {
-          Authorization:
-            'Bearer ' + '4|DAWjJRO3aGhlM6uz8eX5mcqUIKCWXV2myL0tQyF8',
+          Authorization: 'Bearer ' + token,
         },
       });
       const dateNow = moment(new Date()).format('YYYY-DD-MM');

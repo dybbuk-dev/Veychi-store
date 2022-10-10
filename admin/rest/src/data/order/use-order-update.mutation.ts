@@ -21,7 +21,7 @@ export const useUpdateOrderMutation = () => {
       },
       // Always refetch after error or success:
       onSettled: () => {
-        queryClient.invalidateQueries(API_ENDPOINTS.ORDERS);
+        queryClient.invalidateQueries(API_ENDPOINTS.ORDERS,{},{auth});
       },
     }
   );

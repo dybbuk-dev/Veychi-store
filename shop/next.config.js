@@ -1,31 +1,35 @@
-const { i18n } = require("./next-i18next.config");
-const withPWA = require("next-pwa");
-const runtimeCaching = require("next-pwa/cache");
+const { i18n } = require('./next-i18next.config');
+const withPWA = require('next-pwa');
+const runtimeCaching = require('next-pwa/cache');
 module.exports = withPWA({
   pwa: {
-    disable: process.env.NODE_ENV !== "production",
-    dest: "public",
+    disable: process.env.NODE_ENV !== 'production',
+    dest: 'public',
     runtimeCaching,
   },
   i18n,
   images: {
     domains: [
-      "veychi.com",
-      "127.0.0.1",
-      "localhost",
-      "googleusercontent.com",
-      "maps.googleapis.com",
-      "chawkbazarapi.redq.io",
-      "graph.facebook.com",
-      "res.cloudinary.com",
-      "s3.amazonaws.com",
-      "18.141.64.26",
-      "via.placeholder.com",
-      "pickbazarlaravel.s3.ap-southeast-1.amazonaws.com",
-      "chawkbazarlaravel.s3.ap-southeast-1.amazonaws.com",
-      "picsum.photos",
-      "cdninstagram.com",
-      "scontent.cdninstagram.com",
+      'veychi.com',
+      '127.0.0.1',
+      'localhost',
+      'googleusercontent.com',
+      'maps.googleapis.com',
+      'chawkbazarapi.redq.io',
+      'graph.facebook.com',
+      'res.cloudinary.com',
+      's3.amazonaws.com',
+      '18.141.64.26',
+      'via.placeholder.com',
+      'pickbazarlaravel.s3.ap-southeast-1.amazonaws.com',
+      'chawkbazarlaravel.s3.ap-southeast-1.amazonaws.com',
+      'picsum.photos',
+      'cdninstagram.com',
+      'scontent.cdninstagram.com',
+      '137.184.22.131',
+      'd390-201-220-127-222.sa.ngrok.io',
+      '2787-201-220-127-222.sa.ngrok.io',
+      'b3a1-201-220-127-222.sa.ngrok.io',
     ],
   },
 

@@ -1,26 +1,29 @@
-import Input from "@components/ui/input";
-import { useForm } from "react-hook-form";
-import Button from "@components/ui/button";
-import Description from "@components/ui/description";
-import Card from "@components/common/card";
-import { useRouter } from "next/router";
-import ColorPicker from "@components/ui/color-picker/color-picker";
-import { useCreateOrderStatusMutation } from "@data/order-status/product-create.mutation";
-import { useUpdateOrderStatusMutation } from "@data/order-status/product-update.mutation";
-import { useTranslation } from "next-i18next";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { orderStatusValidationSchema } from "./order-status-validation-schema";
-import DisplayColorCode from "@components/ui/color-picker/display-color-code";
+import Input from '@components/ui/input';
+import { useForm } from 'react-hook-form';
+import Button from '@components/ui/button';
+import Description from '@components/ui/description';
+import Card from '@components/common/card';
+import { useRouter } from 'next/router';
+import ColorPicker from '@components/ui/color-picker/color-picker';
+import { useCreateOrderStatusMutation } from '@data/order-status/product-create.mutation';
+import { useUpdateOrderStatusMutation } from '@data/order-status/product-update.mutation';
+import { useTranslation } from 'next-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { orderStatusValidationSchema } from './order-status-validation-schema';
+import DisplayColorCode from '@components/ui/color-picker/display-color-code';
+import SwitchInput from '@components/ui/switch-input';
 
 type FormValues = {
   name: string;
   color: string;
   serial: number;
+  requires_proof_voucher: boolean;
 };
 const defaultValues = {
-  name: "",
+  name: '',
   serial: 1,
-  color: "#d87b64",
+  color: '#d87b64',
+  requires_proof_voucher: false,
 };
 export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
   const router = useRouter();
@@ -51,6 +54,7 @@ export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
               id: initialValues.id,
               name: values.name,
               color: values.color,
+              requires_proof_voucher: values.requires_proof_voucher,
               serial: values.serial,
             },
           },
@@ -59,7 +63,7 @@ export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
           onError: (error: any) => {
             Object.keys(error?.response?.data).forEach((field: any) => {
               setError(field, {
-                type: "manual",
+                type: 'manual',
                 message: error?.response?.data[field][0],
               });
             });
@@ -73,6 +77,8 @@ export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
             input: {
               name: values.name,
               color: values.color,
+              requires_proof_voucher: values.requires_proof_voucher,
+
               serial: values.serial,
             },
           },
@@ -81,7 +87,7 @@ export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
           onError: (error: any) => {
             Object.keys(error?.response?.data).forEach((field: any) => {
               setError(field, {
-                type: "manual",
+                type: 'manual',
                 message: error?.response?.data[field][0],
               });
             });
@@ -95,35 +101,45 @@ export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
-          title={t("form:input-label-description")}
+          title={t('form:input-label-description')}
           details={`${
             initialValues
-              ? t("form:button-label-update")
-              : t("form:button-label-add")
-          } ${t("form:order-status-description-helper-text")}`}
+              ? t('form:button-label-update')
+              : t('form:button-label-add')
+          } ${t('form:order-status-description-helper-text')}`}
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
-            label={t("form:input-label-name")}
-            {...register("name")}
+            label={t('form:input-label-name')}
+            {...register('name')}
             error={t(errors.name?.message!)}
             variant="outline"
             className="mb-5"
           />
 
           <Input
-            label={t("form:input-label-serial")}
-            note={t("form:input-label-serial-help-text")}
-            {...register("serial")}
+            label={t('form:input-label-serial')}
+            note={t('form:input-label-serial-help-text')}
+            {...register('serial')}
             type="number"
             error={t(errors.serial?.message!)}
             variant="outline"
           />
+          <SwitchInput
+            label={
+              <label className="block text-body-dark font-semibold text-sm leading-none my-3">
+                Imagen requerida
+              </label>
+            }
+            errors={t(errors.serial?.message!)}
+            name="requires_proof_voucher"
+            control={control}
+          />
           <ColorPicker
-            label={t("form:input-label-color")}
-            {...register("color")}
+            label={t('form:input-label-color')}
+            {...register('color')}
             error={t(errors.color?.message!)}
             className="mt-5"
           >
@@ -140,15 +156,15 @@ export default function CreateOrUpdateOrderStatusForm({ initialValues }: any) {
             className="me-4"
             type="button"
           >
-            {t("form:button-label-back")}
+            {t('form:button-label-back')}
           </Button>
         )}
 
         <Button loading={creating || updating}>
           {initialValues
-            ? t("form:button-label-update")
-            : t("form:button-label-add")}{" "}
-          {t("form:button-label-order-status")}
+            ? t('form:button-label-update')
+            : t('form:button-label-add')}{' '}
+          {t('form:button-label-order-status')}
         </Button>
       </div>
     </form>

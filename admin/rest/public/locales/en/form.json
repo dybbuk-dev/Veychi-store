@@ -59,6 +59,8 @@
   "input-label-confirm-password": "Confirm Password",
   "input-label-products": "Products",
   "input-label-categories": "Categories",
+  "input-label-subcategories": "Subcategories",
+
   "input-label-coupons": "Coupons",
   "input-label-orders": "Orders",
   "input-label-order-id": "Order ID",
@@ -66,9 +68,12 @@
   "input-label-name": "Name",
   "input-label-description": "Description",
   "input-label-price": "Price",
+  "input-label-price-internal": "Price (Internal Usage)",
   "input-label-sale-price": "Sale Price",
   "input-label-quantity": "Quantity",
   "input-label-unit": "Unit",
+  "input-label-unit-of-measurement": "Unit of measurement",
+
   "input-label-width": "Width",
   "input-label-height": "Height",
   "input-label-length": "Length",
@@ -129,6 +134,7 @@
   "button-label-add-types": "Add Types",
   "button-label-add-group": "Add Group",
   "button-label-add-categories": "Add Categories",
+  "button-label-add-subcategories": "Add Subcategories",
   "button-label-add-order-status": "Add Order Status",
   "button-label-update-group": "Update Group",
   "group-description-help-text": "your group description and necessary information from here",
@@ -139,7 +145,11 @@
   "button-label-change": "Change",
   "button-label-change-status": "Change Status",
   "input-label-customers": "Customers",
+  "input-label-customers-user": "Customers",
+
   "button-label-add-customer": "Add Customer",
+  "button-label-add-customer-user": "Add Customer",
+
   "button-label-login": "Login",
   "button-label-add-coupon": "Add Coupon",
   "button-label-update-coupon": "Update Coupon",
