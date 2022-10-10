@@ -1,23 +1,23 @@
-import CategoryList from "@components/category/category-list";
-import Card from "@components/common/card";
-import Layout from "@components/layouts/admin";
-import Search from "@components/common/search";
-import LinkButton from "@components/ui/link-button";
-import { useState } from "react";
-import ErrorMessage from "@components/ui/error-message";
-import Loader from "@components/ui/loader/loader";
-import { SortOrder } from "@ts-types/generated";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { ROUTES } from "@utils/routes";
-import { useCategoriesQuery } from "@data/category/use-categories.query";
-import {adminOnly} from "@utils/auth-utils";
+import CategoryList from '@components/category/category-list';
+import Card from '@components/common/card';
+import Layout from '@components/layouts/admin';
+import Search from '@components/common/search';
+import LinkButton from '@components/ui/link-button';
+import { useState } from 'react';
+import ErrorMessage from '@components/ui/error-message';
+import Loader from '@components/ui/loader/loader';
+import { SortOrder } from '@ts-types/generated';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { ROUTES } from '@utils/routes';
+import { useCategoriesQuery } from '@data/category/use-categories.query';
+import { adminOnly } from '@utils/auth-utils';
 
 export default function Categories() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
-  const [orderBy, setOrder] = useState("created_at");
+  const [orderBy, setOrder] = useState('created_at');
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const {
     data,
@@ -32,7 +32,7 @@ export default function Categories() {
     parent: null,
   });
 
-  if (loading) return <Loader text={t("common:text-loading")} />;
+  if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 
   function handleSearch({ searchText }: { searchText: string }) {
@@ -48,7 +48,7 @@ export default function Categories() {
         <div className="w-full flex flex-col md:flex-row items-center">
           <div className="md:w-1/4 mb-4 md:mb-0">
             <h1 className="text-xl font-semibold text-heading">
-              {t("form:input-label-categories")}
+              {t('form:input-label-subcategories')}
             </h1>
           </div>
 
@@ -60,10 +60,10 @@ export default function Categories() {
               className="h-12 md:ms-6 w-full md:w-auto"
             >
               <span className="block md:hidden xl:block">
-                + {t("form:button-label-add-categories")}
+                + {t('form:button-label-add-subcategories')}
               </span>
               <span className="hidden md:block xl:hidden">
-                + {t("form:button-label-add")}
+                + {t('form:button-label-add')}
               </span>
             </LinkButton>
           </div>
@@ -86,6 +86,6 @@ Categories.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["form", "common", "table"])),
+    ...(await serverSideTranslations(locale, ['form', 'common', 'table'])),
   },
 });

@@ -38,14 +38,36 @@ export default function Uploader({ onChange, value, multiple }: any) {
                   mergedData = data[0];
                   setFiles(data);
                 } else {
-                  const res = await axios.get(
-                    'http://137.184.22.131' + '/attachments/' + data.id,
-                    { responseType: 'blob' }
+                  const url = await axios.get(
+                    process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                      'attachments/' +
+                      data.id,
+                    {
+                      headers: {
+                        Accept: 'application/json',
+                      },
+                    }
                   );
-                  /* console.log(res); */
-                  mergedData = data;
+                  const res = await axios.get(
+                    process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                      'attachments/' +
+                      data.id,
+                    {
+                      headers: {
+                        Accept: 'application/octet-stream',
+                        responseType: 'blob',
+                      },
+                    }
+                  );
                   console.log(res);
-                  setFiles([res.data!]);
+                  const attachment = {
+                    thumbnail: url.data.url!,
+                    original: url.data.url,
+                    id: data.id,
+                  };
+                  mergedData = attachment!;
+                  console.log(attachment);
+                  setFiles([attachment]);
                 }
               }
               if (onChange) {

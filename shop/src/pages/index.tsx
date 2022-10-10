@@ -1,21 +1,20 @@
-import Container from "@components/ui/container";
-import BrandGridBlock from "@containers/brand-grid-block";
-import CategoryBlock from "@containers/category-block";
-import { getLayout } from "@components/layout/layout";
-import BannerWithProducts from "@containers/banner-with-products";
-import BannerBlock from "@containers/banner-block";
-import Divider from "@components/ui/divider";
-import ProductsFeatured from "@containers/products-featured";
-import BannerSliderBlock from "@containers/banner-slider-block";
-import Subscription from "@components/common/subscription";
-
+import Container from '@components/ui/container';
+import BrandGridBlock from '@containers/brand-grid-block';
+import CategoryBlock from '@containers/category-block';
+import { getLayout } from '@components/layout/layout';
+import BannerWithProducts from '@containers/banner-with-products';
+import BannerBlock from '@containers/banner-block';
+import Divider from '@components/ui/divider';
+import ProductsFeatured from '@containers/products-featured';
+import BannerSliderBlock from '@containers/banner-slider-block';
+import Subscription from '@components/common/subscription';
 import {
   masonryBanner,
   promotionBanner,
   modernDemoProductBanner as productBanner,
-} from "@data/static/banners";
+} from '@data/static/banners';
 
-export { getStaticProps } from "@framework/ssr/homepage/modern";
+export { getStaticProps } from '@framework/ssr/homepage/modern';
 
 export default function Home() {
   return (
