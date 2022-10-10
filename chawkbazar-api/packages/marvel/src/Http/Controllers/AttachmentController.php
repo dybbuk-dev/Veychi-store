@@ -59,9 +59,12 @@ class AttachmentController extends CoreController
      * @param int $id
      * @return JsonResponse
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         try {
+            if($request->wantsJson()){
+                return  ['url'=>$this->repository->findOrFail($id)->getMedia()[0]->getFullUrl(),'slug'=>$this->repository->findOrFail($id)->getMedia()[0]->getUrl()];
+            }
           return  $this->repository->with('media')->findOrFail($id)->media[0];
         } catch (\Exception $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
