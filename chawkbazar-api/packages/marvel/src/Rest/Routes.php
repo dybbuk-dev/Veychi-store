@@ -9,6 +9,7 @@ use Marvel\Http\Controllers\AttributeValueController;
 use Marvel\Http\Controllers\CompanyController;
 use Marvel\Http\Controllers\CountryController;
 use Marvel\Http\Controllers\CustomerReviewsController;
+use Marvel\Http\Controllers\DisputeController;
 use Marvel\Http\Controllers\DNIDocumentController;
 use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\MarketingController;
@@ -60,6 +61,8 @@ Route::apiResource('tags', TagController::class, [
     'only' => ['index', 'show']
 ]);
 
+
+
 Route::get('featured-categories', 'Marvel\Http\Controllers\CategoryController@fetchFeaturedCategories');
 
 // Route::get('fetch-parent-category', 'Marvel\Http\Controllers\CategoryController@fetchOnlyParent');
@@ -95,6 +98,12 @@ Route::apiResource('settings', SettingsController::class, [
 
 
 Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], function () {
+    Route::post('dispute/message','Marvel\Http\Controllers\DisputeController@storeMessage');
+    Route::delete('dispute/message','Marvel\Http\Controllers\DisputeController@deleteMessage');
+    Route::post('dispute/{id}','Marvel\Http\Controllers\DisputeController@store');
+    Route::apiResource('dispute',DisputeController::class,[
+        'only'=>['index','show','update','destroy']
+    ]);
     Route::post('products/review','Marvel\Http\Controllers\ProductController@addReview');
     Route::apiResource('orders', OrderController::class, [
         'only' => ['index', 'show', 'store']
@@ -127,11 +136,19 @@ Route::group(
     ['middleware' => ['permission:' . Permission::STAFF . '|' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
         Route::get('orders/export/all/{id?}',[OrderController::class,'allOrdersInStore']);
+        Route::post('dispute/message','Marvel\Http\Controllers\DisputeController@storeMessage');
+        Route::delete('dispute/message','Marvel\Http\Controllers\DisputeController@deleteMessage');
+        Route::apiResource('dispute',DisputeController::class,[
+            'only'=>['index','show','update','store','destroy']
+        ]);
         Route::apiResource('orders',OrderController::class,[
             'only'=>[
                 'update',
                 'destroy'
             ]
+        ]);
+        Route::apiResource('dispute',DisputeController::class,[
+            'only'=>['index','show','update','store','destroy']
         ]);
         Route::resource('tickets',TicketController::class,[
             'only'=>['index', 'show', 'update', 'destroy','store']

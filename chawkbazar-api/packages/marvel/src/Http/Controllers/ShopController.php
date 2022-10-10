@@ -54,6 +54,7 @@ class ShopController extends CoreController
      * @param ShopCreateRequest $request
      * @return mixed
      */
+
     public function store(ShopCreateRequest $request)
     {
         if ($request->user()->hasPermissionTo(Permission::STORE_OWNER)) {

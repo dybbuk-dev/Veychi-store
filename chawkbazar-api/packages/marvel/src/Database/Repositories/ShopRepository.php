@@ -58,6 +58,7 @@ class ShopRepository extends BaseRepository
     public function storeShop($request)
     {
         try {
+
             $data = $request->only($this->dataArray);
             $data['owner_id'] = $request->user()->id;
             $shop = $this->create($data);
@@ -69,6 +70,7 @@ class ShopRepository extends BaseRepository
             }
             $shop->categories = $shop->categories;
             $shop->staffs = $shop->staffs;
+           // $shop->save();
             return $shop;
         } catch (ValidatorException $e) {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');

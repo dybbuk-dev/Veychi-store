@@ -16,14 +16,24 @@ class Shop extends Model
     protected $table = 'shops';
 
     public $guarded = [];
-
     protected $casts = [
         'logo' => 'json',
         'cover_image' => 'json',
         'address' => 'json',
         'settings' => 'json',
     ];
-    protected $fillable=['approval_token_id'];
+    protected $fillable=[
+        'approval_token_id',
+        'shop',
+        'name',
+        'description',
+        'cover_image',
+        'logo',
+        'address',
+        'settings',
+        'country_id',
+        'owner_id'
+    ];
 
     /**
      * Return the sluggable configuration array for this model.
