@@ -141,6 +141,7 @@ Route::group(
         Route::apiResource('dispute',DisputeController::class,[
             'only'=>['index','show','update','store','destroy']
         ]);
+
         Route::apiResource('orders',OrderController::class,[
             'only'=>[
                 'update',
@@ -190,7 +191,9 @@ Route::group(
         Route::apiResource('shops', ShopController::class, [
             'only' => ['store', 'update', 'destroy']
         ]);
-
+        Route::apiResource('attachments', AttachmentController::class, [
+            'only' => ['store', 'update', 'destroy']
+        ]);
         Route::apiResource('withdraws', WithdrawController::class, [
             'only' => ['store', 'index', 'show']
         ]);

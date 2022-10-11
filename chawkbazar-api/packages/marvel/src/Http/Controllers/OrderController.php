@@ -15,6 +15,7 @@ use Marvel\Database\Models\OrderStatus;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Models\User;
+use Marvel\Database\Models\VoucherStatusMedia;
 use Marvel\Database\Repositories\OrderRepository;
 use Marvel\Enums\Permission;
 use Marvel\Events\OrderCreated;
@@ -55,15 +56,15 @@ class OrderController extends CoreController
                 $user->hasPermissionTo(Permission::MANAGER_RH)||
                 $user->hasPermissionTo(Permission::SHAREHOLDER)||
                 $user->hasPermissionTo(Permission::MARKETING)) && (!isset($request->shop_id) || $request->shop_id === 'undefined')) {
-            return $this->repository->with('children')->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
+            return $this->repository->with(['children','statusVoucher'])->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
         } else if ($this->repository->hasPermission($user, $request->shop_id)) {
             if ($user && $user->hasPermissionTo(Permission::STORE_OWNER)) {
-                return $this->repository->with('children')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
+                return $this->repository->with(['children','statusVoucher'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
             } elseif ($user && $user->hasPermissionTo(Permission::STAFF)) {
-                return $this->repository->with('children')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
+                return $this->repository->with(['children','statusVoucher'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
             }
         } else {
-            return $this->repository->with('children')->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
+            return $this->repository->with(['children','statusVoucher'])->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
         }
     }
 
@@ -88,8 +89,9 @@ class OrderController extends CoreController
     {
         $user = $request->user();
         try {
-            $order = $this->repository->with(['products', 'status', 'children.shop'])->findOrFail($id);
+            $order = $this->repository->with(['products', 'status', 'children.shop','statusVoucher'])->findOrFail($id);
         } catch (\Exception $e) {
+            dd($e);
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         }
         if (($user->hasPermissionTo(Permission::SUPER_ADMIN)||
@@ -152,7 +154,7 @@ class OrderController extends CoreController
         $user = $request->user();
         if (isset($order->shop_id)) {
             if ($this->repository->hasPermission($user, $order->shop_id)) {
-                return $this->changeOrderStatus($order, $request->status,$request->id_proof_voucher_media);
+                return $this->changeOrderStatus($request,$order, $request->status,$request->id_proof_voucher_media);
             }
         } else if (($user->hasPermissionTo(Permission::SUPER_ADMIN)||
             $user->hasPermissionTo(Permission::CEO)||
@@ -161,7 +163,7 @@ class OrderController extends CoreController
             $user->hasPermissionTo(Permission::MANAGER_RH)||
             $user->hasPermissionTo(Permission::SHAREHOLDER)||
             $user->hasPermissionTo(Permission::MARKETING))) {
-            return $this->changeOrderStatus($order, $request->status,$request->id_proof_voucher_media);
+            return $this->changeOrderStatus($request,$order, $request->status,$request->id_proof_voucher_media);
         } else {
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         }
@@ -170,14 +172,16 @@ class OrderController extends CoreController
     /**
      * @throws MarvelException
      */
-    public function changeOrderStatus($order, $status, $voucher)
+    public function changeOrderStatus($request,$order, $status, $voucher)
     {
-        //id_proof_voucher_media
-        //todo: add voucher for each status if is required
         $status_in_repository=OrderStatus::find($status);
         if($status_in_repository->requires_proof_voucher){
             if($voucher){
-                $order->id_proof_voucher_media=$voucher;
+                VoucherStatusMedia::create([
+                    'id_order'=>$order->id,
+                    'id_order_status'=>$status_in_repository->id,
+                    'id_attachment'=>$voucher
+                ]);
             }else{
              return response(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED',400);
             }
@@ -195,7 +199,7 @@ class OrderController extends CoreController
                 $child_order->save();
             }
         }
-        return $order;
+        return $this->show($request,$order->id);
     }
 
     /**
