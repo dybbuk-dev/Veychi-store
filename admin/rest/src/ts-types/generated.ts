@@ -103,6 +103,7 @@ export declare type Order = {
   products: Array<Product>;
   created_at: Scalars['DateTime'];
   updated_at: Scalars['DateTime'];
+  dispute: any[];
   billing_address?: Maybe<UserAddress>;
   shipping_address?: Maybe<UserAddress>;
 };
@@ -845,6 +846,7 @@ export declare type PaymentInfo = {
 export declare type PaymentInfoInput = {
   account?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  accountType?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   bank?: Maybe<Scalars['String']>;
 };

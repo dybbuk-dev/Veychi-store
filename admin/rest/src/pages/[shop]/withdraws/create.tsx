@@ -20,6 +20,7 @@ interface IBalance {
     name: string;
     email: string;
     bank: string;
+    accountType: string;
     account: number;
   };
 }
@@ -66,6 +67,27 @@ export default function CreateWithdrawPage() {
                     payment_info: {
                       ...data!.balance.payment_info,
                       name: e.target.value,
+                    },
+                  },
+                };
+              })
+            }
+            className="mb-5"
+          />
+          <Input
+            label={'Tipo de cuenta'}
+            name="accountType"
+            variant="outline"
+            value={data?.balance.payment_info.accountType}
+            onChange={(e: any) =>
+              setData((data: any) => {
+                return {
+                  ...data,
+                  balance: {
+                    ...data!.balance,
+                    payment_info: {
+                      ...data!.balance.payment_info,
+                      accountType: e.target.value,
                     },
                   },
                 };

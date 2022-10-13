@@ -1,44 +1,63 @@
+import Loader from '@components/ui/loader/loader';
+import { useUploadMutation } from '@data/upload/use-upload.mutation';
 import { useMeQuery } from '@data/user/use-me.query';
 import { MessageSharp } from '@mui/icons-material';
+import { Button } from '@mui/material';
+import { Attachment } from '@ts-types/generated';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import Image from 'next/image';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 const Dispute = () => {
   const { id = '' } = useRouter().query;
-  const { data: user, isLoading: loading, error } = useMeQuery();
-
+  const router = useRouter();
+  const { data: user } = useMeQuery();
   const [data, setData] = useState<any | null>(null);
-  const fetchData = async () => {
-    const tkn = Cookies.get('AUTH_CRED')!;
-    if (!tkn) return;
-    const { token } = JSON.parse(tkn);
-
-    const res = await axios.get('/dispute/' + id, {
-      headers: {
-        authorization: 'Bearer ' + token,
-      },
-    });
-    setData(res.data);
-    console.log(res.data);
-  };
 
   useEffect(() => {
-    fetchData();
+    fetchDispute({ setter: setData, id: id as string });
   }, []);
   if (!data || !user) return <>loading...</>;
   return (
     <div className="flex h-screen text-gray-800 antialiased">
       <div className="flex h-full w-full flex-row overflow-x-hidden">
         <div className="flex w-64 flex-shrink-0 flex-col bg-white py-8 pl-6 pr-2">
-          <div className="justify-star-4 ml-4 flex h-12 w-full flex-row items-center">
-            {'<-'}
-            <div className="ml-1 text-left text-2xl font-bold">Atras</div>
+          <div className="justify-star-4  flex h-12 w-full flex-row items-center">
+            <div className="text-left text-2xl font-bold">
+              <Button
+                variant="text"
+                onClick={() =>
+                  router.push(
+                    '/' + data.order.shop.slug + '/orders/' + data.order.id
+                  )
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+                  />
+                </svg>
+                <span className="ml-2" />
+                Atras
+              </Button>
+            </div>
           </div>
-          <div className="mt-4 flex w-full flex-col items-center rounded-lg border border-gray-200 bg-indigo-100 py-6 px-4">
-            {/* <div className="h-20 w-20 overflow-hidden rounded-full border">
+          {/* <div className="mt-4 flex w-full flex-col items-center rounded-lg border border-gray-200 bg-indigo-100 py-6 px-4">
+            <div className="h-20 w-20 overflow-hidden rounded-full border">
               <img
                 src="https://avatars3.githubusercontent.com/u/2763884?s=128"
                 alt="Avatar"
@@ -52,69 +71,156 @@ const Dispute = () => {
                 <div className="mr-1 h-3 w-3 self-end rounded-full bg-white"></div>
               </div>
               <div className="ml-1 text-xs leading-none">Active</div>
-            </div> */}
+            </div>
+          </div> */}
+        </div>
+        <MessageContainer data={data} user={user} setData={setData} id={id} />
+      </div>
+    </div>
+  );
+};
+
+export default Dispute;
+
+const MessageContainer = ({ data, user, setData, id }: any) => {
+  const [isSending, setIsSending] = useState(false);
+  const { mutate: upload, isLoading: loading } = useUploadMutation();
+  const [file, setFile] = useState<Attachment | null>(null);
+  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+    multiple: false,
+    accept: ['image/*', '.pdf'],
+    onDropAccepted: (options, ...rest) => {
+      console.log({ rest });
+      console.log({ options });
+      upload(
+        options, // it will be an array of uploaded attachments
+        {
+          onSuccess: async (data) => {
+            let mergedData;
+            console.log(data);
+            if (Array.isArray(data)) {
+              mergedData = data[0];
+              setFile(mergedData);
+            } else {
+              console.log('entrdhr');
+              const url = await axios.get(
+                process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                  'attachments/' +
+                  data.id,
+                {
+                  headers: {
+                    Accept: 'application/json',
+                  },
+                }
+              );
+
+              const attachment = {
+                thumbnail: url.data.url!,
+                original: url.data.url,
+                id: data.id,
+              };
+              console.log(attachment);
+              await handleSend({
+                message: url.data.slug,
+                type: options[0].type === 'application/pdf' ? 'pdf' : 'image',
+              });
+              mergedData = attachment!;
+              console.log(attachment);
+              setFile(attachment);
+            }
+          },
+        }
+      );
+    },
+  });
+  const messageRef = useRef<HTMLInputElement>(null);
+  async function handleSend({
+    message: content,
+    type,
+  }: {
+    message: string;
+    type: 'image' | 'text' | 'pdf';
+  }) {
+    setIsSending(true);
+    try {
+      const headers = getHeaders();
+      if (!content) if (!headers) return setIsSending(false);
+      await axios.post(
+        '/dispute/message',
+        {
+          dispute_id: id,
+          type,
+          content,
+        },
+        headers
+      );
+
+      await fetchDispute({ setter: setData, id: id as string });
+      messageRef.current!.value = '';
+    } finally {
+      setIsSending(false);
+    }
+  }
+  return (
+    <div className="flex h-full flex-auto flex-col p-6">
+      <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4">
+        <div className="mb-4 flex h-full flex-col overflow-x-auto">
+          <div className="flex h-full flex-col">
+            <div className="grid grid-cols-12 gap-y-2">
+              {data.messages.map((message: any) => (
+                <MessageWrapper
+                  {...message}
+                  sentByMe={message.sender_id === user.id}
+                />
+              ))}
+            </div>
           </div>
         </div>
-        <div className="flex h-full flex-auto flex-col p-6">
-          <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4">
-            <div className="mb-4 flex h-full flex-col overflow-x-auto">
-              <div className="flex h-full flex-col">
-                <div className="grid grid-cols-12 gap-y-2">
-                  {data.messages.map((message: any) =>
-                    message.sender_id === user.id ? (
-                      <MessageByMe content={message.content} />
-                    ) : (
-                      <MessageByOther content={message.content} />
-                    )
-                  )}
-                </div>
-              </div>
+        <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4">
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+
+            <button className="flex items-center justify-center text-gray-400 hover:text-gray-600>">
+              <svg
+                className="h-5 w-5 "
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div className="ml-4 flex-grow">
+            <div className="relative w-full">
+              <input
+                type="text"
+                className="flex h-10 w-full rounded-xl border pl-4 focus:border-indigo-300 focus:outline-none"
+                ref={messageRef}
+              />
             </div>
-            <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4">
-              <div>
-                <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-              <div className="ml-4 flex-grow">
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="flex h-10 w-full rounded-xl border pl-4 focus:border-indigo-300 focus:outline-none"
-                  />
-                  <button className="absolute right-0 top-0 flex h-full w-12 items-center justify-center text-gray-400 hover:text-gray-600">
-                    <svg
-                      className="h-6 w-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div className="ml-4">
-                <button className="flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600">
+          </div>
+          <div className="ml-4">
+            <button
+              className={`flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600 ${
+                isSending ? 'bg-[#999] hover:bg-[#777]' : ''
+              }`}
+              disabled={isSending}
+              onClick={() =>
+                handleSend({
+                  message: messageRef.current!.value,
+                  type: 'text',
+                })
+              }
+            >
+              {!isSending ? (
+                <>
                   <span>Enviar</span>
                   <span className="ml-2">
                     <svg
@@ -131,10 +237,12 @@ const Dispute = () => {
                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                       ></path>
                     </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
+                  </span>{' '}
+                </>
+              ) : (
+                <Loader simple={true} className="w-6 h-6" />
+              )}
+            </button>
           </div>
         </div>
       </div>
@@ -142,33 +250,117 @@ const Dispute = () => {
   );
 };
 
-export default Dispute;
-
-const MessageByOther = ({ content }: { content: string }) => {
+const MessageWrapper = (props: {
+  content: string;
+  type: 'pdf' | 'image' | 'text';
+  sentByMe: boolean;
+}) => {
   return (
-    <div className="col-start-1 col-end-8 rounded-lg p-3">
-      <div className="flex flex-row items-center">
+    <div
+      className={
+        props.sentByMe
+          ? 'col-start-6 col-end-13 rounded-lg p-3'
+          : 'col-start-1 col-end-8 rounded-lg p-3'
+      }
+    >
+      <div
+        className={
+          props.sentByMe
+            ? 'flex flex-row-reverse items-center justify-start'
+            : 'flex flex-row items-center'
+        }
+      >
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
           C
         </div>
-        <div className="relative ml-3 rounded-xl bg-white py-2 px-4 text-sm shadow">
-          <div>{content}</div>
-        </div>
+
+        <MessageContent {...props} />
       </div>
     </div>
   );
 };
-const MessageByMe = ({ content }: { content: string }) => {
+
+const fetchDispute = async ({
+  setter,
+  id,
+}: {
+  setter: React.Dispatch<React.SetStateAction<any>>;
+  id: string;
+}) => {
+  const headers = getHeaders();
+  if (!headers) return;
+  const res = await axios.get('/dispute/' + id, headers);
+  setter(res.data);
+};
+
+const MessageContent = ({
+  content,
+  type,
+}: {
+  content: string;
+  type: 'image' | 'pdf' | 'text';
+}) => {
   return (
-    <div className="col-start-6 col-end-13 rounded-lg p-3">
-      <div className="flex flex-row-reverse items-center justify-start">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
-          A
-        </div>
-        <div className="relative mr-3 rounded-xl bg-indigo-100 py-2 px-4 text-sm shadow">
-          <div>{content}</div>
-        </div>
+    <div className="relative mr-3 rounded-xl bg-indigo-100 py-2 px-4 text-sm shadow">
+      <div>
+        {type === 'image' ? (
+          <div className="min-w-[150px] relative min-h-[150px]">
+            <ImageWithFallback
+              layout="fill"
+              className="absolute"
+              src={process.env.NEXT_PUBLIC_REST_API_ENDPOINT + content.slice(1)}
+              fallbackSrc={`https://www.publicdomainpictures.net/pictures/280000/nahled/not-found-image-15383864787lu.jpg`}
+            />
+          </div>
+        ) : type === 'pdf' ? (
+          <a
+            href={process.env.NEXT_PUBLIC_REST_API_ENDPOINT + content.slice(1)}
+            target="_blank"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"
+              />
+            </svg>
+          </a>
+        ) : (
+          content
+        )}
       </div>
     </div>
+  );
+};
+const getHeaders = () => {
+  const tkn = Cookies.get('AUTH_CRED')!;
+  if (!tkn) return;
+  const { token } = JSON.parse(tkn);
+  return {
+    headers: {
+      authorization: 'Bearer ' + token,
+    },
+  };
+};
+
+const ImageWithFallback = (props: any) => {
+  const { src, fallbackSrc, ...rest } = props;
+  const [imgSrc, setImgSrc] = useState(src);
+
+  return (
+    <Image
+      {...rest}
+      src={imgSrc}
+      onError={() => {
+        setImgSrc(fallbackSrc);
+      }}
+    />
   );
 };
