@@ -136,8 +136,8 @@ Route::group(
     ['middleware' => ['permission:' . Permission::STAFF . '|' . Permission::STORE_OWNER, 'auth:sanctum']],
     function () {
         Route::get('orders/export/all/{id?}',[OrderController::class,'allOrdersInStore']);
-        Route::post('dispute/message','Marvel\Http\Controllers\DisputeController@storeMessage');
-        Route::delete('dispute/message','Marvel\Http\Controllers\DisputeController@deleteMessage');
+        Route::post('dispute-admin/message','Marvel\Http\Controllers\DisputeController@storeMessage');
+        Route::delete('dispute-admin/message','Marvel\Http\Controllers\DisputeController@deleteMessage');
         Route::apiResource('dispute',DisputeController::class,[
             'only'=>['index','show','update','store','destroy']
         ]);
