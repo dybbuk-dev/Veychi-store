@@ -2,11 +2,15 @@
 
 namespace Marvel\Database\Models;
 
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Marvel\Http\Controllers\AttachmentController;
 
 class Order extends Model
 {
@@ -42,6 +46,14 @@ class Order extends Model
             ->withTimestamps();
     }
 
+    public function dispute(): HasMany {
+        return $this->hasMany(Dispute::class,'purchase_id','id');
+    }
+
+    public function statusVoucher(): hasMany
+    {
+        return $this->hasMany(VoucherStatusMedia::class,'id_order','id')->with(['attachments','status']);
+    }
     /**
      * @return belongsTo
      */
