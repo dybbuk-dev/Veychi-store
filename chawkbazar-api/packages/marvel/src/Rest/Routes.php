@@ -98,10 +98,10 @@ Route::apiResource('settings', SettingsController::class, [
 
 
 Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], function () {
-    Route::post('dispute/message','Marvel\Http\Controllers\DisputeController@storeMessage');
-    Route::delete('dispute/message','Marvel\Http\Controllers\DisputeController@deleteMessage');
+    Route::post('customer-dispute/message','Marvel\Http\Controllers\DisputeController@storeMessage');
+    Route::delete('customer-dispute/message','Marvel\Http\Controllers\DisputeController@deleteMessage');
     Route::post('dispute/{id}','Marvel\Http\Controllers\DisputeController@store');
-    Route::apiResource('dispute',DisputeController::class,[
+    Route::apiResource('customer-dispute',DisputeController::class,[
         'only'=>['index','show','update','destroy']
     ]);
     Route::post('products/review','Marvel\Http\Controllers\ProductController@addReview');
