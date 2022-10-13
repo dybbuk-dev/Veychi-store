@@ -20,7 +20,7 @@ class Dispute extends Model
      return $this->hasMany(DisputeMessages::class,'dispute_id','id');
  }
 
- public function dispute():hasOne{
-     return $this->hasOne(Order::class,'id','purchase_id');
+ public function order():hasOne{
+     return $this->hasOne(Order::class,'id','purchase_id')->with('shop');
  }
 }

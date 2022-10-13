@@ -37,7 +37,7 @@ class DisputeController extends Controller
      */
     public function show($id)
     {
-       return $this->repository->with('messages')->findOrFail($id);
+       return $this->repository->with(['messages','order'])->findOrFail($id);
     }
 
     /**

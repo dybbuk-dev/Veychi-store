@@ -56,15 +56,15 @@ class OrderController extends CoreController
                 $user->hasPermissionTo(Permission::MANAGER_RH)||
                 $user->hasPermissionTo(Permission::SHAREHOLDER)||
                 $user->hasPermissionTo(Permission::MARKETING)) && (!isset($request->shop_id) || $request->shop_id === 'undefined')) {
-            return $this->repository->with(['children','statusVoucher'])->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
+            return $this->repository->with(['children','statusVoucher','dispute'])->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
         } else if ($this->repository->hasPermission($user, $request->shop_id)) {
             if ($user && $user->hasPermissionTo(Permission::STORE_OWNER)) {
-                return $this->repository->with(['children','statusVoucher'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
+                return $this->repository->with(['children','statusVoucher','dispute'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
             } elseif ($user && $user->hasPermissionTo(Permission::STAFF)) {
-                return $this->repository->with(['children','statusVoucher'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
+                return $this->repository->with(['children','statusVoucher','dispute'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
             }
         } else {
-            return $this->repository->with(['children','statusVoucher'])->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
+            return $this->repository->with(['children','statusVoucher','dispute'])->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
         }
     }
 
@@ -89,7 +89,7 @@ class OrderController extends CoreController
     {
         $user = $request->user();
         try {
-            $order = $this->repository->with(['products', 'status', 'children.shop','statusVoucher'])->findOrFail($id);
+            $order = $this->repository->with(['products', 'status', 'children.shop','statusVoucher','dispute'])->findOrFail($id);
         } catch (\Exception $e) {
             dd($e);
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
@@ -118,7 +118,7 @@ class OrderController extends CoreController
     {
         $user = $request->user();
         try {
-            $order = $this->repository->with(['products', 'status', 'children.shop'])->findOneByFieldOrFail('tracking_number', $tracking_number);
+            $order = $this->repository->with(['products', 'status', 'children.shop','dispute'])->findOneByFieldOrFail('tracking_number', $tracking_number);
             if ($user->id === $order->customer_id || $user->can('super_admin')) {
                 return $order;
             } else {

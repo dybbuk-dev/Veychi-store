@@ -46,6 +46,10 @@ class Order extends Model
             ->withTimestamps();
     }
 
+    public function dispute(): HasMany {
+        return $this->hasMany(Dispute::class,'purchase_id','id');
+    }
+
     public function statusVoucher(): hasMany
     {
         return $this->hasMany(VoucherStatusMedia::class,'id_order','id')->with(['attachments','status']);

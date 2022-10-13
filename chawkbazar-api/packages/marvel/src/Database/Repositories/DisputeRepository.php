@@ -58,11 +58,11 @@ class DisputeRepository extends BaseRepository
             if($request->user()->hasPermissionTo(Permission::STORE_OWNER)){
                 $shops = $request->user()->shops()->pluck('id');
                 $orders = Order::whereIn('shop_id',$shops)->pluck('id');
-                return $this->whereIn('purchase_id',$orders)->with('messages')->paginate($limit);
+                return $this->whereIn('purchase_id',$orders)->with(['messages','order'])->paginate($limit);
             }
             if($request->user()->hasPermissionTo(Permission::CUSTOMER)){
                 $orders = Order::where('customer_id',$request->user()->id)->pluck('id');
-                return $this->whereIn('purchase_id',$orders)->with('messages')->paginate($limit);
+                return $this->whereIn('purchase_id',$orders)->with(['messages','order'])->paginate($limit);
             }
         }catch (\Exception $ex){
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
@@ -82,6 +82,7 @@ class DisputeRepository extends BaseRepository
             ['id',"=",$request->purchase_id],
             ['customer_id','=',$request->user()->id]
         ])->first()) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+        if($this->where([['purchase_id',"=",$request->purchase_id],['status',"=",'opened']])->first()) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         return  $this->create($request->only($this->dataArray));
     }
 
@@ -89,9 +90,8 @@ class DisputeRepository extends BaseRepository
      * @throws MarvelException
      */
     public function updateDispute($request){
-
         if(!$request->user()->hasPermissionTo(Permission::CUSTOMER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
-       $validate=Validator::make($request->all(),$this->validateUpdate());
+        $validate=Validator::make($request->all(),$this->validateUpdate());
        if($validate->fails()) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         $dispute=$this->find($request->id);
         $dispute->status=$request->status;
