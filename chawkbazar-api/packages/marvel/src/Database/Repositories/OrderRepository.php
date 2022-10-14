@@ -94,7 +94,7 @@ class OrderRepository extends BaseRepository
             case 'CASH_ON_DELIVERY':
                 // Cash on Delivery no need to capture payment
                 // $request['payment_gateway'] = 'cod';
-                return $this->createOrder($request);
+                return $this->createOrder($request); //todo: VER LO DE SHOP_ID
                 break;
                 // case 'cod':
                 //     // Cash on Delivery no need to capture payment
