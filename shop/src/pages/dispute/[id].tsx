@@ -1,27 +1,26 @@
-import Loader from '@components/ui/loader/loader';
-import { useUploadMutation } from '@data/upload/use-upload.mutation';
-import { useMeQuery } from '@data/user/use-me.query';
 import { MessageSharp } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { Attachment } from '@ts-types/generated';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import useUser from '@framework/auth/use-user';
+import { Attachment } from '@framework/types';
+import ContentLoader from 'react-content-loader';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 const Dispute = () => {
   const { id = '' } = useRouter().query;
   const router = useRouter();
-  const { data: user } = useMeQuery();
+  const { me: user } = useUser();
   const [data, setData] = useState<any | null>(null);
-
   useEffect(() => {
     fetchDispute({ setter: setData, id: id as string });
   }, []);
+  console.log({ data });
+
   if (!data || !user) return <>loading...</>;
   return (
     <div className="flex h-screen text-gray-800 antialiased">
@@ -32,9 +31,7 @@ const Dispute = () => {
               <Button
                 variant="text"
                 onClick={() =>
-                  router.push(
-                    '/' + data.order.shop.slug + '/orders/' + data.order.id
-                  )
+                  router.push('/orders/' + data.order.tracking_number)
                 }
               >
                 <svg
@@ -84,7 +81,6 @@ export default Dispute;
 
 const MessageContainer = ({ data, user, setData, id }: any) => {
   const [isSending, setIsSending] = useState(false);
-  const { mutate: upload, isLoading: loading } = useUploadMutation();
   const [file, setFile] = useState<Attachment | null>(null);
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     multiple: false,
@@ -92,45 +88,6 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
     onDropAccepted: (options, ...rest) => {
       console.log({ rest });
       console.log({ options });
-      upload(
-        options, // it will be an array of uploaded attachments
-        {
-          onSuccess: async (data) => {
-            let mergedData;
-            console.log(data);
-            if (Array.isArray(data)) {
-              mergedData = data[0];
-              setFile(mergedData);
-            } else {
-              console.log('entrdhr');
-              const url = await axios.get(
-                process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
-                  'attachments/' +
-                  data.id,
-                {
-                  headers: {
-                    Accept: 'application/json',
-                  },
-                }
-              );
-
-              const attachment = {
-                thumbnail: url.data.url!,
-                original: url.data.url,
-                id: data.id,
-              };
-              console.log(attachment);
-              await handleSend({
-                message: url.data.slug,
-                type: options[0].type === 'application/pdf' ? 'pdf' : 'image',
-              });
-              mergedData = attachment!;
-              console.log(attachment);
-              setFile(attachment);
-            }
-          },
-        }
-      );
     },
   });
   const messageRef = useRef<HTMLInputElement>(null);
@@ -146,9 +103,9 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
       const headers = getHeaders();
       if (!content) if (!headers) return setIsSending(false);
       await axios.post(
-        '/dispute-admin/message',
+        '/customer-dispute/message',
         {
-          dispute_id: parseInt(id),
+          dispute_id: id,
           type,
           content,
         },
@@ -240,7 +197,7 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
                   </span>{' '}
                 </>
               ) : (
-                <Loader simple={true} className="w-6 h-6" />
+                <ContentLoader />
               )}
             </button>
           </div>
@@ -287,10 +244,12 @@ const fetchDispute = async ({
   setter: React.Dispatch<React.SetStateAction<any>>;
   id: string;
 }) => {
-  const headers = getHeaders();
-  if (!headers) return;
-  const res = await axios.get('/dispute/' + id, headers);
-  setter(res.data);
+  try {
+    const headers = getHeaders();
+    if (!headers) return;
+    const res = await axios.get('/customer-dispute/' + id, headers);
+    setter(res.data);
+  } catch (e) {}
 };
 
 const MessageContent = ({
@@ -340,9 +299,8 @@ const MessageContent = ({
   );
 };
 const getHeaders = () => {
-  const tkn = Cookies.get('AUTH_CRED')!;
-  if (!tkn) return;
-  const { token } = JSON.parse(tkn);
+  const token = Cookies.get('auth_token');
+  if (!token) return;
   return {
     headers: {
       authorization: 'Bearer ' + token,
