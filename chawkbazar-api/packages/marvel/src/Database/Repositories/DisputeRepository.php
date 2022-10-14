@@ -78,11 +78,14 @@ class DisputeRepository extends BaseRepository
         if(!$request->user()->hasPermissionTo(Permission::CUSTOMER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         $validate=Validator::make($request->all(),$this->validate());
         if($validate->fails()) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
-        if(!Order::where([
-            ['id',"=",$request->purchase_id],
-            ['customer_id','=',$request->user()->id]
-        ])->first()) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+          $order = Order::where([
+              ['parent_id',"=",$request->purchase_id],
+              ['customer_id','=',$request->user()->id]
+          ])->whereNotNull('shop_id')->first();
+          if(!$order) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+          $request->merge(['purchase_id'=>$order->id]);
         if($this->where([['purchase_id',"=",$request->purchase_id],['status',"=",'opened']])->first()) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+
         return  $this->create($request->only($this->dataArray));
     }
 
