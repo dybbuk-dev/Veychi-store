@@ -98,8 +98,8 @@ class DisputeRepository extends BaseRepository
         $dispute=$this->find($request->id);
         $dispute->status=$request->status;
         $dispute->save();
-        $order=Order::find($dispute->purchase_id);
-        return $order;
+        $parent=Order::find($dispute->purchase_id);
+        return  Order::find($parent->parent_id);
     }
 
     public function addMessage($request) {
