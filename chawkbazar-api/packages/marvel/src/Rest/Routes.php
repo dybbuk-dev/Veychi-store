@@ -110,7 +110,7 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     ]);
 
     Route::get('orders/tracking-number/{tracking_number}', 'Marvel\Http\Controllers\OrderController@findByTrackingNumber');
-    Route::apiResource('attachments', AttachmentController::class, [
+    Route::apiResource('customer-attachments', AttachmentController::class, [
         'only' => ['store', 'update', 'destroy']
     ]);
     Route::resource('issue-tickets',TicketController::class,[
