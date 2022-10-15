@@ -61,19 +61,21 @@ export default function OrderView({ order }: any) {
                 onClick={() => {
                   Swal.fire(deleteSwalConfig as any).then(async (result) => {
                     if (result.isDenied) {
-                      const token = Cookies.get('auth_token')!;
-                      if (!token) return;
+                      try {
+                        const token = Cookies.get('auth_token')!;
+                        if (!token) return;
 
-                      const res = await axios.post(
-                        '/dispute/' + order.id,
-                        {},
-                        {
-                          headers: {
-                            Authorization: 'Bearer ' + token,
-                          },
-                        }
-                      );
-                      console.log(res);
+                        const res = await axios.post(
+                          '/dispute/' + order.id,
+                          {},
+                          {
+                            headers: {
+                              Authorization: 'Bearer ' + token,
+                            },
+                          }
+                        );
+                        router.push('/dispute/' + res.data.id);
+                      } catch (e) {}
                     }
                   });
                 }}

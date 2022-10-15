@@ -25,11 +25,11 @@ const Dispute = () => {
 
   console.log({ data });
 
-  if (!data || !user) return <span>Cargando...</span>;
+  if (!data || !user) return <PageLoader />;
   return (
     <div className="flex h-screen text-gray-800 antialiased">
       <div className="flex h-full w-full flex-row overflow-x-hidden">
-        <div className="flex w-64 flex-shrink-0 flex-col bg-white py-8 pl-6 pr-2">
+        <div className="flex w-64 flex-shrink flex-col bg-white py-8 pl-6 pr-2 justify-between">
           <div className="justify-star-4  flex h-12 w-full flex-row items-center">
             <div className="text-left text-2xl font-bold">
               <Button
@@ -77,6 +77,7 @@ const Dispute = () => {
           <Button
             variant="contained"
             color="error"
+            disabled={data.status === 'closed'}
             onClick={() => {
               Swal.fire(deleteSwalConfig as any).then(async (result) => {
                 if (result.isDenied) {
@@ -177,8 +178,13 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
     }
   }
   return (
-    <div className="flex h-full flex-auto flex-col p-6">
-      <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4">
+    <div className="flex h-full flex-auto flex-col p-6 relative">
+      <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4 relative">
+        {data.status === 'closed ' && (
+          <div className="absolute w-[100%] h-[100%] bg-[rgba(0,0,0,0.25)] -ml-[0.9rem] -mt-[0.95rem] rounded-[1rem] z-50 flex items-center justify-center">
+            <span className="text-[#333] font-bold">Reclamo Cerrado</span>
+          </div>
+        )}
         <div className="mb-4 flex h-full flex-col overflow-x-auto">
           <div className="flex h-full flex-col">
             <div className="grid grid-cols-12 gap-y-2">
@@ -191,27 +197,48 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
             </div>
           </div>
         </div>
-        <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4">
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
+        <div className="flex h-16 w-full flex-row items-center rounded-xl bg-white px-4 ">
+          {data.status === 'opened' ? (
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
 
-            <button className="flex items-center justify-center text-gray-400 hover:text-gray-600>">
-              <svg
-                className="h-5 w-5 "
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                ></path>
-              </svg>
-            </button>
-          </div>
+              <button className="flex items-center justify-center text-gray-400 hover:text-gray-600>">
+                <svg
+                  className="h-5 w-5 "
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <div>
+              <button className="flex items-center justify-center text-gray-400 hover:text-gray-600> cursor-default">
+                <svg
+                  className="h-5 w-5 "
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          )}
           <div className="ml-4 flex-grow">
             <div className="relative w-full">
               <input
@@ -222,42 +249,67 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
             </div>
           </div>
           <div className="ml-4">
-            <button
-              className={`flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600 ${
-                isSending ? 'bg-[#999] hover:bg-[#777]' : ''
-              }`}
-              disabled={isSending}
-              onClick={() =>
-                handleSend({
-                  message: messageRef.current!.value,
-                  type: 'text',
-                })
-              }
-            >
-              {!isSending ? (
-                <>
-                  <span>Enviar</span>
-                  <span className="ml-2">
-                    <svg
-                      className="-mt-px h-4 w-4 rotate-45 transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                      ></path>
-                    </svg>
-                  </span>{' '}
-                </>
-              ) : (
-                <ContentLoader />
-              )}
-            </button>
+            {data.status === 'opened' ? (
+              <button
+                className={`flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600 ${
+                  isSending ? 'bg-[#999] hover:bg-[#777]' : ''
+                }`}
+                disabled={isSending}
+                onClick={() =>
+                  handleSend({
+                    message: messageRef.current!.value,
+                    type: 'text',
+                  })
+                }
+              >
+                {!isSending ? (
+                  <>
+                    <span>Enviar</span>
+                    <span className="ml-2">
+                      <svg
+                        className="-mt-px h-4 w-4 rotate-45 transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        ></path>
+                      </svg>
+                    </span>{' '}
+                  </>
+                ) : (
+                  <ContentLoader />
+                )}
+              </button>
+            ) : (
+              <button
+                className={`flex flex-shrink-0 items-center justify-center rounded-xl  px-4 py-1 text-white bg-[#999] cursor-default `}
+                disabled={data.status === 'opened'}
+              >
+                <span>Enviar</span>
+                <span className="ml-2">
+                  <svg
+                    className="-mt-px h-4 w-4 rotate-45 transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    ></path>
+                  </svg>
+                </span>{' '}
+              </button>
+            )}
           </div>
         </div>
       </div>
