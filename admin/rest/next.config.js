@@ -24,10 +24,10 @@ module.exports = withPWA({
       'chawkbazarlaravel.s3.ap-southeast-1.amazonaws.com',
       'lh3.googleusercontent.com',
       '137.184.22.131',
-      'd390-201-220-127-222.sa.ngrok.io',
-      '2787-201-220-127-222.sa.ngrok.io',
+      'a65c-201-220-127-222.sa.ngrok.io',
       'b3a1-201-220-127-222.sa.ngrok.io',
       'ed5b-201-220-127-222.sa.ngrok.io',
+      '2787-201-220-127-222.sa.ngrok.io',
     ],
   },
   typescript: {

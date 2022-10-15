@@ -30,7 +30,9 @@ export default function OrderView({ order }: any) {
   const router = useRouter();
   console.log({ order });
   const activeDispute = useMemo(() => {
-    return order?.dispute?.find((dispute: any) => dispute.status === 'opened');
+    return order?.children[0]?.dispute?.find(
+      (dispute: any) => dispute.status === 'opened'
+    );
   }, [order]);
   return (
     <div className="max-w-[1280px] mx-auto mb-14 lg:mb-16">
@@ -62,7 +64,7 @@ export default function OrderView({ order }: any) {
                       const token = Cookies.get('auth_token')!;
                       if (!token) return;
 
-                      axios.post(
+                      const res = await axios.post(
                         '/dispute/' + order.id,
                         {},
                         {
@@ -71,6 +73,7 @@ export default function OrderView({ order }: any) {
                           },
                         }
                       );
+                      console.log(res);
                     }
                   });
                 }}
@@ -258,7 +261,7 @@ export default function OrderView({ order }: any) {
   );
 }
 
-const deleteSwalConfig = {
+export const deleteSwalConfig = {
   title: '¿Estás seguro que quieres abrir un reclamo?',
   icon: 'warning',
   showConfirmButton: false,
