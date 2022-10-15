@@ -21,6 +21,6 @@ class Dispute extends Model
  }
 
  public function order():hasOne{
-     return $this->hasOne(Order::class,'id','purchase_id')->with('shop');
+     return $this->hasOne(Order::class,'parent_id','purchase_id')->with(['shop']);
  }
 }
