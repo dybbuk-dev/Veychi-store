@@ -17,7 +17,33 @@ import { useTagsQuery } from '@data/tag/use-tags.query';
 async function onSubmit(values: any) {
   console.log(values);
 }
-export default function SettingsLayoutImagesForm() {
+export interface LayoutImage {
+  id: number;
+  title: string;
+  text: string;
+  text_position: string;
+  subtitle: string;
+  subtitle_position: string;
+  slug: string;
+  image: {
+    mobile: {
+      url: string;
+      width: number;
+      height: number;
+    };
+    desktop: {
+      url: string;
+      width: number;
+      height: number;
+    };
+  };
+  type: string;
+}
+export default function SettingsLayoutImagesForm({
+  imagesData,
+}: {
+  imagesData: LayoutImage[];
+}) {
   const { t } = useTranslation();
   const {
     register,
@@ -65,10 +91,12 @@ const ImageInput = ({
   index: number;
 }) => {
   const { t } = useTranslation();
-  const { data = { tags: { data: [] } }, isLoading: loading } = useTagsQuery({
+  const { data = { tags: { data: [] } } } = useTagsQuery({
     limit: 999,
   });
-  console.log(data);
+  const imageLabel = useMemo(() => {
+    return 'image' + index + '.';
+  }, []);
   return (
     <div className="flex flex-wrap pb-8 border-t border-dashed border-border-base my-5 sm:my-8 pt-6">
       <Description
@@ -79,14 +107,14 @@ const ImageInput = ({
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
           label={'Título'}
-          {...register('title')}
+          {...register(imageLabel + 'title')}
           error={t(errors.siteTitle?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={'Texto'}
-          {...register('text')}
+          {...register(imageLabel + 'text')}
           error={t(errors.siteTitle?.message!)}
           variant="outline"
           className="mb-5"
@@ -94,13 +122,13 @@ const ImageInput = ({
         <Label>Posición del texto</Label>
         <SelectInput
           control={control}
-          name="text_position"
+          name={imageLabel + 'text_position'}
           defaultValue={positionOptions[1]}
           options={positionOptions}
         />
         <Input
           label={'Subtítulo'}
-          {...register('subtitle')}
+          {...register(imageLabel + 'subtitle')}
           error={t(errors.siteTitle?.message!)}
           variant="outline"
           className="mb-5 mt-5"
@@ -108,21 +136,25 @@ const ImageInput = ({
         <Label className="mt-5">Posición del subtítulo</Label>
         <SelectInput
           control={control}
-          name="subtitle_position"
+          name={imageLabel + 'subtitle_position'}
           defaultValue={positionOptions[1]}
           options={positionOptions}
         />
         <Label className="mt-5">Colección</Label>
         <SelectInput
           control={control}
-          name="slug"
+          name={imageLabel + 'slug'}
           options={data.tags.data.map((item) => ({
             value: item.slug,
             label: item.name,
           }))}
         />
         <br />
-        <FileInput name={'image' + index} control={control} multiple={false} />
+        <FileInput
+          name={imageLabel + 'img'}
+          control={control}
+          multiple={false}
+        />
       </Card>
     </div>
   );

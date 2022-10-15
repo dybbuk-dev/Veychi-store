@@ -22,6 +22,7 @@ import { useOrderStatusesQuery } from '@data/order-status/use-order-statuses.que
 import { useOrderQuery } from '@data/order/use-order.query';
 import { Attachment } from '@ts-types/generated';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 type FormValues = {
   order_status: any;
 };
@@ -84,6 +85,10 @@ export default function OrderDetailsPage() {
       amount: data?.order?.sales_tax!,
     }
   );
+  const { data: orderPlusData } = useOrderQuery(
+    ('' + (parseInt(query.orderId as string) - 1)) as string
+  );
+  console.log(orderPlusData);
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 

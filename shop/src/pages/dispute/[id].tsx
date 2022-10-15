@@ -9,6 +9,9 @@ import Image from 'next/image';
 import useUser from '@framework/auth/use-user';
 import { Attachment } from '@framework/types';
 import ContentLoader from 'react-content-loader';
+import PageLoader from '@components/ui/page-loader/page-loader';
+import Swal from 'sweetalert2';
+import { getToken } from '@framework/utils/get-token';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 const Dispute = () => {
@@ -19,9 +22,10 @@ const Dispute = () => {
   useEffect(() => {
     fetchDispute({ setter: setData, id: id as string });
   }, []);
+
   console.log({ data });
 
-  if (!data || !user) return <>loading...</>;
+  if (!data || !user) return <span>Cargando...</span>;
   return (
     <div className="flex h-screen text-gray-800 antialiased">
       <div className="flex h-full w-full flex-row overflow-x-hidden">
@@ -70,6 +74,23 @@ const Dispute = () => {
               <div className="ml-1 text-xs leading-none">Active</div>
             </div>
           </div> */}
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              Swal.fire(deleteSwalConfig as any).then(async (result) => {
+                if (result.isDenied) {
+                  closeDispute({
+                    router,
+                    purchaseID: data.purchase_id,
+                    disputeID: id as string,
+                  });
+                }
+              });
+            }}
+          >
+            Cerrar Reclamo
+          </Button>
         </div>
         <MessageContainer data={data} user={user} setData={setData} id={id} />
       </div>
@@ -88,6 +109,43 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
     onDropAccepted: (options, ...rest) => {
       console.log({ rest });
       console.log({ options });
+      upload(
+        options, // it will be an array of uploaded attachments
+        async (data) => {
+          let mergedData;
+          console.log(data);
+          if (Array.isArray(data)) {
+            mergedData = data[0];
+            setFile(mergedData);
+          } else {
+            console.log('entrdhr');
+            const url = await axios.get(
+              process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                'attachments/' +
+                data.id,
+              {
+                headers: {
+                  Accept: 'application/json',
+                },
+              }
+            );
+
+            const attachment = {
+              thumbnail: url.data.url!,
+              original: url.data.url,
+              id: data.id,
+            };
+            console.log(attachment);
+            await handleSend({
+              message: url.data.slug,
+              type: options[0].type === 'application/pdf' ? 'pdf' : 'image',
+            });
+            mergedData = attachment!;
+            console.log(attachment);
+            setFile(attachment);
+          }
+        }
+      );
     },
   });
   const messageRef = useRef<HTMLInputElement>(null);
@@ -228,13 +286,41 @@ const MessageWrapper = (props: {
         }
       >
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
-          C
+          {props.sentByMe ? 'A' : 'C'}
         </div>
 
         <MessageContent {...props} />
       </div>
     </div>
   );
+};
+
+const closeDispute = async ({
+  router,
+  purchaseID,
+  disputeID,
+}: {
+  router: any;
+  purchaseID: string;
+  disputeID: string;
+}) => {
+  try {
+    const headers = getHeaders();
+    if (!headers) return;
+    const res: any = await axios.patch(
+      '/customer-dispute/' + purchaseID,
+      {
+        id: disputeID,
+        status: 'closed',
+      },
+      headers
+    );
+    const { tracking_number }: { tracking_number: string } = res.data;
+    if (!res) return Swal.fire('Ups!', 'Error al cerrar el reclamo.', 'error');
+    router.push('/orders/' + tracking_number);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 const fetchDispute = async ({
@@ -321,4 +407,38 @@ const ImageWithFallback = (props: any) => {
       }}
     />
   );
+};
+
+export const deleteSwalConfig = {
+  title: '¿Estás seguro que quieres cerrar el reclamo?',
+  icon: 'warning',
+  showConfirmButton: false,
+  showDenyButton: true,
+  showCancelButton: true,
+  denyButtonText: `Cerrar Reclamo`,
+  cancelButtonText: 'Cancelar',
+};
+
+const upload = async (variables: any, callback: (data: any) => void) => {
+  try {
+    let formData = new FormData();
+    variables.forEach((attachment: any) => {
+      formData.append('attachment[]', attachment);
+    });
+    const token = getToken();
+    const options = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    const response = await axios.post(
+      'customer-attachments',
+      formData,
+      options
+    );
+    callback(response.data);
+  } catch (e) {
+    return null;
+  }
 };

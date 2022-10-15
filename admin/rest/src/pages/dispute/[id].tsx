@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import PageLoader from '@components/ui/page-loader/page-loader';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 const Dispute = () => {
@@ -22,7 +23,7 @@ const Dispute = () => {
   useEffect(() => {
     fetchDispute({ setter: setData, id: id as string });
   }, []);
-  if (!data || !user) return <>loading...</>;
+  if (!data || !user) return <PageLoader />;
   return (
     <div className="flex h-screen text-gray-800 antialiased">
       <div className="flex h-full w-full flex-row overflow-x-hidden">
@@ -148,7 +149,7 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
       await axios.post(
         '/dispute-admin/message',
         {
-          dispute_id: parseInt(id),
+          dispute_id: id,
           type,
           content,
         },
@@ -271,7 +272,7 @@ const MessageWrapper = (props: {
         }
       >
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
-          C
+          {props.sentByMe ? 'C' : 'A'}
         </div>
 
         <MessageContent {...props} />
