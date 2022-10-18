@@ -13,9 +13,91 @@ import { useMemo } from 'react';
 import SelectInput from '@components/ui/select-input';
 import Label from '@components/ui/label';
 import { useTagsQuery } from '@data/tag/use-tags.query';
+import { UseQueryResult } from 'react-query';
+import { TagPaginator } from '@ts-types/generated';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
+
+const formatHref = (url: string) => '/' + url.split('/').slice(3).join('/');
 
 async function onSubmit(values: any) {
-  console.log(values);
+  const marketingImages = Object.values(values).map(
+    ({
+      id,
+      title,
+      subtitle,
+      text,
+      type,
+      subtitle_position,
+      slug,
+      text_position,
+      image,
+    }: any) => ({
+      id,
+      title: title || '',
+      subtitle: subtitle || '',
+      text: text || '',
+      type,
+      slug: slug.value,
+      subtitle_position: subtitle_position.value,
+      text_position: text_position.value,
+      image: {
+        desktop: {
+          height: image.desktop.height,
+          width: image.desktop.width,
+          slug: formatHref(image.desktop.attachment.thumbnail),
+          url: formatHref(image.desktop.attachment.thumbnail),
+        },
+        mobile: {
+          height: image.mobile.height,
+          width: image.mobile.width,
+          slug: formatHref(image.mobile.attachment.thumbnail),
+          url: formatHref(image.mobile.attachment.thumbnail),
+        },
+      },
+    })
+  );
+  try {
+    const tkn = Cookies.get('AUTH_CRED')!;
+    if (!tkn) return;
+    const { token } = JSON.parse(tkn);
+    const res: any = await axios.put(
+      'marketing',
+      { marketing_images: marketingImages },
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+    Swal.fire('Perfecto!', 'Información actualizada correctamente', 'success');
+  } catch (e) {
+    Swal.fire('Ups!', 'Hubo un error', 'error');
+  }
+}
+
+const positionOptions = [
+  { label: 'Izquierda', value: 'left' },
+  { label: 'Centro', value: 'middle' },
+  { label: 'Derecha', value: 'right' },
+];
+interface FormData {
+  title: string;
+  text: string;
+  subtitle: string;
+  img: [
+    {
+      slug: string;
+      url: string;
+      width: number;
+      height: number;
+    }
+  ];
+  slug: { label: string; value: string };
+  subtitle_position: { label: string; value: string };
+  text_position: { label: string; value: string };
 }
 export interface LayoutImage {
   id: number;
@@ -27,11 +109,13 @@ export interface LayoutImage {
   slug: string;
   image: {
     mobile: {
+      slug: string;
       url: string;
       width: number;
       height: number;
     };
     desktop: {
+      slug: string;
       url: string;
       width: number;
       height: number;
@@ -39,10 +123,13 @@ export interface LayoutImage {
   };
   type: string;
 }
+
 export default function SettingsLayoutImagesForm({
   imagesData,
+  tags,
 }: {
   imagesData: LayoutImage[];
+  tags: { tags: TagPaginator };
 }) {
   const { t } = useTranslation();
   const {
@@ -51,9 +138,9 @@ export default function SettingsLayoutImagesForm({
     watch,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: formFormmater({ imagesData, tags }) });
   const fieldsArray = useMemo(() => {
-    return new Array(8).fill('');
+    return new Array(imagesData.length).fill('');
   }, []);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,6 +150,7 @@ export default function SettingsLayoutImagesForm({
           control={control}
           errors={errors}
           index={i}
+          data={tags}
         />
       ))}
 
@@ -73,27 +161,21 @@ export default function SettingsLayoutImagesForm({
   );
 }
 
-const positionOptions = [
-  { label: 'Izquierda', value: 'left' },
-  { label: 'Centro', value: 'middle' },
-  { label: 'Derecha', value: 'right' },
-];
-
 const ImageInput = ({
   control,
   register,
   errors,
   index,
+  data,
 }: {
   register: UseFormRegister<FieldValues>;
   control: Control<FieldValues, object>;
   errors: DeepMap<DeepPartial<any>, FieldError>;
   index: number;
+  data: { tags: TagPaginator };
 }) => {
   const { t } = useTranslation();
-  const { data = { tags: { data: [] } } } = useTagsQuery({
-    limit: 999,
-  });
+
   const imageLabel = useMemo(() => {
     return 'image' + index + '.';
   }, []);
@@ -150,12 +232,78 @@ const ImageInput = ({
           }))}
         />
         <br />
+        <Label className="mt-5">Imagen en Pantallas Grandes</Label>
+
         <FileInput
-          name={imageLabel + 'img'}
+          name={imageLabel + 'image.desktop.attachment'}
+          control={control}
+          multiple={false}
+        />
+        <br />
+        <Label className="mt-5">Imagen en Pantallas Pequeñas / Móviles</Label>
+
+        <FileInput
+          name={imageLabel + 'image.mobile.attachment'}
           control={control}
           multiple={false}
         />
       </Card>
     </div>
   );
+};
+const formFormmater = ({
+  imagesData,
+  tags,
+}: {
+  imagesData: LayoutImage[];
+  tags: { tags: TagPaginator };
+}) => {
+  const result: {
+    [key: string]: LayoutImage;
+  } = imagesData.reduce(
+    (acc, curr, i) => ({
+      ...acc,
+      [`image${i}`]: {
+        ...curr,
+        slug: {
+          value: curr.slug,
+          label: tags.tags.data.find((tag) => tag.slug === curr.slug)!.name,
+        },
+        text_position: positionOptions.find(
+          (option) => option.value === curr.text_position
+        ),
+        subtitle_position: positionOptions.find(
+          (option) => option.value === curr.subtitle_position
+        ),
+        image: {
+          desktop: {
+            ...curr.image.desktop,
+            attachment: {
+              id: 391,
+              thumbnail:
+                process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                curr.image.desktop.slug.slice(1),
+              original:
+                process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                curr.image.desktop.slug.slice(1),
+            },
+          },
+          mobile: {
+            ...curr.image.mobile,
+            attachment: {
+              id: 391,
+              thumbnail:
+                process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                curr.image.mobile.slug.slice(1),
+              original:
+                process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                curr.image.mobile.slug.slice(1),
+            },
+          },
+        },
+      },
+    }),
+    {}
+  );
+  return result;
 };

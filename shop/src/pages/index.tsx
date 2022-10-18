@@ -13,10 +13,36 @@ import {
   promotionBanner,
   modernDemoProductBanner as productBanner,
 } from '@data/static/banners';
+import { useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
+import { getToken } from '@framework/utils/get-token';
 
 export { getStaticProps } from '@framework/ssr/homepage/modern';
 
 export default function Home() {
+  const [marketingImages, setMarketingImages] = useState([]);
+  const masonryBanner = useMemo(() => {
+    return marketingImages.slice(0, 6);
+  }, [marketingImages]);
+  const promotionBanner = useMemo(() => {
+    console.log(marketingImages.slice(6, 9));
+    return marketingImages.slice(6, 9);
+  }, [marketingImages]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(
+          process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'marketing-images-data',
+          {
+            headers: {
+              Authorization: 'Bearer ' + getToken()!,
+            },
+          }
+        );
+        setMarketingImages(res.data.data);
+      } catch (e) {}
+    })();
+  }, []);
   return (
     <>
       <div className="md:px-8 xl:px-14 px-3">
