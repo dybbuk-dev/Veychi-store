@@ -70,8 +70,8 @@ export const siteSettings = {
             icon: 'ShippingsIcon',
           },
           {
-            href: ROUTES.TICKETS,
-            label: 'sidebar-nav-item-tickets',
+            href: ROUTES.TOKENS,
+            label: 'Tokens',
             icon: 'WithdrawIcon',
           },
         ],

@@ -17,6 +17,7 @@ export const API_ENDPOINTS = {
   SETTINGS: 'settings',
   CATEGORIES: 'categories',
   TAGS: 'tags',
+  TOKENS: 'approval-tokens',
   TYPES: 'types',
   PROFILE_UPDATE: 'profile-update',
   LOGOUT: 'logout',

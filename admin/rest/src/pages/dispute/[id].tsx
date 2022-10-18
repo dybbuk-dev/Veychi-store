@@ -22,6 +22,10 @@ const Dispute = () => {
 
   useEffect(() => {
     fetchDispute({ setter: setData, id: id as string });
+    const interval = setInterval(() => {
+      fetchDispute({ setter: setData, id: id as string });
+    }, 6000);
+    return () => clearInterval(interval);
   }, []);
   if (!data || !user) return <PageLoader />;
   return (

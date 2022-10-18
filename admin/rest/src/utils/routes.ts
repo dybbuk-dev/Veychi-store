@@ -25,6 +25,7 @@ export const ROUTES = {
   GET_PREMIUM: '/premium-info',
   LOGOUT: '/logout',
   TICKETS: '/tickets',
+  TOKENS: '/shop-tokens',
   STAFFS: '/staffs',
   ADMINISTRATORS: '/administrators',
 };
