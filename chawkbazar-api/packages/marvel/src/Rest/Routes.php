@@ -44,7 +44,7 @@ Route::post('/social-login-token', 'Marvel\Http\Controllers\UserController@socia
 Route::post('/send-otp-code', 'Marvel\Http\Controllers\UserController@sendOtpCode');
 Route::post('/verify-otp-code', 'Marvel\Http\Controllers\UserController@verifyOtpCode');
 Route::post('/otp-login', 'Marvel\Http\Controllers\UserController@otpLogin');
-
+Route::get('marketing-images-data', 'Marvel\Http\Controllers\MarketingController@index');
 Route::apiResource('products', ProductController::class, [
     'only' => ['index', 'show']
 ]);
