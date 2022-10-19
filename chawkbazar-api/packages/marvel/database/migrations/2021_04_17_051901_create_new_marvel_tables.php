@@ -60,7 +60,7 @@ class CreateNewMarvelTables extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('owner_id');
-            $table->foreign('owner_id')->references('id')->on('users');
+            $table->boolean('premium')->nullable()->default(false);
             $table->bigInteger("approval_token_id")->unsigned()->nullable();
             $table->bigInteger("country_id")->unsigned()->nullable();
             $table->string('name')->nullable();
@@ -73,6 +73,7 @@ class CreateNewMarvelTables extends Migration
             $table->json('address')->nullable();
             $table->json('settings')->nullable();
             $table->timestamps();
+            $table->foreign('owner_id')->references('id')->on('users');
             $table->foreign('approval_token_id')
                 ->references('id')
                 ->on('approval_tokens');
@@ -93,7 +94,6 @@ class CreateNewMarvelTables extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('premium')->nullable()->default(false);
             $table->unsignedBigInteger('shop_id')->nullable();
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
         });

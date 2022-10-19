@@ -5,6 +5,7 @@ namespace Marvel\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use League\Csv\CannotInsertRecord;
+use Marvel\Database\Models\Shop;
 use Marvel\Database\Repositories\CompanyRepository;
 use Marvel\Database\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
@@ -113,7 +114,7 @@ class UserController extends CoreController
         $user = $request->user();
 
         if (isset($user)) {
-            return $this->repository->with(['profile', 'address', 'shops.balance', 'managed_shop.balance'])->find($user->id);
+            return $this->repository->with(['profile', 'address', 'shops.balance', 'managed_shop.balance','permissions'])->find($user->id);
         }
         throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
     }
@@ -506,7 +507,13 @@ class UserController extends CoreController
      * @throws MarvelException
      */
     public function makePremium(Request $request){
-       return $this->repository->premiumSubscription($request);
+        $shop=Shop::find($request->shop_id);
+        if(!$shop)   throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+       return $this->repository->makePremium($shop);
+    }
+
+    public function premiumPaymentIntent(Request $request){
+        return $this->repository->premiumSubscription($request);
     }
     /**
      * @throws CannotInsertRecord

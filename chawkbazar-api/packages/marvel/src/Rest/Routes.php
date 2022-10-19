@@ -13,6 +13,7 @@ use Marvel\Http\Controllers\DisputeController;
 use Marvel\Http\Controllers\DNIDocumentController;
 use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\MarketingController;
+use Marvel\Http\Controllers\PremiumSubscriptionsController;
 use Marvel\Http\Controllers\PrivacyPolicyController;
 use Marvel\Http\Controllers\ProductController;
 use Marvel\Http\Controllers\SalariesController;
@@ -64,6 +65,7 @@ Route::apiResource('tags', TagController::class, [
 
 
 Route::get('featured-categories', 'Marvel\Http\Controllers\CategoryController@fetchFeaturedCategories');
+
 
 // Route::get('fetch-parent-category', 'Marvel\Http\Controllers\CategoryController@fetchOnlyParent');
 // Route::get('fetch-category-recursively', 'Marvel\Http\Controllers\CategoryController@fetchCategoryRecursively');
@@ -142,6 +144,11 @@ Route::group(
             'only'=>['index','show','update','store','destroy']
         ]);
 
+
+        Route::apiResource('premium-owner',PremiumSubscriptionsController::class,[
+            'only'=>['index','show','update','store','destroy']
+        ]);
+
         Route::apiResource('orders',OrderController::class,[
             'only'=>[
                 'update',
@@ -157,7 +164,8 @@ Route::group(
         Route::resource('ticket-comment',TicketCommentsController::class,[
             'only'=>['index', 'show', 'update', 'destroy','store']
         ]);
-        Route::post('users/premium/purchase','Marvel\Http\Controllers\UserController@makePremium');
+        Route::post('users/premium/purchase','Marvel\Http\Controllers\UserController@premiumPaymentIntent');
+        Route::post('users/premium/make-premium','Marvel\Http\Controllers\UserController@makePremium');
         Route::put('orders',[OrderController::class,'update']);
         Route::patch('orders',[OrderController::class,'update']);
         Route::delete('orders',[OrderController::class,'destroy']);
@@ -225,6 +233,9 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN.'|'.Permi
     Route::get('product/export','Marvel\Http\Controllers\ProductController@exportAllProducts');
     Route::apiResource('types', TypeController::class, [
         'only' => ['store', 'update', 'destroy']
+    ]);
+    Route::apiResource('premium-admin',PremiumSubscriptionsController::class,[
+        'only'=>['index','show','update','destroy']
     ]);
     Route::get('orders/export/all',[OrderController::class,'allOrdersInStore']);
     Route::apiResource('privacy-policy', PrivacyPolicyController::class,[

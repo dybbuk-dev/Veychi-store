@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\User;
 use Marvel\Enums\PaymentGatewayType;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -22,6 +23,8 @@ use Marvel\Database\Models\Profile;
 use Marvel\Database\Models\Shop;
 use Marvel\Exceptions\MarvelException;
 use Spatie\Permission\Models\Role;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class UserRepository extends BaseRepository
 {
@@ -135,38 +138,39 @@ class UserRepository extends BaseRepository
     /**
      * @throws MarvelException
      */
-    private function makePremium($userId){
-        $user=User::findOrFail($userId);
-        $user->premium=true;
-        $user->save();
-        return $user;
+    public function makePremium($shop){
+        $shop->premium=true;
+        $shop->save();
+        return $shop;
     }
 
     /**
      * @throws MarvelException
      */
-    public function premiumSubscription($request)
+    public function premiumSubscription($request): array
     {
-        $price=env('PREMIUM_PRICE_USD');
+        $stripeKey = env('STRIPE_API_KEY');
+        if(!isset($stripeKey)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+        Stripe::setApiKey($stripeKey);
+        $settings=Settings::first()->options;
         if (!$request->user()->hasPermissionTo(UserPermission::STORE_OWNER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         if($request->user()->premium)throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
-        $request['paid_total']=$request->amount;
-        $request["total"]=$price;
         $request['tracking_number'] = Str::random(12);
         $request['customer_id'] = $request->user()->id;
         try{
-            Omnipay::setGateway(PaymentGatewayType::STRIPE);
-            $response= $this->capturePayment($request);
-            if($response->isRedirect()) return $response->getRedirectResponse();
-            if($response->isSuccessful()){
-                $payment_id = $response->getTransactionReference();
-                $request['payment_id'] = $payment_id;
-                return $this->makePremium($request->user()->id);
-            }
+            $paymentIntent=PaymentIntent::create([
+                'amount'=>$settings["premium_price"],
+                'currency'=>$settings["currency"],
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+            ]);
+            return ['clientSecret'=>$paymentIntent->client_secret,'amount'=>$settings["premium_price"], 'currency'=>$settings["currency"]];
+
         }catch (\Exception $ex){
-            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.PAYMENT_FAILED');
         }
-        throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.PAYMENT_FAILED');
+
 
     }
 

@@ -24,6 +24,7 @@
         "messagebird/php-rest-api": "^2.0",
         "omnipay/common": "dev-master",
         "omnipay/stripe": "dev-master",
+        "stripe/stripe-php": "^9.7",
         "twilio/sdk": "^6.25"
     },
     "require-dev": {
