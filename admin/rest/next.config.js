@@ -27,7 +27,9 @@ module.exports = withPWA({
       'a65c-201-220-127-222.sa.ngrok.io',
       'b3a1-201-220-127-222.sa.ngrok.io',
       'ed5b-201-220-127-222.sa.ngrok.io',
+      'veychi.com',
       '2787-201-220-127-222.sa.ngrok.io',
+      '5500-201-220-127-222.sa.ngrok.io',
     ],
   },
   typescript: {

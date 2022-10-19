@@ -46,14 +46,21 @@
   "item-description-add": "Add",
   "product-description-help-text": "your product description and necessary information from here",
   "total-variation-added": "Variant",
+  "qr-help-text": "This is the site's QR code.",
+  "qr-dimension-help-text": "Print it for sharing the site.",
+
   "input-label-attribute-name": "Attribute Name",
   "input-label-attribute-value": "Attribute Value",
   "input-label-disable-variant": "Disable This Variant",
   "input-label-logo": "Logo",
+
+  "input-label-qr-code": "QR Code",
   "input-label-email": "Email",
   "input-label-token": "Put your token you got from email",
   "input-label-password": "Password",
   "input-label-bio": "Bio",
+  "print-button": "Print",
+
   "input-label-contact": "Contact Number",
   "input-label-avatar": "Avatar",
   "input-label-old-password": "Old Password",
@@ -170,6 +177,9 @@
   "site-info-help-text": "Change your site information from here",
   "avatar-help-text": "Upload your profile image from here. Dimension of the avatar should be 140 x 140px",
   "button-label-save-settings": "Save Settings",
+  "banner-image-helper-text": "Image for the top section of the homepage",
+  "slider-image-helper-text": "Image for the slider of the homepage",
+
   "button-label-change-password": "Change Password",
   "button-label-save": "Save",
   "button-label-send": "Send",

@@ -4,18 +4,23 @@ import Box from '@mui/material/Box';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem, { TreeItemProps, treeItemClasses } from '@mui/lab/TreeItem';
 import Typography from '@mui/material/Typography';
-import MailIcon from '@mui/icons-material/Mail';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Label from '@mui/icons-material/Label';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import InfoIcon from '@mui/icons-material/Info';
-import ForumIcon from '@mui/icons-material/Forum';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 import { useTranslation } from 'next-i18next';
 import SidebarItem from '../navigation/sidebar-item';
+
+interface ISidebarChildren {
+  href: string;
+  label: string;
+  icon: string;
+}
+interface ISidebarLink {
+  label: string;
+  allowedRoles: string[];
+  children: ISidebarChildren[];
+}
 
 declare module 'react' {
   interface CSSProperties {
@@ -103,9 +108,19 @@ function StyledTreeItem(props: StyledTreeItemProps) {
   );
 }
 
-export default function CustomTreeview({ items }: any) {
+export default function CustomTreeview({
+  items,
+  userData,
+}: {
+  items: ISidebarLink[];
+  userData: any;
+}) {
   const { t } = useTranslation();
-
+  console.log({ items });
+  const permissions = React.useMemo(() => {
+    return userData?.data?.permissions.map((item: any) => item.name) ?? [];
+  }, [userData]);
+  console.log({ permissions, userData });
   return (
     <TreeView
       aria-label="gmail"
@@ -115,20 +130,40 @@ export default function CustomTreeview({ items }: any) {
       defaultEndIcon={<div style={{ width: 24 }} />}
       sx={{ flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}
     >
-      {items.map((item: any, i: string) => (
-        <StyledTreeItem nodeId={i} labelText={item.label} labelIcon={Label}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              marginLeft: '2.5rem',
-            }}
+      {items
+        .filter((item: any) => {
+          if (!item.allowedRoles) return true;
+          return item.allowedRoles.some((r: string) => permissions.includes(r));
+        })
+        .map((item: any, i: number) => (
+          <StyledTreeItem
+            nodeId={i.toString()}
+            labelText={item.label}
+            labelIcon={Label}
           >
-            {item.children.map((child: any, childIndex: string) => (
-              <SidebarItem {...child} label={t(child.label)} key={childIndex} />
-            ))}
-          </div>
-          {/* <StyledTreeItem
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                marginLeft: '2.5rem',
+              }}
+            >
+              {item.children
+                .filter((item: any) => {
+                  if (!item.allowedRoles) return true;
+                  return item.allowedRoles.some((r: string) =>
+                    permissions.includes(r)
+                  );
+                })
+                .map((child: any, childIndex: string) => (
+                  <SidebarItem
+                    {...child}
+                    label={t(child.label)}
+                    key={childIndex}
+                  />
+                ))}
+            </div>
+            {/* <StyledTreeItem
             nodeId="5"
             labelText="Social"
             labelIcon={SupervisorAccountIcon}
@@ -136,8 +171,8 @@ export default function CustomTreeview({ items }: any) {
             color="#1a73e8"
             bgColor="#e8f0fe"
           /> */}
-        </StyledTreeItem>
-      ))}
+          </StyledTreeItem>
+        ))}
     </TreeView>
   );
 }

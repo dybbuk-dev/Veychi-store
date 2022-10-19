@@ -31,6 +31,7 @@ module.exports = withPWA({
       '2787-201-220-127-222.sa.ngrok.io',
       '0830-201-220-127-222.sa.ngrok.io',
       '149b-201-220-127-222.sa.ngrok.io',
+      '5500-201-220-127-222.sa.ngrok.io',
     ],
   },
 

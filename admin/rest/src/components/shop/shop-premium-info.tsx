@@ -16,7 +16,7 @@ export default function ShopPremiumPayment() {
     fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ id: 'xl-tshirt' }] }),
+      body: JSON.stringify({ items: [{ id: 'premium' }] }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));

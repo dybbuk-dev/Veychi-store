@@ -1,5 +1,5 @@
-import Cookie from "js-cookie";
-import SSRCookie from "cookie";
+import Cookie from 'js-cookie';
+import SSRCookie from 'cookie';
 import {
   AUTH_CRED,
   PERMISSIONS,
@@ -7,12 +7,54 @@ import {
   STORE_OWNER,
   SUPER_ADMIN,
   TOKEN,
-} from "./constants";
+  MARKETING,
+  SHAREHOLDER,
+  CEO,
+  MANAGER_RH,
+  MANAGEMENT,
+  LEGAL,
+} from './constants';
 
-export const allowedRoles = [SUPER_ADMIN, STORE_OWNER, STAFF];
-export const adminAndOwnerOnly = [SUPER_ADMIN, STORE_OWNER];
-export const adminOwnerAndStaffOnly = [SUPER_ADMIN, STORE_OWNER, STAFF];
-export const adminOnly = [SUPER_ADMIN];
+export const allowedRoles = [
+  SUPER_ADMIN,
+  STORE_OWNER,
+  STAFF,
+  MARKETING,
+  SHAREHOLDER,
+  CEO,
+  MANAGER_RH,
+  MANAGEMENT,
+  LEGAL,
+];
+export const adminAndOwnerOnly = [
+  SUPER_ADMIN,
+  STORE_OWNER,
+  SHAREHOLDER,
+  CEO,
+  MANAGER_RH,
+  MANAGEMENT,
+  LEGAL,
+];
+export const adminOwnerAndStaffOnly = [
+  SUPER_ADMIN,
+  STORE_OWNER,
+  STAFF,
+  MARKETING,
+  SHAREHOLDER,
+  CEO,
+  MANAGER_RH,
+  MANAGEMENT,
+  LEGAL,
+];
+export const adminOnly = [
+  SUPER_ADMIN,
+  MARKETING,
+  SHAREHOLDER,
+  CEO,
+  MANAGER_RH,
+  MANAGEMENT,
+  LEGAL,
+];
 export const ownerOnly = [STORE_OWNER];
 
 export function setAuthCredentials(token: string, permissions: any) {
@@ -36,7 +78,7 @@ export function getAuthCredentials(context?: any): {
 }
 
 export function parseSSRCookie(context: any) {
-  return SSRCookie.parse(context.req.headers.cookie ?? "");
+  return SSRCookie.parse(context.req.headers.cookie ?? '');
 }
 
 export function hasAccess(
