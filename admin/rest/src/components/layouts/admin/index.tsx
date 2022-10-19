@@ -5,10 +5,13 @@ import { siteSettings } from '@settings/site.settings';
 import { useTranslation } from 'next-i18next';
 import SidebarItem from '@components/layouts/navigation/sidebar-item';
 import CustomTreeview from './TreeView';
+import { useMeQuery } from '@data/user/use-me.query';
 
 const AdminLayout: React.FC = ({ children }) => {
+  const me = useMeQuery();
+  console.log({ me });
   const { t } = useTranslation();
-
+  console.log(siteSettings.sidebarLinks.admin);
   const SidebarItemMap = () => (
     <Fragment>
       {/* {siteSettings.sidebarLinks.admin.map(({ href, label, icon }) => (
@@ -16,19 +19,12 @@ const AdminLayout: React.FC = ({ children }) => {
       ))} */}
     </Fragment>
   );
-  /* const SidebarItemMap = () => (
-    <Fragment>
-      {siteSettings.sidebarLinks.admin.map(({ href, label, icon }) => (
-        <SidebarItem href={href} label={t(label)} icon={icon} key={href} />
-      ))}
-    </Fragment>
-  ); */
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col transition-colors duration-150">
       <Navbar />
       <MobileNavigation>
-        <CustomTreeview items={siteSettings.sidebarLinks.admin} />
+        <CustomTreeview items={siteSettings.sidebarLinks.admin} userData={me} />
       </MobileNavigation>
 
       <div className="flex flex-1 pt-20">
@@ -36,7 +32,10 @@ const AdminLayout: React.FC = ({ children }) => {
           <div className="flex flex-col space-y-6 py-3">
             <SidebarItemMap />
           </div>
-          <CustomTreeview items={siteSettings.sidebarLinks.admin} />
+          <CustomTreeview
+            items={siteSettings.sidebarLinks.admin}
+            userData={me}
+          />
         </aside>
         <main className="w-full lg:ps-72 xl:ps-76">
           <div className="p-5 md:p-8 overflow-y-auto h-full">{children}</div>

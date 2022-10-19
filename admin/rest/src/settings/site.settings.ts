@@ -1,6 +1,17 @@
 import { adminAndOwnerOnly, adminOwnerAndStaffOnly } from '@utils/auth-utils';
+import {
+  CEO,
+  LEGAL,
+  MANAGEMENT,
+  MANAGER_RH,
+  MARKETING,
+  SHAREHOLDER,
+  STAFF,
+  SUPER_ADMIN,
+} from '@utils/constants';
 import { ROUTES } from '@utils/routes';
 
+const allRoutes = [SUPER_ADMIN, STAFF];
 export const siteSettings = {
   name: 'ChawkBazar',
   description: '',
@@ -33,51 +44,61 @@ export const siteSettings = {
     admin: [
       {
         label: 'Comercial',
+        allowedRoles: [...allRoutes, CEO, SHAREHOLDER],
         children: [
           {
             href: ROUTES.DASHBOARD,
             label: 'sidebar-nav-item-dashboard',
+            allowedRoles: [...allRoutes, CEO, SHAREHOLDER],
             icon: 'DashboardIcon',
           },
           {
             href: ROUTES.SHOPS,
             label: 'sidebar-nav-item-shops',
+            allowedRoles: [...allRoutes, CEO],
             icon: 'ShopIcon',
           },
           {
             href: ROUTES.ADMIN_MY_SHOPS,
             label: 'sidebar-nav-item-my-shops',
+            allowedRoles: [...allRoutes, CEO],
             icon: 'MyShopIcon',
           },
           {
             href: ROUTES.PRODUCTS,
             label: 'sidebar-nav-item-products',
+            allowedRoles: [...allRoutes, CEO],
             icon: 'ProductsIcon',
           },
           {
             href: ROUTES.ORDERS,
             label: 'sidebar-nav-item-orders',
+            allowedRoles: [...allRoutes, CEO, SHAREHOLDER],
             icon: 'OrdersIcon',
           },
           {
             href: ROUTES.ORDER_STATUS,
             label: 'sidebar-nav-item-order-status',
+            allowedRoles: [...allRoutes, CEO],
             icon: 'OrdersStatusIcon',
           },
           {
             href: ROUTES.SHIPPINGS,
             label: 'sidebar-nav-item-shippings',
+            allowedRoles: [...allRoutes, CEO],
             icon: 'ShippingsIcon',
           },
           {
             href: ROUTES.TOKENS,
             label: 'Tokens',
+            allowedRoles: [...allRoutes, CEO],
             icon: 'WithdrawIcon',
           },
         ],
       },
       {
         label: 'Marketing',
+        allowedRoles: [...allRoutes, CEO, MARKETING],
         children: [
           {
             href: ROUTES.ATTRIBUTES,
@@ -113,32 +134,40 @@ export const siteSettings = {
       },
       {
         label: 'Administración',
+        allowedRoles: [...allRoutes, CEO, MANAGEMENT, SHAREHOLDER],
+
         children: [
           {
             href: ROUTES.USERS,
             label: 'sidebar-nav-item-customers-user',
+            allowedRoles: [...allRoutes, MANAGEMENT],
             icon: 'UsersIcon',
           },
 
           {
             href: ROUTES.TAXES,
             label: 'sidebar-nav-item-taxes',
+            allowedRoles: [...allRoutes, MANAGEMENT],
             icon: 'TaxesIcon',
           },
 
           {
             href: ROUTES.WITHDRAWS,
             label: 'sidebar-nav-item-withdraws',
+            allowedRoles: [...allRoutes, MANAGEMENT, SHAREHOLDER],
             icon: 'WithdrawIcon',
           },
         ],
       },
       {
         label: 'RH',
+        allowedRoles: [...allRoutes, CEO, LEGAL, MANAGER_RH],
+
         children: [
           {
             href: ROUTES.ADMINISTRATORS,
             label: 'sidebar-nav-item-staff',
+            allowedRoles: [...allRoutes, CEO, LEGAL, MANAGER_RH],
             icon: 'UsersIcon',
           },
         ],

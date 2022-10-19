@@ -1,9 +1,9 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { getAuthCredentials, hasAccess } from "./auth-utils";
-import Loader from "@components/ui/loader/loader";
-import AccessDeniedPage from "@components/common/access-denied";
-import { ROUTES } from "./routes";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { getAuthCredentials, hasAccess } from './auth-utils';
+import Loader from '@components/ui/loader/loader';
+import AccessDeniedPage from '@components/common/access-denied';
+import { ROUTES } from './routes';
 
 const PrivateRoute: React.FC<{ authProps: any }> = ({
   children,
@@ -16,6 +16,10 @@ const PrivateRoute: React.FC<{ authProps: any }> = ({
     Array.isArray(permissions) &&
     !!permissions.length &&
     hasAccess(authProps.permissions, permissions);
+  console.log({
+    authProps,
+    permissions,
+  });
   React.useEffect(() => {
     if (!isUser) router.replace(ROUTES.LOGIN); // If not authenticated, force log in
   }, [isUser]);

@@ -140,7 +140,17 @@ export default function SettingsLayoutImagesForm({
     formState: { errors },
   } = useForm({ defaultValues: formFormmater({ imagesData, tags }) });
   const fieldsArray = useMemo(() => {
-    return new Array(imagesData.length).fill('');
+    return [
+      'Banner 1',
+      'Banner 2',
+      'Banner 3',
+      'Banner 4',
+      'Banner 5',
+      'Banner 6',
+      'Slider 1',
+      'Slider 2',
+      'Slider 3',
+    ];
   }, []);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -151,6 +161,7 @@ export default function SettingsLayoutImagesForm({
           errors={errors}
           index={i}
           data={tags}
+          label={_}
         />
       ))}
 
@@ -167,12 +178,14 @@ const ImageInput = ({
   errors,
   index,
   data,
+  label,
 }: {
   register: UseFormRegister<FieldValues>;
   control: Control<FieldValues, object>;
   errors: DeepMap<DeepPartial<any>, FieldError>;
   index: number;
   data: { tags: TagPaginator };
+  label: string;
 }) => {
   const { t } = useTranslation();
 
@@ -182,8 +195,12 @@ const ImageInput = ({
   return (
     <div className="flex flex-wrap pb-8 border-t border-dashed border-border-base my-5 sm:my-8 pt-6">
       <Description
-        title={'Image ' + String.fromCharCode(97 + index).toUpperCase()}
-        details={'Information'}
+        title={label}
+        details={
+          label.startsWith('Banner')
+            ? t('form:banner-image-helper-text')
+            : t('form:slider-image-helper-text')
+        }
         className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
       />
       <Card className="w-full sm:w-8/12 md:w-2/3">

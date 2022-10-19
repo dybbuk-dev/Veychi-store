@@ -394,7 +394,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
               />
 
               <Input
-                label={`${t('form:input-label-unit')}*`}
+                label={`${t('form:input-label-unit-of-measurement')}*`}
+                tooltip="Este campo sera usado por el consumidor "
                 {...register('unit')}
                 error={t(errors.unit?.message!)}
                 variant="outline"

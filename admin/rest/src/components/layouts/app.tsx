@@ -1,17 +1,18 @@
-import { SUPER_ADMIN } from "@utils/constants";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { MARKETING, SUPER_ADMIN } from '@utils/constants';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import {
+  adminOnly,
   allowedRoles,
   getAuthCredentials,
   hasAccess,
   isAuthenticated,
-} from "@utils/auth-utils";
-import { useEffect, useState } from "react";
-import { ROUTES } from "@utils/routes";
+} from '@utils/auth-utils';
+import { useEffect, useState } from 'react';
+import { ROUTES } from '@utils/routes';
 
-const AdminLayout = dynamic(() => import("@components/layouts/admin"));
-const OwnerLayout = dynamic(() => import("@components/layouts/owner"));
+const AdminLayout = dynamic(() => import('@components/layouts/admin'));
+const OwnerLayout = dynamic(() => import('@components/layouts/owner'));
 
 export default function AppLayout(props: any) {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function AppLayout(props: any) {
     return null;
   }
 
-  if (permissions?.includes(SUPER_ADMIN)) {
+  if (permissions?.some((r) => adminOnly.includes(r))) {
     return <AdminLayout {...props} />;
   }
   return <OwnerLayout {...props} />;

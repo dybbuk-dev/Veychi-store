@@ -44,13 +44,18 @@
   "item-description-add": "Agregar",
   "product-description-help-text": "la descripción de su producto y la información necesaria desde aquí",
   "input-label-logo": "Logo",
+  "input-label-qr-code": "Código QR",
+  "qr-help-text": "Éste es el código QR del sitio.",
+  "qr-dimension-help-text": "Imprímalo para poder compartir el sitio a través de él.",
   "input-label-products-description": "Descripción general de sus productos",
+  "print-button": "Imprimir",
   "input-label-email": "Correo electrónico",
   "input-label-salary": "Salario",
 
   "input-label-token": "Pon tu token que recibiste del correo electrónico",
   "input-label-password": "Contraseña",
   "input-label-bio": "Bio",
+
   "input-label-contact": "Contacto",
   "input-label-avatar": "Avatar",
   "input-label-old-password": "Contraseña anterior",
@@ -188,6 +193,9 @@
   "avatar-help-text": "Sube tu imagen de perfil desde aquí. La dimensión del avatar debe ser de 45 x 45 píxeles",
   "button-label-save-settings": "Guardar ajustes",
   "button-label-change-password": "Cambiar la contraseña",
+  "banner-image-helper-text": "Imagen de la sección superior del home",
+  "slider-image-helper-text": "Imagen del carousel de la página",
+
   "button-label-save": "Guardar",
   "button-label-send": "Enviar",
   "password-help-text": "Cambia tu contraseña desde aquí",
