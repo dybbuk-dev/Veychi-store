@@ -20,7 +20,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-white shadow fixed w-full z-40">
-      <nav className="px-5 md:px-8 pt-4 flex items-center justify-between">
+      <nav className="px-5 md:px-8  flex items-center justify-between">
         {/* <!-- Mobile menu button --> */}
         <motion.button
           whileTap={{ scale: 0.88 }}

@@ -1,19 +1,19 @@
-import Input from "@components/ui/input";
-import { useFieldArray, useForm } from "react-hook-form";
-import Button from "@components/ui/button";
-import Description from "@components/ui/description";
-import Card from "@components/common/card";
-import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
-import { Attribute } from "@ts-types/generated";
-import { useShopQuery } from "@data/shop/use-shop.query";
-import { useCreateAttributeMutation } from "@data/attributes/use-attribute-create.mutation";
-import { useUpdateAttributeMutation } from "@data/attributes/use-attribute-update.mutation";
-import { useState } from "react";
-import Alert from "@components/ui/alert";
-import { animateScroll } from "react-scroll";
-import { attributeValidationSchema } from "@components/attribute/attribute-validation-schema";
-import { yupResolver } from "@hookform/resolvers/yup";
+import Input from '@components/ui/input';
+import { useFieldArray, useForm } from 'react-hook-form';
+import Button from '@components/ui/button';
+import Description from '@components/ui/description';
+import Card from '@components/common/card';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { Attribute } from '@ts-types/generated';
+import { useShopQuery } from '@data/shop/use-shop.query';
+import { useCreateAttributeMutation } from '@data/attributes/use-attribute-create.mutation';
+import { useUpdateAttributeMutation } from '@data/attributes/use-attribute-update.mutation';
+import { useState } from 'react';
+import Alert from '@components/ui/alert';
+import { animateScroll } from 'react-scroll';
+import { attributeValidationSchema } from '@components/attribute/attribute-validation-schema';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type FormValues = {
   name?: string | null;
@@ -39,12 +39,12 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     control,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: initialValues ? initialValues : { name: "", values: [] },
-    resolver: yupResolver(attributeValidationSchema)
+    defaultValues: initialValues ? initialValues : { name: '', values: [] },
+    resolver: yupResolver(attributeValidationSchema),
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "values",
+    name: 'values',
   });
   const { mutate: createAttribute, isLoading: creating } =
     useCreateAttributeMutation();
@@ -100,19 +100,19 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
           <Description
-            title={t("common:attribute")}
+            title={t('common:attribute')}
             details={`${
               initialValues
-                ? t("form:item-description-update")
-                : t("form:item-description-add")
-            } ${t("form:form-description-attribute-name")}`}
+                ? t('form:item-description-update')
+                : t('form:item-description-add')
+            } ${t('form:form-description-attribute-name')}`}
             className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <Input
-              label={t("form:input-label-name")}
-              {...register("name")}
+              label={t('form:input-label-name') + ' (Ej: Talla, Color)'}
+              {...register('name')}
               error={t(errors.name?.message!)}
               variant="outline"
               className="mb-5"
@@ -122,12 +122,12 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
         <div className="flex flex-wrap my-5 sm:my-8">
           <Description
-            title={t("common:attribute-values")}
+            title={t('common:attribute-values')}
             details={`${
               initialValues
-                ? t("form:item-description-update")
-                : t("form:item-description-add")
-            } ${t("form:form-description-attribute-value")}`}
+                ? t('form:item-description-update')
+                : t('form:item-description-add')
+            } ${t('form:form-description-attribute-value')}`}
             className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
           />
 
@@ -141,7 +141,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                   <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
                     <Input
                       className="sm:col-span-2"
-                      label={t("form:input-label-value-star")}
+                      label={
+                        t('form:input-label-value-star') + ' (Ej: XL, M, Azul)'
+                      }
                       variant="outline"
                       {...register(`values.${index}.value` as const)}
                       defaultValue={item.value} // make sure to set up defaultValue
@@ -149,7 +151,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                     />
                     <Input
                       className="sm:col-span-2"
-                      label={t("form:input-label-meta")}
+                      label={t('form:input-label-meta') + '/ Unidad de medida (Ej: 80cm, 1 litro )'}
                       variant="outline"
                       {...register(`values.${index}.meta` as const)}
                       defaultValue={item.meta} // make sure to set up defaultValue
@@ -159,7 +161,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                       type="button"
                       className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
                     >
-                      {t("form:button-label-remove")}
+                      {t('form:button-label-remove')}
                     </button>
                   </div>
                 </div>
@@ -168,10 +170,10 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
             <Button
               type="button"
-              onClick={() => append({ value: "", meta: "" })}
+              onClick={() => append({ value: '', meta: '' })}
               className="w-full sm:w-auto"
             >
-              {t("form:button-label-add-value")}
+              {t('form:button-label-add-value')}
             </Button>
 
             {errors?.values?.message ? (
@@ -181,7 +183,6 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                 className="mt-5"
               />
             ) : null}
-
           </Card>
         </div>
 
@@ -193,15 +194,15 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
               className="me-4"
               type="button"
             >
-              {t("form:button-label-back")}
+              {t('form:button-label-back')}
             </Button>
           )}
 
           <Button loading={creating || updating}>
             {initialValues
-              ? t("form:item-description-update")
-              : t("form:item-description-add")}{" "}
-            {t("common:attribute")}
+              ? t('form:item-description-update')
+              : t('form:item-description-add')}{' '}
+            {t('common:attribute')}
           </Button>
         </div>
       </form>

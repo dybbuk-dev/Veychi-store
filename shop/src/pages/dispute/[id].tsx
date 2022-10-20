@@ -409,15 +409,12 @@ const MessageContent = ({
             <ImageWithFallback
               layout="fill"
               className="absolute"
-              src={process.env.NEXT_PUBLIC_REST_API_ENDPOINT + content.slice(1)}
+              src={content}
               fallbackSrc={`https://www.publicdomainpictures.net/pictures/280000/nahled/not-found-image-15383864787lu.jpg`}
             />
           </div>
         ) : type === 'pdf' ? (
-          <a
-            href={process.env.NEXT_PUBLIC_REST_API_ENDPOINT + content.slice(1)}
-            target="_blank"
-          >
+          <a href={content} target="_blank">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -453,7 +450,6 @@ const getHeaders = () => {
 const ImageWithFallback = (props: any) => {
   const { src, fallbackSrc, ...rest } = props;
   const [imgSrc, setImgSrc] = useState(src);
-
   return (
     <Image
       {...rest}

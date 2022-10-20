@@ -50,7 +50,7 @@ type AppPropsWithLayout = AppProps & {
 
 export const AppSettings: React.FC = (props) => {
   const { data, isLoading: loading, error } = useSettingsQuery();
-  if (loading) return <PageLoader />;
+  if (loading) return <div>test ola</div>
   if (error) return <ErrorMessage message={error.message} />;
   return <SettingsProvider initialValue={data?.settings?.options} {...props} />;
 };

@@ -126,6 +126,11 @@ export const siteSettings = {
             icon: 'SettingsIcon',
           },
           {
+            href: ROUTES.SITEQR,
+            label: 'QR',
+            icon: 'AttributeIcon',
+          },
+          {
             href: ROUTES.COUPONS,
             label: 'sidebar-nav-item-coupons',
             icon: 'CouponsIcon',

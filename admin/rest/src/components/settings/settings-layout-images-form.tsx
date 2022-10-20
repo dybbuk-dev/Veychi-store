@@ -20,7 +20,11 @@ import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
-const formatHref = (url: string) => '/' + url.split('/').slice(3).join('/');
+const formatHref = (url: string) => {
+  console.log(url);
+
+  return '/' + url.split('/').slice(3).join('/');
+};
 
 async function onSubmit(values: any) {
   const marketingImages = Object.values(values).map(
@@ -141,15 +145,51 @@ export default function SettingsLayoutImagesForm({
   } = useForm({ defaultValues: formFormmater({ imagesData, tags }) });
   const fieldsArray = useMemo(() => {
     return [
-      'Banner 1',
-      'Banner 2',
-      'Banner 3',
-      'Banner 4',
-      'Banner 5',
-      'Banner 6',
-      'Slider 1',
-      'Slider 2',
-      'Slider 3',
+      {
+        label: 'Banner 1',
+        desktop: { width: 1078, height: 425 },
+        mobile: { width: 470, height: 232 },
+      },
+      {
+        label: 'Banner 2',
+        desktop: { width: 425, height: 425 },
+        mobile: { width: 232, height: 232 },
+      },
+      {
+        label: 'Banner 3',
+        desktop: { width: 425, height: 425 },
+        mobile: { width: 232, height: 232 },
+      },
+      {
+        label: 'Banner 4',
+        desktop: { width: 425, height: 425 },
+        mobile: { width: 232, height: 232 },
+      },
+      {
+        label: 'Banner 5',
+        desktop: { width: 425, height: 425 },
+        mobile: { width: 232, height: 232 },
+      },
+      {
+        label: 'Banner 6',
+        desktop: { width: 1078, height: 425 },
+        mobile: { width: 470, height: 232 },
+      },
+      {
+        label: 'Slider 1',
+        desktop: { width: 1440, height: 570 },
+        mobile: { width: 450, height: 570 },
+      },
+      {
+        label: 'Slider 2',
+        desktop: { width: 1440, height: 123 },
+        mobile: { width: 450, height: 570 },
+      },
+      {
+        label: 'Slider 3',
+        desktop: { width: 1440, height: 123 },
+        mobile: { width: 450, height: 570 },
+      },
     ];
   }, []);
   return (
@@ -185,7 +225,7 @@ const ImageInput = ({
   errors: DeepMap<DeepPartial<any>, FieldError>;
   index: number;
   data: { tags: TagPaginator };
-  label: string;
+  label: any;
 }) => {
   const { t } = useTranslation();
 
@@ -195,9 +235,9 @@ const ImageInput = ({
   return (
     <div className="flex flex-wrap pb-8 border-t border-dashed border-border-base my-5 sm:my-8 pt-6">
       <Description
-        title={label}
+        title={label.label}
         details={
-          label.startsWith('Banner')
+          label.label.startsWith('Banner')
             ? t('form:banner-image-helper-text')
             : t('form:slider-image-helper-text')
         }
@@ -249,7 +289,10 @@ const ImageInput = ({
           }))}
         />
         <br />
-        <Label className="mt-5">Imagen en Pantallas Grandes</Label>
+        <Label className="mt-5">
+          Imagen en Pantallas Grandes ({label.desktop.width} x{' '}
+          {label.desktop.height} )
+        </Label>
 
         <FileInput
           name={imageLabel + 'image.desktop.attachment'}
@@ -257,7 +300,10 @@ const ImageInput = ({
           multiple={false}
         />
         <br />
-        <Label className="mt-5">Imagen en Pantallas Pequeñas / Móviles</Label>
+        <Label className="mt-5">
+          Imagen en Pantallas Pequeñas / Móviles ({label.mobile.height} x{' '}
+          {label.mobile.width} )
+        </Label>
 
         <FileInput
           name={imageLabel + 'image.mobile.attachment'}
