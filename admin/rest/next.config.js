@@ -33,6 +33,7 @@ module.exports = withPWA({
       '5500-201-220-127-222.sa.ngrok.io',
       'www.publicdomainpictures.net',
       'react-pdf.org',
+      '793a-201-220-127-222.sa.ngrok.io',
     ],
   },
   typescript: {

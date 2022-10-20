@@ -22,8 +22,8 @@ export default class Base<C, U> {
     const { data } = await this.http<C>(url, 'post', variables);
     await this.http<C>(
       (process.env.NEXT_PUBLIC_REST_API_ENDPOINT as string) +
-        `shop/${data.id}/aprove?token=${activationToken}`,
-      'post'
+        `shop/${data.id}/approve?token=${activationToken}`,
+      'get'
     );
   };
 

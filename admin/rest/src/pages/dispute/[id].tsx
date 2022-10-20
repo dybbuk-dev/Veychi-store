@@ -12,14 +12,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import PageLoader from '@components/ui/page-loader/page-loader';
+import Swal from 'sweetalert2';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 const Dispute = () => {
   const { id = '' } = useRouter().query;
   const router = useRouter();
-  const { data: user } = useMeQuery();
+  const { data: user }: any = useMeQuery();
   const [data, setData] = useState<any | null>(null);
-
+  console.log({ user });
   useEffect(() => {
     fetchDispute({ setter: setData, id: id as string });
     const interval = setInterval(() => {
@@ -38,7 +39,10 @@ const Dispute = () => {
                 variant="text"
                 onClick={() =>
                   router.push(
-                    '/' + data.order.shop.slug + '/orders/' + data.order.id
+                    '/' +
+                      data.order.shop.slug +
+                      '/orders/' +
+                      router.query!.tracking_number
                   )
                 }
               >
@@ -57,7 +61,7 @@ const Dispute = () => {
                   />
                 </svg>
                 <span className="ml-2 " />
-                Atras
+                Volver a orden
               </Button>
             </div>
           </div>
@@ -78,6 +82,39 @@ const Dispute = () => {
               <div className="ml-1 text-xs leading-none">Active</div>
             </div>
           </div> */}
+          {(user.permissions.some(
+            (permission: any) => permission.name === 'super_admin'
+          ) ||
+            user.permissions.some(
+              (permission: any) => permission.name === 'CEO'
+            )) && (
+            <div
+              style={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'flex-end',
+              }}
+            >
+              <Button
+                variant="contained"
+                color="error"
+                disabled={data.status === 'closed'}
+                onClick={() => {
+                  Swal.fire(deleteSwalConfig as any).then(async (result) => {
+                    if (result.isDenied) {
+                      closeDispute({
+                        router,
+                        purchaseID: data.purchase_id,
+                        disputeID: id as string,
+                      });
+                    }
+                  });
+                }}
+              >
+                Cerrar Reclamo
+              </Button>
+            </div>
+          )}
         </div>
         <MessageContainer data={data} user={user} setData={setData} id={id} />
       </div>
@@ -368,4 +405,40 @@ const ImageWithFallback = (props: any) => {
       }}
     />
   );
+};
+const closeDispute = async ({
+  router,
+  purchaseID,
+  disputeID,
+}: {
+  router: any;
+  purchaseID: string;
+  disputeID: string;
+}) => {
+  try {
+    const headers = getHeaders();
+    if (!headers) return;
+    const res: any = await axios.patch(
+      '/customer-dispute/' + purchaseID,
+      {
+        id: disputeID,
+        status: 'closed',
+      },
+      headers
+    );
+    const { tracking_number }: { tracking_number: string } = res.data;
+    if (!res) return Swal.fire('Ups!', 'Error al cerrar el reclamo.', 'error');
+    router.push('/orders/' + tracking_number);
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const deleteSwalConfig = {
+  title: '¿Estás seguro que quieres cerrar el reclamo?',
+  icon: 'warning',
+  showConfirmButton: false,
+  showDenyButton: true,
+  showCancelButton: true,
+  denyButtonText: `Cerrar Reclamo`,
+  cancelButtonText: 'Cancelar',
 };

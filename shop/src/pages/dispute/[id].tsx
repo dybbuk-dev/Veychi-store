@@ -39,7 +39,7 @@ const Dispute = () => {
               <Button
                 variant="text"
                 onClick={() =>
-                  router.push('/orders/' + data.order.tracking_number)
+                  router.push('/orders/' + router.query!.tracking_number)
                 }
               >
                 <svg
@@ -57,7 +57,7 @@ const Dispute = () => {
                   />
                 </svg>
                 <span className="ml-2" />
-                Atras
+                Volver a orden
               </Button>
             </div>
           </div>

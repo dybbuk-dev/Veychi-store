@@ -22,7 +22,7 @@ import { useOrderStatusesQuery } from '@data/order-status/use-order-statuses.que
 import { useOrderQuery } from '@data/order/use-order.query';
 import { Attachment } from '@ts-types/generated';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 type FormValues = {
   order_status: any;
 };
@@ -88,6 +88,9 @@ export default function OrderDetailsPage() {
   const { data: orderPlusData } = useOrderQuery(
     ('' + (parseInt(query.orderId as string) - 1)) as string
   );
+  const foundDispute = useMemo(() => {
+    return data?.order.dispute.find((dispute) => dispute.status === 'opened');
+  }, [data]);
   console.log(orderPlusData);
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -141,8 +144,14 @@ export default function OrderDetailsPage() {
       <div className="flex flex-col lg:flex-row items-center">
         <h3 className="text-2xl font-semibold text-heading text-center lg:text-start w-full lg:w-1/3 mb-8 lg:mb-0 whitespace-nowrap">
           {t('form:input-label-order-id')} - {data?.order?.tracking_number}{' '}
-          {data!.order!.dispute!.length > 0 ? (
-            <Link href={'/dispute/' + data!.order!.dispute[0].id}>
+          {foundDispute ? (
+            <Link
+              href={
+                '/dispute/' +
+                foundDispute.id +
+                `?tracking_number=${data!.order.id}`
+              }
+            >
               <span className="bg-red-100 cursor-pointer text-red-800 text-xs font-semibold ml-2 mr-2 px-2.5 py-0.5 text-[0.9rem] rounded dark:bg-red-200 dark:text-red-900">
                 Disputa abierta
               </span>
