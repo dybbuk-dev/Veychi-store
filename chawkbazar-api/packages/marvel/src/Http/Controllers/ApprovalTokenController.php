@@ -33,7 +33,7 @@ class ApprovalTokenController extends CoreController
    }
     public function store(Request $request)
     {
-        return $this->repository->create(['token'=>Str::random(290)]);
+        return $this->repository->create(['token'=>Str::random(10)]);
     }
 
     public function destroy(int $id){
