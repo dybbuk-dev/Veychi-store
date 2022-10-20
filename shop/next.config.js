@@ -32,6 +32,8 @@ module.exports = withPWA({
       '0830-201-220-127-222.sa.ngrok.io',
       '149b-201-220-127-222.sa.ngrok.io',
       '5500-201-220-127-222.sa.ngrok.io',
+      '793a-201-220-127-222.sa.ngrok.io',
+      'www.publicdomainpictures.net',
     ],
   },
 

@@ -180,11 +180,18 @@ const DisputeList = ({ data }: IProps) => {
       align: 'center',
       width: 100,
       render: (id: string) => {
-        const foundDispute = data
-          .find((order) => order.id == id)!
-          .dispute.find((dispute) => dispute.status === 'opened');
+        const order = data.find((order) => order.id == id)!;
+        const foundDispute = order.dispute.find(
+          (dispute) => dispute.status === 'opened'
+        );
         return (
-          <ActionButtons id={id} detailsUrl={`/dispute/${foundDispute.id}`} />
+          <ActionButtons
+            id={id}
+            detailsUrl={
+              `/dispute/${foundDispute.id}` +
+              `?tracking_number=${order.id}`
+            }
+          />
         );
       },
     },

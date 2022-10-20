@@ -46,7 +46,13 @@ export default function OrderView({ order }: any) {
             />
             {activeDispute ? (
               <Button
-                onClick={() => router.push('/dispute/' + activeDispute.id)}
+                onClick={() =>
+                  router.push(
+                    '/dispute/' +
+                      activeDispute.id +
+                      `?tracking_number=${order!.tracking_number}`
+                  )
+                }
                 variant="normal"
               >
                 <Badge
