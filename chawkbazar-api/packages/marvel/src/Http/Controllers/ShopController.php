@@ -65,7 +65,8 @@ class ShopController extends CoreController
     }
 
     public function approveWithToken(Request $request,$id){
-            $shop=$this->repository->findOrFail($id);
+
+            $shop=$this->repository->find($id);
             return $this->repository->approveShop($request,$shop);
 
 
