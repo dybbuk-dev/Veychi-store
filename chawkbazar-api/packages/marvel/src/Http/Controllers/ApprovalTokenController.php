@@ -31,7 +31,7 @@ class ApprovalTokenController extends CoreController
 
        }
    }
-    public function sto     re(Request $request)
+    public function store(Request $request)
     {
         return $this->repository->create(['token'=>Str::random(290)]);
     }
