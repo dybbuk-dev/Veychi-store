@@ -1,8 +1,8 @@
-import SelectInput from "@components/ui/select-input";
-import Label from "@components/ui/label";
-import { Control } from "react-hook-form";
-import { useCategoriesQuery } from "@data/category/use-categories.query";
-import { useTranslation } from "next-i18next";
+import SelectInput from '@components/ui/select-input';
+import Label from '@components/ui/label';
+import { Control } from 'react-hook-form';
+import { useCategoriesQuery } from '@data/category/use-categories.query';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
   control: Control<any>;
@@ -10,15 +10,15 @@ interface Props {
 }
 
 const ProductCategoryInput = ({ control }: Props) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
 
   const { data, isLoading: loading } = useCategoriesQuery({
-    limit: 999
+    limit: 999,
   });
 
   return (
     <div className="mb-5">
-      <Label>{t("form:input-label-categories")}</Label>
+      <Label>{t('form:input-label-subcategory')}</Label>
       <SelectInput
         name="categories"
         isMulti

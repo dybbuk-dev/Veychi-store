@@ -1,9 +1,9 @@
-import SelectInput from "@components/ui/select-input";
-import Label from "@components/ui/label";
-import ValidationError from "@components/ui/form-validation-error";
-import { Control } from "react-hook-form";
-import { useTypesQuery } from "@data/type/use-types.query";
-import { useTranslation } from "next-i18next";
+import SelectInput from '@components/ui/select-input';
+import Label from '@components/ui/label';
+import ValidationError from '@components/ui/form-validation-error';
+import { Control } from 'react-hook-form';
+import { useTypesQuery } from '@data/type/use-types.query';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
   control: Control<any>;
@@ -18,7 +18,7 @@ const ProductGroupInput = ({ control, error }: Props) => {
 
   return (
     <div className="mb-5">
-      <Label>{t("form:input-label-group")}*</Label>
+      <Label>{t('form:input-label-category')}*</Label>
       <SelectInput
         name="type"
         control={control}

@@ -426,7 +426,7 @@ function TransitionsModal({ handleClose, open, data }: any) {
               trigger={() => (
                 <button
                   type="button"
-                  className="border border-indigo-500 bg-indigo-500 text-white rounded-md px-4 py-2 my-2 mx-auto transition duration-500 ease select-none hover:bg-indigo-600 focus:outline-none focus:shadow-outline"
+                  className="border  border-[#5697FA] bg-[#5697FA] text-white rounded-md px-4 py-2 my-2 mx-auto transition duration-500 ease select-none hover:bg-[#C1508F] focus:outline-none focus:shadow-outline"
                 >
                   Imprimir QR
                 </button>

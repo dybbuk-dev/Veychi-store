@@ -20,6 +20,7 @@ export const ROUTES = {
   ATTRIBUTE_VALUES: '/attribute-values',
   BRANDS: '/brands',
   TAGS: '/tags',
+  SITEQR: '/site-qr',
   WITHDRAWS: '/withdraws',
   PROFILE_UPDATE: '/profile-update',
   GET_PREMIUM: '/premium-info',

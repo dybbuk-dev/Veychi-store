@@ -1,7 +1,7 @@
 import Loader from '@components/ui/loader/loader';
 import { useUploadMutation } from '@data/upload/use-upload.mutation';
 import { useMeQuery } from '@data/user/use-me.query';
-import { MessageSharp } from '@mui/icons-material';
+import { ContentCopyRounded, MessageSharp } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { Attachment } from '@ts-types/generated';
 import axios from 'axios';
@@ -48,7 +48,7 @@ const Dispute = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-6 h-6 text-[#FF2F8E]"
                 >
                   <path
                     strokeLinecap="round"
@@ -56,7 +56,7 @@ const Dispute = () => {
                     d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
                   />
                 </svg>
-                <span className="ml-2" />
+                <span className="ml-2 " />
                 Atras
               </Button>
             </div>
@@ -168,7 +168,10 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
   }
   return (
     <div className="flex h-full flex-auto flex-col p-6">
-      <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4">
+      <div
+        className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl p-4"
+        style={{ border: '1px solid rgba(125,125,125,0.5)' }}
+      >
         <div className="mb-4 flex h-full flex-col overflow-x-auto">
           <div className="flex h-full flex-col">
             <div className="grid grid-cols-12 gap-y-2">
@@ -213,7 +216,7 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
           </div>
           <div className="ml-4">
             <button
-              className={`flex flex-shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-4 py-1 text-white hover:bg-indigo-600 ${
+              className={`flex flex-shrink-0 items-center justify-center rounded-xl bg-[#5697FA] px-4 py-1 text-white hover:bg-[#C1508F] ${
                 isSending ? 'bg-[#999] hover:bg-[#777]' : ''
               }`}
               disabled={isSending}
@@ -264,7 +267,7 @@ const MessageWrapper = (props: {
     <div
       className={
         props.sentByMe
-          ? 'col-start-6 col-end-13 rounded-lg p-3'
+          ? 'col-start-6 col-end-13 rounded-lg p-3 '
           : 'col-start-1 col-end-8 rounded-lg p-3'
       }
     >
@@ -275,7 +278,7 @@ const MessageWrapper = (props: {
             : 'flex flex-row items-center'
         }
       >
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#5697FA] mr-2 text-white">
           {props.sentByMe ? 'C' : 'A'}
         </div>
 
@@ -313,15 +316,12 @@ const MessageContent = ({
             <ImageWithFallback
               layout="fill"
               className="absolute"
-              src={process.env.NEXT_PUBLIC_REST_API_ENDPOINT + content.slice(1)}
+              src={content}
               fallbackSrc={`https://www.publicdomainpictures.net/pictures/280000/nahled/not-found-image-15383864787lu.jpg`}
             />
           </div>
         ) : type === 'pdf' ? (
-          <a
-            href={process.env.NEXT_PUBLIC_REST_API_ENDPOINT + content.slice(1)}
-            target="_blank"
-          >
+          <a href={content} target="_blank">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

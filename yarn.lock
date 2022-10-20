@@ -7454,6 +7454,11 @@ use-local-storage@^2.3.6:
   resolved "https://registry.yarnpkg.com/use-local-storage/-/use-local-storage-2.3.6.tgz#11058465143aa7537556af482b21c6b1f77a78a6"
   integrity sha512-OJQHWYbH2M5mMaSY6uYIbfzOm7eVz1fBYFw1wqQurCR2+gQb+FjVt0KzzDAsgTOSEUNVAbaiJ0I4WcNjRn7u5w==
 
+use-mobile-detect-hook@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/use-mobile-detect-hook/-/use-mobile-detect-hook-1.0.5.tgz#1ec83ac112d09e99ee49d60c7175cf3174c1586f"
+  integrity sha512-8Uu69l2DTsPahD+j+ZefzV3IRHWcN2vbQmdlTshTnoHIS8MDvgr2IC3dgaNNpPCUbr8EhKH06c0KB3ViYNSnAQ==
+
 use-subscription@1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/use-subscription/-/use-subscription-1.5.1.tgz"

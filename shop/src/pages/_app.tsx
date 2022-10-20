@@ -1,40 +1,40 @@
-import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
-import { AnimatePresence } from "framer-motion";
-import { ManagedUIContext } from "@contexts/ui.context";
-import ManagedModal from "@components/common/modal/managed-modal";
-import ManagedDrawer from "@components/common/drawer/managed-drawer";
-import React, { useEffect, useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { Hydrate } from "react-query/hydration";
-import { ToastContainer } from "react-toastify";
+import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import { AnimatePresence } from 'framer-motion';
+import { ManagedUIContext } from '@contexts/ui.context';
+import ManagedModal from '@components/common/modal/managed-modal';
+import ManagedDrawer from '@components/common/drawer/managed-drawer';
+import React, { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Hydrate } from 'react-query/hydration';
+import { ToastContainer } from 'react-toastify';
 // import { ReactQueryDevtools } from "react-query/devtools";
-import { appWithTranslation } from "next-i18next";
-import DefaultSeo from "@components/common/default-seo";
+import { appWithTranslation } from 'next-i18next';
+import DefaultSeo from '@components/common/default-seo';
 
 // Load Open Sans and satisfy typeface font
-import "@fontsource/open-sans";
-import "@fontsource/open-sans/600.css";
-import "@fontsource/open-sans/700.css";
-import "@fontsource/satisfy";
+import '@fontsource/open-sans';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@fontsource/satisfy';
 // external
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 // base css file
-import "@styles/scrollbar.css";
-import "@styles/swiper-carousel.css";
-import "@styles/custom-plugins.css";
-import "@styles/tailwind.css";
-import { getDirection } from "@utils/get-direction";
-import PageLoader from "@components/ui/page-loader/page-loader";
-import ErrorMessage from "@components/ui/error-message";
-import { SettingsProvider } from "@contexts/settings.context";
-import { useSettingsQuery } from "@framework/settings/settings.query";
-import type { NextPage } from "next";
-import PrivateRoute from "@lib/private-route";
-import SocialLoginProvider from "../providers/social-login-provider";
+import '@styles/scrollbar.css';
+import '@styles/swiper-carousel.css';
+import '@styles/custom-plugins.css';
+import '@styles/tailwind.css';
+import { getDirection } from '@utils/get-direction';
+import PageLoader from '@components/ui/page-loader/page-loader';
+import ErrorMessage from '@components/ui/error-message';
+import { SettingsProvider } from '@contexts/settings.context';
+import { useSettingsQuery } from '@framework/settings/settings.query';
+import type { NextPage } from 'next';
+import PrivateRoute from '@lib/private-route';
+import SocialLoginProvider from '../providers/social-login-provider';
 
 function handleExitComplete() {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     window.scrollTo({ top: 0 });
   }
 }

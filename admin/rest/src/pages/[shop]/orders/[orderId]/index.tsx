@@ -143,7 +143,7 @@ export default function OrderDetailsPage() {
           {t('form:input-label-order-id')} - {data?.order?.tracking_number}{' '}
           {data!.order!.dispute!.length > 0 ? (
             <Link href={'/dispute/' + data!.order!.dispute[0].id}>
-              <span className="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
+              <span className="bg-red-100 cursor-pointer text-red-800 text-xs font-semibold ml-2 mr-2 px-2.5 py-0.5 text-[0.9rem] rounded dark:bg-red-200 dark:text-red-900">
                 Disputa abierta
               </span>
             </Link>
@@ -189,7 +189,7 @@ export default function OrderDetailsPage() {
         />
       </div>
 
-      <div className="mb-10">
+      <div className="mb-10 fixing-color ">
         {data?.order ? (
           <Table
             //@ts-ignore

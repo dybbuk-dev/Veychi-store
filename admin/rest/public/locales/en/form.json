@@ -64,7 +64,7 @@
   "input-label-products": "Products",
   "input-label-categories": "Categories",
   "input-label-subcategories": "Subcategories",
-
+  "input-label-subcategory": "Subcategory",
   "input-label-coupons": "Coupons",
   "input-label-orders": "Orders",
   "input-label-order-id": "Order ID",
@@ -87,6 +87,8 @@
   "input-label-select-icon": "Select Icon",
   "input-label-details": "Details",
   "input-label-group": "Group",
+  "input-label-category": "Category",
+
   "input-label-type": "Type",
   "input-label-types": "Types",
   "input-label-parent-category": "Parent Category",

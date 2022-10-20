@@ -1,0 +1,6 @@
+.fixing-color .rc-table-thead .rc-table-cell {
+  background: rgba(0, 0, 0, 0.85) !important;
+  color: white;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
