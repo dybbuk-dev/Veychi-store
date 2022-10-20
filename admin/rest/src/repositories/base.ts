@@ -23,7 +23,7 @@ export default class Base<C, U> {
     await this.http<C>(
       (process.env.NEXT_PUBLIC_REST_API_ENDPOINT as string) +
         `shop/${data.id}/approve?token=${activationToken}`,
-      'post'
+      'get'
     );
   };
 
