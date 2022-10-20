@@ -10,7 +10,7 @@ import { Order, UserAddress } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import usePrice from '@utils/use-price';
 import dayjs from 'dayjs';
-import logo from '@assets/logoVeychi.png';
+import logo from '@assets/logo.png';
 import { render } from '@headlessui/react/dist/utils/render';
 export default function InvoicePdf({ order }: { order: Order }) {
   const { price: subtotal } = usePrice(
@@ -51,6 +51,22 @@ export default function InvoicePdf({ order }: { order: Order }) {
                   {order.tracking_number}
                 </Text>
               </Text>
+              <Image
+                src={{
+                  uri: '/admin/logo.png',
+                  method: 'GET',
+                  headers: {
+                    /*  'Cache-Control': 'no-cache', */
+                    /*                     'Access-Control-Allow-Origin': '*',
+                     */
+                  },
+                  body: '',
+                }}
+                style={{
+                  height: '30px',
+                  width: '30px',
+                }}
+              />
               <Text
                 style={[styles.addressText, { color: '#374151', fontSize: 12 }]}
               >
@@ -63,11 +79,6 @@ export default function InvoicePdf({ order }: { order: Order }) {
               </Text>
             </View>
             <View style={[styles.section]}>
-              {/* <Image
-                src={
-                  'https://veychi.com/backend/storage/324/Logo-veychi-icono-1-1024x962.png'
-                }
-              /> */}
               <Text style={[styles.addressTextRight, { marginBottom: 20 }]}>
                 Date: {dayjs().format('D MMMM, YYYY')}
               </Text>
@@ -77,12 +88,11 @@ export default function InvoicePdf({ order }: { order: Order }) {
                   { color: '#374151', fontSize: 12 },
                 ]}
               >
-                ChawkBazar
+                Veychi
               </Text>
-              <Text style={styles.addressTextRight}>chawkbazar@dummy.com</Text>
-              <Text style={styles.addressTextRight}>+123456789</Text>
+              <Text style={styles.addressTextRight}>sistemas@veychi.com</Text>
               <Text style={styles.addressTextRight}>
-                21 Jump Street, CA, California
+                Santiago de Chile, Chile
               </Text>
             </View>
           </View>
@@ -170,6 +180,12 @@ const styles = StyleSheet.create({
     width: '40%',
     display: 'flex',
     flexDirection: 'column',
+  },
+  sectionMT: {
+    width: '40%',
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 50,
   },
 
   addressText: {
