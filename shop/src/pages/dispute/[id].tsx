@@ -48,7 +48,7 @@ const Dispute = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-6 h-6 text-[#FF2F8E]"
                 >
                   <path
                     strokeLinecap="round"
@@ -183,7 +183,10 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
   }
   return (
     <div className="flex h-full flex-auto flex-col p-6 relative">
-      <div className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl bg-gray-100 p-4 relative">
+      <div
+        className="flex h-full flex-auto flex-shrink-0 flex-col rounded-2xl  p-4 relative"
+        style={{ border: '1px solid rgba(125,125,125,0.5)' }}
+      >
         {data.status === 'closed ' && (
           <div className="absolute w-[100%] h-[100%] bg-[rgba(0,0,0,0.25)] -ml-[0.9rem] -mt-[0.95rem] rounded-[1rem] z-50 flex items-center justify-center">
             <span className="text-[#333] font-bold">Reclamo Cerrado</span>
@@ -421,7 +424,7 @@ const MessageContent = ({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="w-6 h-6 text-[#FF2F8E]"
             >
               <path
                 strokeLinecap="round"

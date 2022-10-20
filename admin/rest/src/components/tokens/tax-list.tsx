@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 export type IProps = {
-  taxes: Tax[] | undefined;
+  taxes: any[] | undefined;
   onSort: (current: any) => void;
   onOrder: (current: string) => void;
 };
@@ -59,6 +59,26 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
       dataIndex: 'token',
       key: 'token',
       align: 'center',
+    },
+    {
+      title: t('sidebar-nav-item-shops'),
+      dataIndex: 'id',
+      key: 'shops',
+      align: 'center',
+      render: (id: string) => (
+        <div>
+          {[1234, 567, 89].map((item) => (
+            <div>
+              {item}
+              {'  '}
+              <b>(12/12/2022)</b>
+            </div>
+          ))}
+
+          {/* {JSON.stringify(taxes?.find((item) => item.id === id)!.shops)} */}
+        </div>
+      ),
+      width: 200,
     },
     {
       title: t('table:table-item-actions'),
