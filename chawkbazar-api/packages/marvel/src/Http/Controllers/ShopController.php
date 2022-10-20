@@ -67,7 +67,7 @@ class ShopController extends CoreController
     public function approveWithToken(Request $request,$id){
             $shop=$this->repository->where([
                 ['id',"=",$id],
-                ['owner_id',"=",Auth::id()]
+                ['owner_id',"=",$request->user()->id]
             ])->firstOrFail();
             return $this->repository->approveShop($request,$shop);
 
