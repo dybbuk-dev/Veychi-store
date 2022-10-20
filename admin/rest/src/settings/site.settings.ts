@@ -210,6 +210,12 @@ export const siteSettings = {
         permissions: adminAndOwnerOnly,
       },
       {
+        href: (shop: string) => `/${shop}/disputes`,
+        label: 'sidebar-nav-item-disputes',
+        icon: 'ProductsIcon',
+        permissions: adminAndOwnerOnly,
+      },
+      {
         href: (shop: string) => `/${shop}${ROUTES.WITHDRAWS}`,
         label: 'sidebar-nav-item-withdraws',
         icon: 'AttributeIcon',
