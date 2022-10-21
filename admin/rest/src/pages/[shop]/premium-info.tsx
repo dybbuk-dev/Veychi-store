@@ -17,7 +17,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
-interface Premium {
+export interface Premium {
   id: number;
   title: string;
   price: number;
@@ -41,6 +41,22 @@ export default function UpdateShopPage() {
   } = useShopQuery(shop as string);
   const [premiumCards, setPremiumCards] = useState<Premium[]>([]);
   const [selectedPremium, setSelectedPremium] = useState<null | Premium>(null);
+  const cancelSubscription = async () => {
+    try {
+      const tkn = Cookies.get('AUTH_CRED')!;
+      if (!tkn) return;
+      const { token } = JSON.parse(tkn);
+      const res = await axios.delete('premium-owner/' + shopData!.shop.id, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      });
+      window.location.reload();
+    } catch (e) {
+    } finally {
+    }
+  };
+  console.log({ shopData });
   useEffect(() => {
     (async () => {
       const tkn = Cookies.get('AUTH_CRED')!;
@@ -72,12 +88,19 @@ export default function UpdateShopPage() {
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          {false ? (
+          {shopData!.shop.plan ? (
             <div className="flex flex-col items-center gap-2">
               <TaskAlt sx={{ color: 'green' }} />
               <h4 className="text-md font-semibold text-[#555]">
                 Subscripción Activa
               </h4>
+              <div>{shopData!.shop.plan.title}</div>
+              <button
+                onClick={cancelSubscription}
+                className="bg-red-500 text-white rounded-[9px] px-6 py-2"
+              >
+                Cancel
+              </button>
             </div>
           ) : !selectedPremium ? (
             <>

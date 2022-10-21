@@ -1,3 +1,5 @@
+import { Premium } from 'src/pages/[shop]/premium-info';
+
 export declare type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export declare type Scalars = {
@@ -833,6 +835,7 @@ export declare type Shop = {
   logo?: Maybe<Attachment>;
   address?: Maybe<UserAddress>;
   settings?: Maybe<ShopSettings>;
+  plan?: Premium;
   created_at?: Maybe<Scalars['DateTime']>;
   updated_at?: Maybe<Scalars['DateTime']>;
 };
