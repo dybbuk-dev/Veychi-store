@@ -21,6 +21,7 @@ export { getStaticProps } from '@framework/ssr/homepage/modern';
 
 export default function Home() {
   const [marketingImages, setMarketingImages] = useState<any>([]);
+
   const masonryBanner = useMemo(() => {
     return marketingImages.slice(0, 6).map((image: any) => ({
       ...image,

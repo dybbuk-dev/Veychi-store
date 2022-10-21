@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import isEmpty from "lodash/isEmpty";
-import { ROUTES } from "@lib/routes";
-import { useUI } from "@contexts/ui.context";
-import Button from "@components/ui/button";
-import Image from "next/image";
-import Counter from "@components/common/counter";
-import { ProductAttributes } from "@components/product/product-attributes";
-import { generateCartItem } from "@utils/generate-cart-item";
-import usePrice from "@lib/use-price";
-import { getVariations } from "@framework/utils/get-variations";
-import { useTranslation } from "next-i18next";
-import { useProductQuery } from "@framework/products/products.query";
-import isEqual from "lodash/isEqual";
-import Spinner from "@components/ui/loaders/spinner/spinner";
-import VariationPrice from "@components/product/product-variant-price";
-import { useCart } from "@store/quick-cart/cart.context";
-import { toast } from "react-toastify";
-import isMatch from "lodash/isMatch";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import isEmpty from 'lodash/isEmpty';
+import { ROUTES } from '@lib/routes';
+import { useUI } from '@contexts/ui.context';
+import Button from '@components/ui/button';
+import Image from 'next/image';
+import Counter from '@components/common/counter';
+import { ProductAttributes } from '@components/product/product-attributes';
+import { generateCartItem } from '@utils/generate-cart-item';
+import usePrice from '@lib/use-price';
+import { getVariations } from '@framework/utils/get-variations';
+import { useTranslation } from 'next-i18next';
+import { useProductQuery } from '@framework/products/products.query';
+import isEqual from 'lodash/isEqual';
+import Spinner from '@components/ui/loaders/spinner/spinner';
+import VariationPrice from '@components/product/product-variant-price';
+import { useCart } from '@store/quick-cart/cart.context';
+import { toast } from 'react-toastify';
+import isMatch from 'lodash/isMatch';
 
 export default function ProductPopup({ productSlug }: { productSlug: string }) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const { closeModal, openCart } = useUI();
   const { data: product, isLoading: loading }: any =
     useProductQuery(productSlug);
@@ -66,10 +66,10 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
     const item = generateCartItem(product!, selectedVariation);
     addItemToCart(item, quantity);
 
-    toast(t("add-to-cart"), {
-      type: "dark",
-      progressClassName: "fancy-progress-bar",
-      position: "top-right",
+    toast(t('text-added-to-cart'), {
+      type: 'dark',
+      progressClassName: 'fancy-progress-bar',
+      position: 'top-right',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -121,7 +121,7 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
             height={558}
             src={
               product?.image?.original ??
-              "/assets/placeholder/products/product-thumbnail.svg"
+              '/assets/placeholder/products/product-thumbnail.svg'
             }
             alt={product.name}
             className="lg:object-cover lg:w-full lg:h-full"
@@ -201,7 +201,7 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
                     />
                   ) : (
                     <div className="text-base text-red-500 whitespace-nowrap ltr:lg:ml-7 rtl:first:-mr-4">
-                      {t("text-out-stock")}
+                      {t('text-out-stock')}
                     </div>
                   )}
                 </>
@@ -212,7 +212,7 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
                   {selectedVariation?.is_disable ||
                   selectedVariation.quantity === 0 ? (
                     <div className="text-base text-red-500 whitespace-nowrap ltr:lg:ml-7 rtl:first:-mr-4">
-                      {t("text-out-stock")}
+                      {t('text-out-stock')}
                     </div>
                   ) : (
                     <Counter
@@ -234,7 +234,7 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
                 onClick={addToCart}
                 variant="slim"
                 className={`w-full lg:w-6/12 xl:w-full ${
-                  !isSelected && "bg-gray-400 hover:bg-gray-400"
+                  !isSelected && 'bg-gray-400 hover:bg-gray-400'
                 }`}
                 disabled={
                   !isSelected ||
@@ -246,8 +246,8 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
                 <span className="py-2 3xl:px-8">
                   {product?.quantity ||
                   (!isEmpty(selectedVariation) && selectedVariation?.quantity)
-                    ? t("text-add-to-cart")
-                    : t("text-out-stock")}
+                    ? t('text-add-to-cart')
+                    : t('text-out-stock')}
                 </span>
               </Button>
             </div>
@@ -257,7 +257,7 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
                 onClick={navigateToCartPage}
                 className="w-full mb-4 h-11 md:h-12 rounded bg-gray-100 text-heading focus:outline-none border border-gray-300 transition-colors hover:bg-gray-50 focus:bg-gray-50 text-sm xl:text-base"
               >
-                {t("text-view-cart")}
+                {t('text-view-cart')}
               </button>
             )}
 
@@ -266,7 +266,7 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
               variant="flat"
               className="w-full h-11 md:h-12"
             >
-              {t("text-view-details")}
+              {t('text-view-details')}
             </Button>
           </div>
         </div>

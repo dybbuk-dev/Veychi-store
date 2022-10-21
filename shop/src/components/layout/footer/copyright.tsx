@@ -20,15 +20,16 @@ const Copyright: React.FC<CopyrightProps> = ({ payment }) => {
     <div className="border-t border-gray-300 pt-5 pb-16 sm:pb-20 md:pb-5 mb-2 sm:mb-0">
       <Container className="flex flex-col-reverse md:flex-row text-center md:justify-between">
         <p className="text-body text-xs md:text-[13px] lg:text-sm leading-6">
-          {t('text-copyright')} &copy; {year}&nbsp; Veychi&nbsp;
+          {t('text-copyright')} &copy; {year}&nbsp; Veychi LLC{' '}
+          {t('text-all-rights-reserved')}&nbsp;---{' '}
           <a
             className="font-semibold text-gray-700 transition-colors duration-200 ease-in-out hover:text-body"
             href={'https://desarrollosmoyan.com/'}
             target="_blank"
           >
-            Diseñado y Desarrollado por Desarrollos Moyan
+            diseñado y desarrollado por Desarrollos Moyan
           </a>
-          &nbsp; {t('text-all-rights-reserved')}
+          {/* &nbsp; {t('text-all-rights-reserved')} */}
         </p>
 
         {payment && (
