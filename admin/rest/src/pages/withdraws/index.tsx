@@ -46,7 +46,6 @@ export default function WithdrawsPage() {
       const dateNow = moment(new Date()).format('YYYY-DD-MM');
       saveXLSXData!(res.data, `retiros_${dateNow}.csv`);
     } catch (error) {
-      console.log(error);
     }
   };
 

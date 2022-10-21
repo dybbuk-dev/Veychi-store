@@ -24,8 +24,6 @@ export default function AttributePage() {
   const { data: shopData, isLoading: fetchingShop } = useShopQuery(
     shop as string
   );
-  console.log(shopData);
-  console.log('entrd');
   useEffect(() => {
     if (!shopData) return;
     (async () => {

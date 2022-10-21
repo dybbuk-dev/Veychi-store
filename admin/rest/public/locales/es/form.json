@@ -55,7 +55,12 @@
   "input-label-token": "Pon tu token que recibiste del correo electrónico",
   "input-label-password": "Contraseña",
   "input-label-bio": "Bio",
+  "input-label-domain-password": "Contraseña del dominio",
+  "input-label-domain-provider": "Proveedor del dominio",
+  "input-label-domain-provider-url": "URL del provedor del dominio",
 
+  "input-label-domain-user": "Usuario del dominio",
+  "input-label-domain": "Dominio",
   "input-label-contact": "Contacto",
   "input-label-avatar": "Avatar",
   "input-label-old-password": "Contraseña anterior",
@@ -74,6 +79,8 @@
   "input-label-traits": "Rasgos",
 
   "input-label-duration-in-days": "Duración (en días)",
+  "input-label-days": "días",
+
   "input-label-sku": "SKU",
   "input-label-name": "Nombre",
   "input-label-description": "Descripción",

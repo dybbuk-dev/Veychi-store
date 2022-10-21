@@ -14,9 +14,11 @@ const stripePromise = loadStripe(
 
 export default function ShopPremiumPayment({
   selectedPremium,
+  setSelectedPremium,
   shopData,
 }: {
   selectedPremium: any;
+  setSelectedPremium: any;
   shopData: Shop;
 }) {
   const [clientSecret, setClientSecret] = React.useState('');
@@ -39,7 +41,10 @@ export default function ShopPremiumPayment({
             },
           }
         );
-        console.log({ res });
+        if (res.data.errors) {
+          setSelectedPremium(null);
+          return;
+        }
         setClientSecret(res.data.clientSecret);
       } catch (e) {}
     })();

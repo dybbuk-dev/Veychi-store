@@ -26,7 +26,6 @@ class User extends Base<CreateUser, UpdateUser> {
   };
 
   register = async (url: string, variables: FormValues.RootObject) => {
-    console.log(variables);
     return this.http<FormValues.RootObject>(url, "post", variables);
   };
 

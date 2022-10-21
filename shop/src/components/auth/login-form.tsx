@@ -90,7 +90,6 @@ const LoginForm: React.FC<Props> = ({ layout = "modal" }) => {
           }
         },
         onError: (error: any) => {
-          console.log(error.message);
         },
       }
     );

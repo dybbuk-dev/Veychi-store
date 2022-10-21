@@ -6,6 +6,7 @@ export const ROUTES = {
   CREATE_SHOP: '/shops/create',
   LOGIN: '/login',
   ORDER_STATUS: '/order-status',
+  PREMIUM_SALES: '/premium-sales',
   ORDERS: '/orders',
   PRODUCTS: '/products',
   COUPONS: '/coupons',

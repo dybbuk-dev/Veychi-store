@@ -33,7 +33,6 @@ export default function Uploader({ onChange, value, multiple }: any) {
                 mergedData = files.concat(data);
                 setFiles(files.concat(data));
               } else {
-                console.log(data);
                 if (Array.isArray(data)) {
                   mergedData = data[0];
                   setFiles(data);
@@ -59,14 +58,12 @@ export default function Uploader({ onChange, value, multiple }: any) {
                       },
                     }
                   );
-                  console.log(res);
                   const attachment = {
                     thumbnail: url.data.url!,
                     original: url.data.url,
                     id: data.id,
                   };
                   mergedData = attachment!;
-                  console.log(attachment);
                   setFiles([attachment]);
                 }
               }

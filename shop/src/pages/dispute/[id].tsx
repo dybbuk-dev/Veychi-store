@@ -27,8 +27,6 @@ const Dispute = () => {
     return () => clearInterval(interval);
   }, []);
 
-  console.log({ data });
-
   if (!data || !user) return <PageLoader />;
   return (
     <div className="flex h-screen text-gray-800 antialiased">
@@ -112,18 +110,15 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
     multiple: false,
     accept: ['image/*', '.pdf'],
     onDropAccepted: (options, ...rest) => {
-      console.log({ rest });
-      console.log({ options });
       upload(
         options, // it will be an array of uploaded attachments
         async (data) => {
           let mergedData;
-          console.log(data);
+
           if (Array.isArray(data)) {
             mergedData = data[0];
             setFile(mergedData);
           } else {
-            console.log('entrdhr');
             const url = await axios.get(
               process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
                 'attachments/' +
@@ -140,13 +135,13 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
               original: url.data.url,
               id: data.id,
             };
-            console.log(attachment);
+
             await handleSend({
               message: url.data.slug,
               type: options[0].type === 'application/pdf' ? 'pdf' : 'image',
             });
             mergedData = attachment!;
-            console.log(attachment);
+
             setFile(attachment);
           }
         }

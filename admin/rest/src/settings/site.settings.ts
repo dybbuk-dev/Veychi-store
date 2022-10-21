@@ -168,6 +168,12 @@ export const siteSettings = {
             allowedRoles: [...allRoutes, MANAGEMENT, SHAREHOLDER],
             icon: 'WithdrawIcon',
           },
+          {
+            href: ROUTES.PREMIUM_SALES,
+            label: 'sidebar-nav-item-sales',
+            allowedRoles: [...allRoutes, MANAGEMENT, SHAREHOLDER],
+            icon: 'CategoriesIcon',
+          },
         ],
       },
       {

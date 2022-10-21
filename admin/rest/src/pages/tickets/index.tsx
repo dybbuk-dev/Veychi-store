@@ -56,9 +56,7 @@ export default function Tickets() {
       });
       const dateNow = moment(new Date()).format('YYYY-DD-MM');
       saveXLSXData!(res.data, `ordenes_${dateNow}.csv`);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <>

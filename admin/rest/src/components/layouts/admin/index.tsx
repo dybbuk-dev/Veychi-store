@@ -9,9 +9,7 @@ import { useMeQuery } from '@data/user/use-me.query';
 
 const AdminLayout: React.FC = ({ children }) => {
   const me = useMeQuery();
-  console.log({ me });
   const { t } = useTranslation();
-  console.log(siteSettings.sidebarLinks.admin);
   const SidebarItemMap = () => (
     <Fragment>
       {/* {siteSettings.sidebarLinks.admin.map(({ href, label, icon }) => (

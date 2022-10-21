@@ -36,7 +36,6 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import QRIcon from './qr-icon.png';
 import QRCode from 'react-qr-code';
 import ReactToPrint from 'react-to-print';
 import Swal from 'sweetalert2';
@@ -52,14 +51,14 @@ export default function ShopPage() {
 
   const handleOpen = () => {
     const premiumStatus = localStorage.getItem('premium');
-    console.log(premiumStatus);
     if (premiumStatus != '"true"')
       return Swal.fire(
         'Ups',
         `Parece que aún no eres Premium.<br/>
          * <a href='${
-           window.location.origin + '/es/chawkbazar-vendor-shop/premium-info'
-         }' style="color:#FFAF48">Hazte Premium</a> para poder generar tu QR!`,
+           window.location.origin +
+           '/admin/es/chawkbazar-vendor-shop/premium-info'
+         }' style="color:#5697FA">Hazte Premium</a> para poder generar tu QR!`,
         'error'
       );
     setOpen(true);
@@ -391,7 +390,6 @@ const style = {
 };
 
 function TransitionsModal({ handleClose, open, data }: any) {
-  console.log(data);
   const docRef = React.useRef(null);
 
   const baseURL = React.useMemo(() => {

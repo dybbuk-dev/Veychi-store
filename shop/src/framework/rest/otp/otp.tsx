@@ -44,7 +44,6 @@ export const OTP: React.FC<OTPProps> = ({ defaultValue, onVerify }) => {
             setOtpId(data?.sendOtpCode?.id!);
           }
           if (!data?.success) {
-            console.log("text-otp-failed");
             setErrorMessage(data?.message);
           }
         },

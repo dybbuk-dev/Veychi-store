@@ -222,7 +222,6 @@ const fetchShopData = async ({
         },
       },
     });
-    console.log(res);
   } catch (error) {}
 };
 interface IShopUpdateProps {
@@ -251,7 +250,6 @@ const handleInfoUpdate = async ({
     });
     toast.success('¡Actualizado Correctamente!');
 
-    console.log(res);
   } catch (error) {
     Swal.fire('Ups!', 'No se pudo actualizar', 'error');
   } finally {

@@ -39,7 +39,7 @@ export default function CreateOrUpdateTokenForm({ initialValues }: IProps) {
     defaultValues: initialValues ?? defaultValues,
   });
   const onSubmit = async (values: any) => {
-    console.log('test', { values });
+    
     if (initialValues) {
       /* updateTaxClass({
         variables: {
@@ -64,7 +64,7 @@ export default function CreateOrUpdateTokenForm({ initialValues }: IProps) {
           }
         );
         router.push('/es/shop-tokens');
-        console.log(creation);
+        
       } catch (e) {}
     }
   };

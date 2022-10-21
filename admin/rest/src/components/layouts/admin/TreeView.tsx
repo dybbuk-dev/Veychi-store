@@ -116,11 +116,9 @@ export default function CustomTreeview({
   userData: any;
 }) {
   const { t } = useTranslation();
-  console.log({ items });
   const permissions = React.useMemo(() => {
     return userData?.data?.permissions.map((item: any) => item.name) ?? [];
   }, [userData]);
-  console.log({ permissions, userData });
   return (
     <TreeView
       aria-label="gmail"

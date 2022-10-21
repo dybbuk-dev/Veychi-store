@@ -9,7 +9,6 @@ type Props = {
 };
 
 const TitleWithSort = ({ title, ascending, isActive = true }: Props) => {
-  console.log(ascending);
 
   return (
     <span className="inline-flex items-center">

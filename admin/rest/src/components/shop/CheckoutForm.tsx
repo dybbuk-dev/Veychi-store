@@ -18,7 +18,6 @@ export default function CheckoutForm({
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
-  console.log({ router });
   const [message, setMessage] = React.useState<null | string>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -54,7 +53,6 @@ export default function CheckoutForm({
         }
       });
   }, [stripe]);
-  console.log({ shopData });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 

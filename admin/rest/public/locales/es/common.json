@@ -26,6 +26,8 @@
   "order-total": "Total",
   "signing-out-text": "Cerrando sesión...",
   "sale-history": "Historial de ventas",
+  "sales": "Ventas",
+
   "january": "Enero",
   "february": "Febrero",
   "march": "Marcha",
@@ -57,6 +59,8 @@
   "sidebar-nav-item-customers": "Clientes",
   "sidebar-nav-item-coupons": "Cupones",
   "sidebar-nav-item-taxes": "Impuestos",
+  "sidebar-nav-item-sales": "Ventas",
+
   "sidebar-nav-item-shippings": "Envíos",
   "sidebar-nav-item-premium-plans": "Planes Premium",
   "sidebar-nav-item-premium-plan": "Plan Premium",

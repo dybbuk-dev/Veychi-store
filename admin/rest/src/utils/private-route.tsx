@@ -16,10 +16,7 @@ const PrivateRoute: React.FC<{ authProps: any }> = ({
     Array.isArray(permissions) &&
     !!permissions.length &&
     hasAccess(authProps.permissions, permissions);
-  console.log({
-    authProps,
-    permissions,
-  });
+
   React.useEffect(() => {
     if (!isUser) router.replace(ROUTES.LOGIN); // If not authenticated, force log in
   }, [isUser]);

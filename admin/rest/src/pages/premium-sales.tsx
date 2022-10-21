@@ -14,9 +14,10 @@ import { SortOrder } from '@ts-types/generated';
 import TokenList from '@components/tokens/tax-list';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import PremiumSubscriptionsList from '@components/premium-plans/premium-plans-list';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
-export default function TokensPage() {
+export default function PremiumSalesPage() {
   const { t } = useTranslation();
   const [searchTerm, setSearch] = useState('');
   const [orderBy, setOrder] = useState('created_at');
@@ -29,7 +30,7 @@ export default function TokensPage() {
       if (!tkn) return;
       const { token } = JSON.parse(tkn);
       try {
-        const res = await axios.get('approval-tokens', {
+        const res = await axios.get('premium-owner', {
           headers: {
             Authorization: 'Bearer ' + token,
           },
@@ -42,25 +43,22 @@ export default function TokensPage() {
     <>
       <Card className="flex flex-col xl:flex-row items-center mb-8">
         <div className="md:w-1/4 mb-4 md:mb-0">
-          <h1 className="text-xl font-semibold text-heading">Tokens</h1>
-        </div>
-
-        <div className="w-full flex flex-col md:flex-row space-y-4 md:space-y-0 items-center ms-auto justify-end">
-          <LinkButton
-            href={`${ROUTES.TOKENS}/create`}
-            className="h-12 w-full md:w-auto"
-          >
-            <span>+ Crear Token</span>
-          </LinkButton>
+          <h1 className="text-xl font-semibold text-heading">
+            {t('sidebar-nav-item-sales')}
+          </h1>
         </div>
       </Card>
       {!loading ? (
-        <TokenList taxes={tokens} onOrder={setOrder} onSort={() => {}} />
+        <PremiumSubscriptionsList
+          taxes={tokens}
+          onOrder={setOrder}
+          onSort={() => {}}
+        />
       ) : null}
     </>
   );
 }
-TokensPage.Layout = Layout;
+PremiumSalesPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

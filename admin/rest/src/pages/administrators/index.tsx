@@ -3,14 +3,14 @@ import Layout from '@components/layouts/admin';
 import Search from '@components/common/search';
 import CustomerList from '@components/user/user-list';
 import LinkButton from '@components/ui/link-button';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { useUsersQuery } from '@data/user/use-users.query';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ROUTES } from '@utils/routes';
-import { SortOrder } from '@ts-types/generated';
+import { SortOrder, User } from '@ts-types/generated';
 
 export default function Customers() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,13 +25,31 @@ export default function Customers() {
     isLoading: loading,
     error,
   } = useUsersQuery({
-    limit: 20,
+    limit: 0,
     page,
     text: searchTerm,
     orderBy,
     sortedBy,
   });
 
+  const staffs = useMemo(() => {
+    if (!data) return data;
+    return {
+      ...data,
+      users: {
+        ...data?.users,
+        data:
+          data?.users?.data?.filter(
+            (user: any) =>
+              user.permissions.filter(
+                (permission: any) =>
+                  permission.name !== 'customer' &&
+                  permission.name !== 'store_owner'
+              ).length > 0
+          ) || [],
+      },
+    };
+  }, [data]);
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
   function handleSearch({ searchText }: { searchText: string }) {
@@ -63,7 +81,7 @@ export default function Customers() {
 
       {loading ? null : (
         <CustomerList
-          customers={data?.users}
+          customers={staffs?.users}
           onPagination={handlePagination}
           onOrder={setOrder}
           onSort={setColumn}
