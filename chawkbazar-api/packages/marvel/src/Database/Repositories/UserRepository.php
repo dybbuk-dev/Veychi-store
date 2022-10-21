@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Marvel\Database\Models\PremiumPlans;
+use Marvel\Database\Models\PremiumSubscriptions;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\User;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -141,7 +142,15 @@ class UserRepository extends BaseRepository
         $shop->premium=true;
         $shop->premium_plan_id=$plan_id;
         $shop->save();
-        return $shop;
+        $premium=new PremiumSubscriptions();
+        $plan = PremiumPlans::findOrFail($plan_id);
+        $premium->shop_id=$shop->id;
+        $premium->plan_id=$plan->id;
+        $premium->created_at=Carbon::now();
+        $premium->updated_at=Carbon::now();
+        $premium->end_date = Carbon::now()->addDays($plan->duration);
+        $premium->save();
+        return Shop::with(['owner','plan'])->where('id',$shop->id)->first();
     }
 
     /**
@@ -160,7 +169,7 @@ class UserRepository extends BaseRepository
         $request['customer_id'] = $request->user()->id;
         try{
             $paymentIntent=PaymentIntent::create([
-                'amount'=>$plan->price,
+                'amount'=>$plan->price*100,
                 'currency'=>Str::lower($settings["currency"]),
                 'automatic_payment_methods' => [
                     'enabled' => true,

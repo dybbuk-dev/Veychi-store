@@ -27,18 +27,23 @@ class PremiumSubscriptions extends Migration
         */
         Schema::create($this->table_name,function (Blueprint $table){
             $table->id();
-            $table->string("provider");
+            $table->string("provider")->nullable();
             $table->string("url",200)->nullable();
-            $table->string("password",300);
+            $table->string("user",300)->nullable();
+            $table->string("password",300)->nullable();
             $table->string("domain")->nullable();
             $table->dateTime("purchase_date")->nullable();
             $table->dateTime("end_date")->nullable();
-            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('shop_id')->nullable();
+            $table->unsignedBigInteger('plan_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('shop_id')
                 ->references('id')
                 ->on('shops');
+            $table->foreign('plan_id')
+                ->references('id')
+                ->on('premium_plans');
 
         });
     }

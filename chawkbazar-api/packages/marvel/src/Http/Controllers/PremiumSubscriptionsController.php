@@ -43,10 +43,10 @@ class PremiumSubscriptionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+   /* public function store(Request $request)
     {
         return $this->repository->storeSubscription($request);
-    }
+    }*/
 
     /**
      * Update the specified resource in storage.
@@ -58,6 +58,7 @@ class PremiumSubscriptionsController extends Controller
     public function update(Request $request, int $id)
     {
         $request->merge(['id'=>$id]);
+
      return  $this->repository->updateSubscription($request);
     }
 
