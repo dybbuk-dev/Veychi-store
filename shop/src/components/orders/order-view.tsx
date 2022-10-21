@@ -28,7 +28,6 @@ export default function OrderView({ order }: any) {
   const { price: tax } = usePrice({ amount: order?.sales_tax ?? 0 });
   const { price: discount } = usePrice({ amount: order?.discount ?? 0 });
   const router = useRouter();
-  console.log({ order });
   const activeDispute = useMemo(() => {
     return order?.children[0]?.dispute?.find(
       (dispute: any) => dispute.status === 'opened'

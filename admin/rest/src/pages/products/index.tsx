@@ -29,7 +29,6 @@ export default function ProductsPage() {
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const [visible, setVisible] = useState(false);
 
-  console.log(sortedBy);
 
   const toggleVisible = () => {
     setVisible((v) => !v);
@@ -64,7 +63,6 @@ export default function ProductsPage() {
       const dateNow = moment(new Date()).format('YYYY-DD-MM');
       saveXLSXData!(res.data, `productos_${dateNow}.csv`);
     } catch (error) {
-      console.log(error);
     }
   };
   if (loading) return <Loader text={t('common:text-loading')} />;

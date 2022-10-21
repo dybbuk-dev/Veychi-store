@@ -25,7 +25,6 @@ export default function Home() {
     return marketingImages.slice(0, 6);
   }, [marketingImages]);
   const promotionBanner = useMemo(() => {
-    console.log(marketingImages.slice(6, 9));
     return marketingImages.slice(6, 9);
   }, [marketingImages]);
   useEffect(() => {

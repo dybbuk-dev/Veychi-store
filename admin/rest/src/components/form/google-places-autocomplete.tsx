@@ -34,7 +34,6 @@ export default function GooglePlacesAutocomplete({
     const place = autocomplete.getPlace();
 
     if (!place.geometry || !place.geometry.location) {
-      console.log("Returned place contains no geometry");
       return;
     }
     const location: any = {

@@ -22,7 +22,6 @@ export default function TokensPage() {
   const [orderBy, setOrder] = useState('created_at');
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const [tokens, setTokens] = useState([]);
-  console.log({ tokens });
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     (async () => {

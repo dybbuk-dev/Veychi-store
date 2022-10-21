@@ -23,7 +23,6 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { alignLeft } = useIsRTL();
-  console.log({ taxes });
   const [sortingObj, setSortingObj] = useState<{
     sort: SortOrder;
     column: string | null;
@@ -68,7 +67,6 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
       align: 'center',
       render: (id: string) => {
         const foundShops = taxes!.find((item) => item.id === id)!.shops;
-        console.log({ foundShops });
         return (
           <div>
             {foundShops.map((shop: any) => (

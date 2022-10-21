@@ -20,7 +20,7 @@ const Dispute = () => {
   const router = useRouter();
   const { data: user }: any = useMeQuery();
   const [data, setData] = useState<any | null>(null);
-  console.log({ user });
+
   useEffect(() => {
     fetchDispute({ setter: setData, id: id as string });
     const interval = setInterval(() => {
@@ -117,19 +117,16 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
     multiple: false,
     accept: ['image/*', '.pdf'],
     onDropAccepted: (options, ...rest) => {
-      console.log({ rest });
-      console.log({ options });
       upload(
         options, // it will be an array of uploaded attachments
         {
           onSuccess: async (data) => {
             let mergedData;
-            console.log(data);
+
             if (Array.isArray(data)) {
               mergedData = data[0];
               setFile(mergedData);
             } else {
-              console.log('entrdhr');
               const url = await axios.get(
                 process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
                   'attachments/' +
@@ -146,13 +143,13 @@ const MessageContainer = ({ data, user, setData, id }: any) => {
                 original: url.data.url,
                 id: data.id,
               };
-              console.log(attachment);
+
               await handleSend({
                 message: url.data.slug,
                 type: options[0].type === 'application/pdf' ? 'pdf' : 'image',
               });
               mergedData = attachment!;
-              console.log(attachment);
+
               setFile(attachment);
             }
           },

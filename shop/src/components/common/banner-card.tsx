@@ -30,7 +30,6 @@ const BannerCard: FC<BannerProps> = ({
   const { title, image, text, text_position, subtitle_position, subtitle } =
     data;
   const selectedImage = getImage(width, image);
-  console.log({ text });
   return (
     <div className={cn('mx-auto', className)}>
       <Link

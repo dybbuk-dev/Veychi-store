@@ -9,7 +9,6 @@ import ReactToPrint from 'react-to-print';
 import React from 'react';
 
 import Box from '@mui/material/Box';
-console.log(QRImage);
 export default function QRViewer() {
   const { t } = useTranslation();
   const docRef = React.useRef(null);

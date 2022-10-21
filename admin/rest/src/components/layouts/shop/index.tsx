@@ -13,7 +13,6 @@ const ShopLayout: React.FC = ({ children }) => {
     query: { shop },
   } = useRouter();
   const { permissions: currentUserPermissions, ...rest } = getAuthCredentials();
-  console.log({ rest });
 
   const SidebarItemMap = () => (
     <Fragment>

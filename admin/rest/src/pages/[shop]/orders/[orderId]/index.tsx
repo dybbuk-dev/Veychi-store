@@ -40,7 +40,6 @@ export default function OrderDetailsPage() {
     error,
   } = useOrderQuery(query.orderId as string);
 
-  console.log(data);
   const {
     handleSubmit,
     control,
@@ -49,7 +48,7 @@ export default function OrderDetailsPage() {
   } = useForm<FormValues>({
     defaultValues: { order_status: data?.order?.status ?? '' },
   });
-  console.log(data);
+
   const ChangeStatus = ({ order_status }: FormValues) => {
     updateOrder({
       variables: {
@@ -91,7 +90,7 @@ export default function OrderDetailsPage() {
   const foundDispute = useMemo(() => {
     return data?.order.dispute.find((dispute) => dispute.status === 'opened');
   }, [data]);
-  console.log(orderPlusData);
+
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 

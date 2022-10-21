@@ -21,7 +21,6 @@ import Swal from 'sweetalert2';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 const formatHref = (url: string) => {
-  console.log(url);
 
   return '/' + url.split('/').slice(3).join('/');
 };

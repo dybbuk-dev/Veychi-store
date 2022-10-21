@@ -57,7 +57,6 @@ export default function Orders() {
       const dateNow = moment(new Date()).format('YYYY-DD-MM');
       saveXLSXData!(res.data, `ordenes_${dateNow}.csv`);
     } catch (error) {
-      console.log(error);
     }
   };
   return (

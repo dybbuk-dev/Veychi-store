@@ -51,7 +51,6 @@ export default function ShopPage() {
 
   const handleOpen = () => {
     const premiumStatus = localStorage.getItem('premium');
-    console.log(premiumStatus);
     if (premiumStatus != '"true"')
       return Swal.fire(
         'Ups',
@@ -391,7 +390,6 @@ const style = {
 };
 
 function TransitionsModal({ handleClose, open, data }: any) {
-  console.log(data);
   const docRef = React.useRef(null);
 
   const baseURL = React.useMemo(() => {

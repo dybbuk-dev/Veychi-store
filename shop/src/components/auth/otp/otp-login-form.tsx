@@ -120,7 +120,6 @@ export const OTPLoginForm: React.FC<OTPProps> = ({ onLoginSuccess }) => {
           }
         },
         onError: (error: any) => {
-          console.log("Error", error);
           setErrorMessage(error?.response?.data?.message);
         },
       }

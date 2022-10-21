@@ -23,7 +23,6 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { alignLeft } = useIsRTL();
-  console.log({ taxes });
   const [sortingObj, setSortingObj] = useState<{
     sort: SortOrder;
     column: string | null;
@@ -46,7 +45,6 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
       });
     },
   });
-  console.log({ taxes });
   const columns = [
     {
       title: t('table:table-item-id'),

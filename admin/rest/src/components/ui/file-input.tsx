@@ -8,7 +8,6 @@ interface FileInputProps {
 }
 
 const FileInput = ({ control, name, multiple = true }: FileInputProps) => {
-  console.log(multiple);
   return (
     <Controller
       control={control}

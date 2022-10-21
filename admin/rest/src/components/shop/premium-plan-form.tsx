@@ -25,7 +25,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  shop: Shop;
+  shop: any;
   initialValues?: any | null;
 };
 export default function CreateOrUpdatePremiumInfoForm({
@@ -40,9 +40,15 @@ export default function CreateOrUpdatePremiumInfoForm({
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: initialValues ?? defaultValues,
+    defaultValues:
+      {
+        domain: shop.subscription.domain ?? '',
+        url: shop.subscription.url ?? '',
+        user: shop.subscription.user ?? '',
+        password: shop.subscription.password ?? '',
+        provider: shop.subscription.provider ?? '',
+      } ?? defaultValues,
   });
-  console.log({ shop });
   const onSubmit = async (values: any) => {
     if (initialValues) {
       /* updateTaxClass({
@@ -58,13 +64,16 @@ export default function CreateOrUpdatePremiumInfoForm({
       if (!tkn) return;
       const { token } = JSON.parse(tkn);
       try {
-        const creation = await axios.put('premium-owner', values, {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        });
+        const creation = await axios.put(
+          'premium-owner/' + shop.subscription.id,
+          values,
+          {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+          }
+        );
         window.location.reload();
-        console.log(creation);
       } catch (e) {}
     }
   };

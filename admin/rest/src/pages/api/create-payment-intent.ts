@@ -15,11 +15,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log({
-    ...req.query,
-    shop_id: req.query.shop_id,
-    premium_plan_id: req.query.premium_plan,
-  });
+
   if (req.query.redirect_status !== 'succeeded')
     return res.redirect(
       307,
@@ -37,6 +33,5 @@ export default async function handler(
       },
     }
   );
-  console.log(response.data);
   return res.redirect(307, req.query.callback_url as string);
 }

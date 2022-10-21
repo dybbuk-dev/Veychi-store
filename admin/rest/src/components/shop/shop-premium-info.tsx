@@ -41,7 +41,6 @@ export default function ShopPremiumPayment({
             },
           }
         );
-        console.log({ res });
         if (res.data.errors) {
           setSelectedPremium(null);
           return;
