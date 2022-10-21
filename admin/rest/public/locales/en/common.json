@@ -27,6 +27,8 @@
   "order-total": "Total",
   "signing-out-text": "Signing out...",
   "sale-history": "Sale History",
+  "sales": "Sales",
+
   "january": "January",
   "february": "February",
   "march": "March",
@@ -58,6 +60,7 @@
   "sidebar-nav-item-staff": "Staff",
   "sidebar-nav-item-coupons": "Coupons",
   "sidebar-nav-item-taxes": "Taxes",
+  "sidebar-nav-item-sales": "Sales",
   "sidebar-nav-item-shippings": "Shippings",
   "sidebar-nav-item-premium-plans": "Premium Plans",
   "sidebar-nav-item-premium-plan": "Premium Plans",

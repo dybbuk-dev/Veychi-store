@@ -55,6 +55,12 @@
   "input-label-email": "Email",
   "input-label-token": "Put your token you got from email",
   "input-label-password": "Password",
+  "input-label-domain-password": "Your domain's password",
+  "input-label-domain-provider": "Your domain's provider",
+  "input-label-domain-provider-url": "Your domain's provider url",
+
+  "input-label-domain-user": "Your domain's username",
+  "input-label-domain": "Domain",
   "input-label-bio": "Bio",
   "input-label-contact": "Contact Number",
   "input-label-avatar": "Avatar",

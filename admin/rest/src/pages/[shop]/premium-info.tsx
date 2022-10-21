@@ -1,6 +1,6 @@
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import ShopLayout from '@components/layouts/shop';
@@ -16,6 +16,9 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import PremiumPlanShower from '@components/shop/premium-plan-shower';
+import CreateOrUpdatePremiumForm from '@components/premium-plans/tax-form';
+import CreateOrUpdatePremiumInfoForm from '@components/shop/premium-plan-form';
+import Swal from 'sweetalert2';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 export interface Premium {
@@ -30,9 +33,11 @@ export interface Premium {
   updated_at: string;
   deleted_at: Date;
 }
-
+function delQuery(asPath: string) {
+  return asPath.split('?')[0];
+}
 export default function UpdateShopPage() {
-  const { query } = useRouter();
+  const { query, ...router } = useRouter();
   const { shop, redirect_status } = query;
   const { t } = useTranslation();
   const {
@@ -43,22 +48,19 @@ export default function UpdateShopPage() {
   const [loadingCards, setLoadingCards] = useState(true);
   const [premiumCards, setPremiumCards] = useState<Premium[]>([]);
   const [selectedPremium, setSelectedPremium] = useState<null | Premium>(null);
-  const cancelSubscription = async () => {
-    try {
-      const tkn = Cookies.get('AUTH_CRED')!;
-      if (!tkn) return;
-      const { token } = JSON.parse(tkn);
-      const res = await axios.delete('premium-owner/' + shopData!.shop.id, {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      });
-      window.location.reload();
-    } catch (e) {
-    } finally {
-    }
-  };
   useEffect(() => {
+    if (redirect_status === 'failed') {
+      Swal.fire(
+        'Ocurrió un error',
+        'Error al procesar el pago, verifique sus credenciales o utilice otro método de pago.',
+        'error'
+      ).then((res) => {
+        if (res.isConfirmed) {
+          router.push(delQuery(router.asPath));
+        }
+      });
+    }
+
     (async () => {
       const tkn = Cookies.get('AUTH_CRED')!;
       if (!tkn) return;
@@ -99,19 +101,7 @@ export default function UpdateShopPage() {
           style={{ paddingBottom: '5rem' }}
         >
           {shopData!.shop.plan ? (
-            <div className="flex flex-col items-center gap-2">
-              <TaskAlt sx={{ color: 'green' }} />
-              <h4 className="text-md font-semibold text-[#555]">
-                Subscripción Activa
-              </h4>
-              <div>{shopData!.shop.plan.title}</div>
-              <button
-                onClick={cancelSubscription}
-                className="bg-red-500 text-white rounded-[9px] px-6 py-2"
-              >
-                Cancel
-              </button>
-            </div>
+            <CreateOrUpdatePremiumInfoForm shop={shopData!.shop} />
           ) : !selectedPremium ? (
             <>
               <PremiumPlanShower

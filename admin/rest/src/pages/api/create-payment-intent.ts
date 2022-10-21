@@ -16,9 +16,15 @@ export default async function handler(
   res: NextApiResponse
 ) {
   console.log({
+    ...req.query,
     shop_id: req.query.shop_id,
     premium_plan_id: req.query.premium_plan,
   });
+  if (req.query.redirect_status !== 'succeeded')
+    return res.redirect(
+      307,
+      (req.query.callback_url + '?redirect_status=failed') as string
+    );
   const response = await axios.post(
     'users/premium/make-premium',
     {

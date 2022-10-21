@@ -36,7 +36,6 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import QRIcon from './qr-icon.png';
 import QRCode from 'react-qr-code';
 import ReactToPrint from 'react-to-print';
 import Swal from 'sweetalert2';
