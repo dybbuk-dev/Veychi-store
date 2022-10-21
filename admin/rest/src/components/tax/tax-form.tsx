@@ -10,10 +10,6 @@ import { useUpdateTaxClassMutation } from '@data/tax/use-tax-update.mutation';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { taxValidationSchema } from './tax-validation-schema';
-import SelectInput from '@components/ui/select-input';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 const defaultValues = {
   name: '',
@@ -25,47 +21,42 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: any | null;
+  initialValues?: Tax | null;
 };
-export default function CreateOrUpdateTokenForm({ initialValues }: IProps) {
+export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<Tax>({
+    shouldUnregister: true,
+    resolver: yupResolver(taxValidationSchema),
     defaultValues: initialValues ?? defaultValues,
   });
-  const onSubmit = async (values: any) => {
-    
+  const { mutate: createTaxClass, isLoading: creating } =
+    useCreateTaxClassMutation();
+  const { mutate: updateTaxClass, isLoading: updating } =
+    useUpdateTaxClassMutation();
+  const onSubmit = async (values: Tax) => {
     if (initialValues) {
-      /* updateTaxClass({
+      updateTaxClass({
         variables: {
           id: initialValues.id!,
           input: {
             ...values,
           },
         },
-      }); */
+      });
     } else {
-      const tkn = Cookies.get('AUTH_CRED')!;
-      if (!tkn) return;
-      const { token } = JSON.parse(tkn);
-      try {
-        const creation = await axios.post(
-          'approval-tokens',
-          {},
-          {
-            headers: {
-              Authorization: 'Bearer ' + token,
-            },
-          }
-        );
-        router.push('/es/shop-tokens');
-        
-      } catch (e) {}
+      createTaxClass({
+        variables: {
+          input: {
+            ...values,
+          },
+        },
+      });
     }
   };
   return (
@@ -75,21 +66,55 @@ export default function CreateOrUpdateTokenForm({ initialValues }: IProps) {
           title={t('form:form-title-information')}
           details={`${
             initialValues
-              ? 'Edita la información de tu token'
-              : 'Agrega la información de tu token'
-          } `}
+              ? t('form:item-description-update')
+              : t('form:item-description-add')
+          } ${t('form:tax-form-info-help-text')}`}
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <SelectInput
-            defaultValue={{ value: 'true', label: 'Activado' }}
-            name="status"
-            control={control}
-            options={[
-              { value: 'true', label: 'Activado' },
-              { value: 'false', label: 'Desactivado' },
-            ]}
+          <Input
+            label={t('form:input-label-name')}
+            {...register('name', { required: 'Name is required' })}
+            error={t(errors.name?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-rate')}
+            {...register('rate')}
+            type="number"
+            error={t(errors.rate?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-country')}
+            {...register('country')}
+            error={t(errors.country?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-city')}
+            {...register('city')}
+            error={t(errors.city?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-state')}
+            {...register('state')}
+            error={t(errors.state?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-zip')}
+            {...register('zip')}
+            error={t(errors.zip?.message!)}
+            variant="outline"
+            className="mb-5"
           />
         </Card>
       </div>
@@ -106,8 +131,11 @@ export default function CreateOrUpdateTokenForm({ initialValues }: IProps) {
           </Button>
         )}
 
-        <Button loading={false}>
-          {initialValues ? 'Editar' : 'Agregar'} Token
+        <Button loading={creating || updating}>
+          {initialValues
+            ? t('form:button-label-update')
+            : t('form:button-label-add')}{' '}
+          {t('form:button-label-tax')}
         </Button>
       </div>
     </form>

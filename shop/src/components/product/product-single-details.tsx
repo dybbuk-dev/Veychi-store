@@ -214,7 +214,16 @@ const ProductSingleDetails: React.FC<Props> = ({
               className="w-5"
               alt=""
             />
-            <p>{getReviewStar()}</p>
+            <p>{getReviewStar()}</p>{' '}
+            <div className="flex items-center pl-4 gap-2">
+              <span className=" text-gray-800 text-[1.2rem]">Visítanos</span>
+              <Link
+                href={`${ROUTES.SHOPS}/${product?.shop?.slug}`}
+                className="inline-block ltr:pr-1.5 rtl:pl-1.5 transition hover:underline hover:text-[#659ae9] ltr:last:pr-0 rtl:last:pl-0 text-[#5697FA]"
+              >
+                {product?.shop?.name}
+              </Link>
+            </div>
           </h2>
           <p className="text-body text-sm lg:text-base leading-6 lg:leading-8">
             {product?.description}

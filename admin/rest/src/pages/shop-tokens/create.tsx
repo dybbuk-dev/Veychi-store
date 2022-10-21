@@ -1,6 +1,5 @@
 import Layout from '@components/layouts/admin';
-import CreateOrUpdateTokenForm from '@components/tax/tax-form';
-import CreateOrUpdateTaxForm from '@components/tax/tax-form';
+import CreateOrUpdateTokenForm from '@components/tokens/tax-form';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 

@@ -55,6 +55,18 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
       width: 62,
     },
     {
+      title: 'Responsable',
+      dataIndex: 'responsible',
+      key: 'responsible',
+      align: 'center',
+    },
+    {
+      title: 'Validez',
+      dataIndex: 'validity',
+      key: 'validity',
+      align: 'center',
+    },
+    {
       title: 'Código',
       dataIndex: 'token',
       key: 'token',
@@ -124,7 +136,7 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
             />
           </svg>
 
-          <ActionButtons id={id} editUrl={`${ROUTES.TAXES}/edit/${id}`} />
+          <ActionButtons id={id} editUrl={`shop-tokens/edit/${id}`} />
         </div>
       ),
       width: 200,
