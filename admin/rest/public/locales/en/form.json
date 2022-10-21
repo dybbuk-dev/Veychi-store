@@ -67,6 +67,12 @@
   "input-label-subcategory": "Subcategory",
   "input-label-coupons": "Coupons",
   "input-label-orders": "Orders",
+  "input-label-title": "Title",
+
+  "input-label-order": "Order",
+  "input-label-duration-in-days": "Duration (in days)",
+  "input-label-traits": "Traits",
+
   "input-label-order-id": "Order ID",
   "input-label-sku": "SKU",
   "input-label-name": "Name",
@@ -171,6 +177,7 @@
   "button-label-tax": "Tax",
   "button-label-add-tax": "Add Tax",
   "tax-form-info-help-text": "your tax information from here",
+  "premium-form-info-help-text": "your premium plan information here",
   "logo-help-text": "Upload your site logo from here.",
   "logo-dimension-help-text": "Dimension of the logo should be",
   "site-info-help-text": "Change your site information from here",

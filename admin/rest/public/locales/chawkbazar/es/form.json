@@ -80,7 +80,13 @@
 
   "input-label-coupons": "Cupones",
   "input-label-orders": "Pedidos",
+  "input-label-title": "Título",
+
   "input-label-order-id": "Solicitar ID",
+  "input-label-order": "Orden",
+  "input-label-traits": "Rasgos",
+
+  "input-label-duration-in-days": "Duración (en días)",
   "input-label-sku": "SKU",
   "input-label-name": "Nombre",
   "input-label-description": "Descripción",
@@ -191,6 +197,8 @@
   "button-label-tax": "Impuesto",
   "button-label-add-tax": "Agregar impuestos",
   "tax-form-info-help-text": "su información fiscal de aquí",
+  "premium-form-info-help-text": "la información de su plan premium aquí",
+
   "logo-help-text": "Sube el logotipo de tu sitio desde aquí",
   "logo-dimension-help-text": "La dimensión del logotipo debe ser",
   "site-info-help-text": "Cambie la información de su sitio desde aquí",

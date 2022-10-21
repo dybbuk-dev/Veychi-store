@@ -94,6 +94,12 @@ export const siteSettings = {
             allowedRoles: [...allRoutes, CEO],
             icon: 'WithdrawIcon',
           },
+          {
+            href: ROUTES.PREMIUMPLANS,
+            label: 'sidebar-nav-item-premium-plans',
+            allowedRoles: [...allRoutes, CEO],
+            icon: 'CategoriesIcon',
+          },
         ],
       },
       {

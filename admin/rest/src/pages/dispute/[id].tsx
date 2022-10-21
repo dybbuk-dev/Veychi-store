@@ -65,23 +65,7 @@ const Dispute = () => {
               </Button>
             </div>
           </div>
-          {/* <div className="mt-4 flex w-full flex-col items-center rounded-lg border border-gray-200 bg-indigo-100 py-6 px-4">
-            <div className="h-20 w-20 overflow-hidden rounded-full border">
-              <img
-                src="https://avatars3.githubusercontent.com/u/2763884?s=128"
-                alt="Avatar"
-                className="h-full w-full"
-              />
-            </div>
-            <div className="mt-2 text-sm font-semibold">Aminos Co.</div>
-            <div className="text-xs text-gray-500">Lead UI/UX Designer</div>
-            <div className="mt-3 flex flex-row items-center">
-              <div className="flex h-4 w-8 flex-col justify-center rounded-full bg-indigo-500">
-                <div className="mr-1 h-3 w-3 self-end rounded-full bg-white"></div>
-              </div>
-              <div className="ml-1 text-xs leading-none">Active</div>
-            </div>
-          </div> */}
+
           {(user.permissions.some(
             (permission: any) => permission.name === 'super_admin'
           ) ||
@@ -106,6 +90,7 @@ const Dispute = () => {
                         router,
                         purchaseID: data.purchase_id,
                         disputeID: id as string,
+                        data,
                       });
                     }
                   });
@@ -408,10 +393,12 @@ const ImageWithFallback = (props: any) => {
 };
 const closeDispute = async ({
   router,
+  data,
   purchaseID,
   disputeID,
 }: {
   router: any;
+  data: any;
   purchaseID: string;
   disputeID: string;
 }) => {
@@ -426,9 +413,10 @@ const closeDispute = async ({
       },
       headers
     );
-    const { tracking_number }: { tracking_number: string } = res.data;
     if (!res) return Swal.fire('Ups!', 'Error al cerrar el reclamo.', 'error');
-    router.push('/orders/' + tracking_number);
+    router.push(
+      `/${data.order.shop.slug}/orders/${router.query.tracking_number}`
+    );
   } catch (e) {
     console.error(e);
   }

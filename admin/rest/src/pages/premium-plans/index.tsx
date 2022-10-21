@@ -14,6 +14,7 @@ import { SortOrder } from '@ts-types/generated';
 import TokenList from '@components/tokens/tax-list';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import PremiumList from '@components/premium-plans/tax-list';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 export default function TokensPage() {
@@ -22,7 +23,7 @@ export default function TokensPage() {
   const [orderBy, setOrder] = useState('created_at');
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const [tokens, setTokens] = useState([]);
-  console.log({ tokens });
+
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     (async () => {
@@ -30,7 +31,7 @@ export default function TokensPage() {
       if (!tkn) return;
       const { token } = JSON.parse(tkn);
       try {
-        const res = await axios.get('approval-tokens', {
+        const res = await axios.get('premium-plans', {
           headers: {
             Authorization: 'Bearer ' + token,
           },
@@ -43,20 +44,20 @@ export default function TokensPage() {
     <>
       <Card className="flex flex-col xl:flex-row items-center mb-8">
         <div className="md:w-1/4 mb-4 md:mb-0">
-          <h1 className="text-xl font-semibold text-heading">Tokens</h1>
+          <h1 className="text-xl font-semibold text-heading">Plan Premium</h1>
         </div>
 
         <div className="w-full flex flex-col md:flex-row space-y-4 md:space-y-0 items-center ms-auto justify-end">
           <LinkButton
-            href={`${ROUTES.TOKENS}/create`}
+            href={`${ROUTES.PREMIUMPLANS}/create`}
             className="h-12 w-full md:w-auto"
           >
-            <span>+ Crear Token</span>
+            <span>+ Crear Plan</span>
           </LinkButton>
         </div>
       </Card>
       {!loading ? (
-        <TokenList taxes={tokens} onOrder={setOrder} onSort={() => {}} />
+        <PremiumList taxes={tokens} onOrder={setOrder} onSort={() => {}} />
       ) : null}
     </>
   );

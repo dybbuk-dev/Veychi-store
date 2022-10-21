@@ -47,6 +47,7 @@
     "react-dropzone": "^11.4.2",
     "react-hook-form": "^7.16.1",
     "react-laag": "^2.0.3",
+    "react-moment": "^1.1.2",
     "react-qr-code": "^2.0.8",
     "react-query": "^3.24.4",
     "react-scroll": "^1.8.4",

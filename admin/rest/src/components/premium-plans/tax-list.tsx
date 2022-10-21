@@ -19,7 +19,7 @@ export type IProps = {
   onSort: (current: any) => void;
   onOrder: (current: string) => void;
 };
-const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
+const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { alignLeft } = useIsRTL();
@@ -46,7 +46,7 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
       });
     },
   });
-
+  console.log({ taxes });
   const columns = [
     {
       title: t('table:table-item-id'),
@@ -56,46 +56,65 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
       width: 62,
     },
     {
-      title: 'Código',
-      dataIndex: 'token',
-      key: 'token',
+      title: 'Órden',
+      dataIndex: 'order',
+      key: 'order',
       align: 'center',
     },
     {
-      title: t('sidebar-nav-item-shops'),
+      title: 'Título',
+      dataIndex: 'title',
+      key: 'title',
+      align: 'center',
+    },
+    {
+      title: 'Precio',
+      dataIndex: 'price',
+      key: 'price',
+      align: 'center',
+    },
+    {
+      title: 'Popular',
+      dataIndex: 'popular',
+      key: 'popular',
+      align: 'center',
+      render: (id: boolean) => {
+        return <div>{id ? 'Sí' : 'No'}</div>;
+      },
+    },
+    {
+      title: 'Rasgos',
       dataIndex: 'id',
-      key: 'shops',
+      key: 'traits',
       align: 'center',
       render: (id: string) => {
-        const foundShops = taxes!.find((item) => item.id === id)!.shops;
-        console.log({ foundShops });
+        const foundPlan = taxes!.find((tax: any) => tax.id == id)!;
+        const parsedTraits = foundPlan.traits;
         return (
           <div>
-            {foundShops.map((shop: any) => (
-              <div>
-                {shop.name || ''}{' '}
-                <b>( {moment(shop.createdAt).format('DD/MM/YYYY')} )</b>
-              </div>
+            {parsedTraits.map((trait: any) => (
+              <div> - {trait || ''} </div>
             ))}
           </div>
         );
       },
       width: 200,
     },
+
     {
       title: t('table:table-item-actions'),
       dataIndex: 'id',
       key: 'actions',
       align: 'center',
       render: (id: string) => (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className="w-6 h-6 cursor-pointer"
             onClick={() => {
               Swal.fire(deleteSwalConfig as any).then(async (result) => {
                 if (result.isDenied) {
@@ -105,7 +124,7 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
                     const { token } = JSON.parse(tkn);
 
                     const res = await axios.delete(
-                      '/approval-tokens/' + id,
+                      '/premium-plans/' + id,
 
                       {
                         headers: {
@@ -126,7 +145,7 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
             />
           </svg>
 
-          <ActionButtons id={id} editUrl={`${ROUTES.TAXES}/edit/${id}`} />
+          {/*  <ActionButtons id={id} editUrl={`${ROUTES.PREMIUMPLANS}/edit/${id}`} /> */}
         </div>
       ),
       width: 200,
@@ -136,7 +155,7 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
     <div className="rounded overflow-hidden shadow mb-8">
       {/* @ts-ignore */}
       <Table
-        columns={columns}
+        columns={columns as any}
         emptyText={t('table:empty-table-data')}
         data={taxes}
         rowKey="id"
@@ -146,13 +165,13 @@ const TokenList = ({ taxes, onSort, onOrder }: IProps) => {
   );
 };
 
-export default TokenList;
+export default PremiumList;
 export const deleteSwalConfig = {
-  title: '¿Estás seguro que quieres borrar el token?',
+  title: '¿Estás seguro que quieres borrar el plan?',
   icon: 'warning',
   showConfirmButton: false,
   showDenyButton: true,
   showCancelButton: true,
-  denyButtonText: `Borrar Token`,
+  denyButtonText: `Borrar Plan`,
   cancelButtonText: 'Cancelar',
 };
