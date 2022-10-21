@@ -15,6 +15,7 @@ import ShopPremiumPayment from '@components/shop/shop-premium-info';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import PremiumPlanShower from '@components/shop/premium-plan-shower';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 export interface Premium {
@@ -39,6 +40,7 @@ export default function UpdateShopPage() {
     isLoading: loading,
     error,
   } = useShopQuery(shop as string);
+  const [loadingCards, setLoadingCards] = useState(true);
   const [premiumCards, setPremiumCards] = useState<Premium[]>([]);
   const [selectedPremium, setSelectedPremium] = useState<null | Premium>(null);
   const cancelSubscription = async () => {
@@ -56,7 +58,6 @@ export default function UpdateShopPage() {
     } finally {
     }
   };
-  console.log({ shopData });
   useEffect(() => {
     (async () => {
       const tkn = Cookies.get('AUTH_CRED')!;
@@ -68,11 +69,17 @@ export default function UpdateShopPage() {
             Authorization: 'Bearer ' + token,
           },
         });
-        setPremiumCards(res.data.data);
-      } catch (e) {}
+        setPremiumCards(
+          [...res.data.data].sort((a: Premium, b: Premium) => a.order - b.order)
+        );
+      } catch (e) {
+      } finally {
+        setLoadingCards(false);
+      }
     })();
   }, []);
-  if (loading) return <Loader text={t('common:text-loading')} />;
+  if (loading || loadingCards)
+    return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
   return (
     <>
@@ -87,7 +94,10 @@ export default function UpdateShopPage() {
           details={t('form:premium-info-helper-text')}
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card
+          className="w-full sm:w-8/12 md:w-2/3 "
+          style={{ paddingBottom: '5rem' }}
+        >
           {shopData!.shop.plan ? (
             <div className="flex flex-col items-center gap-2">
               <TaskAlt sx={{ color: 'green' }} />
@@ -104,16 +114,16 @@ export default function UpdateShopPage() {
             </div>
           ) : !selectedPremium ? (
             <>
-              {premiumCards.map((item) => (
-                <button onClick={() => setSelectedPremium(item)}>
-                  {item.price}
-                </button>
-              ))}
+              <PremiumPlanShower
+                premiumCards={premiumCards}
+                setSelectedPremium={setSelectedPremium}
+              />
             </>
           ) : (
             <ShopPremiumPayment
               selectedPremium={selectedPremium}
-              shopData={shopData}
+              setSelectedPremium={setSelectedPremium}
+              shopData={shopData as any}
             />
           )}
         </Card>

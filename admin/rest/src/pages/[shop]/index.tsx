@@ -58,8 +58,9 @@ export default function ShopPage() {
         'Ups',
         `Parece que aún no eres Premium.<br/>
          * <a href='${
-           window.location.origin + '/es/chawkbazar-vendor-shop/premium-info'
-         }' style="color:#FFAF48">Hazte Premium</a> para poder generar tu QR!`,
+           window.location.origin +
+           '/admin/es/chawkbazar-vendor-shop/premium-info'
+         }' style="color:#5697FA">Hazte Premium</a> para poder generar tu QR!`,
         'error'
       );
     setOpen(true);

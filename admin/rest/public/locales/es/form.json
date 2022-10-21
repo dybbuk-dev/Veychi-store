@@ -74,6 +74,8 @@
   "input-label-traits": "Rasgos",
 
   "input-label-duration-in-days": "Duración (en días)",
+  "input-label-days": "días",
+
   "input-label-sku": "SKU",
   "input-label-name": "Nombre",
   "input-label-description": "Descripción",

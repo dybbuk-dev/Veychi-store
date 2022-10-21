@@ -71,6 +71,8 @@
 
   "input-label-order": "Order",
   "input-label-duration-in-days": "Duration (in days)",
+  "input-label-days": "days",
+
   "input-label-traits": "Traits",
 
   "input-label-order-id": "Order ID",
