@@ -147,7 +147,7 @@ Route::group(
 
 
         Route::apiResource('premium-owner',PremiumSubscriptionsController::class,[
-            'only'=>['index','show','update','store','destroy']
+            'only'=>['index','show','update','destroy']
         ]);
 
         Route::apiResource('orders',OrderController::class,[

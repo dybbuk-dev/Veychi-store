@@ -12,7 +12,7 @@ class PremiumSubscriptions extends Model
 {
     protected $table = 'premium_subscriptions';
     use SoftDeletes;
-    protected $fillable=["provider", "url", "password", "domain", "purchase_date", "end_date","shop_id"];
+    protected $fillable=["provider","user", "url", "password", "domain", "purchase_date", "end_date","shop_id",'plan_id'];
 
     /**
      * @return BelongsTo
@@ -20,6 +20,11 @@ class PremiumSubscriptions extends Model
     public function shops(): hasOne
     {
         return $this->hasOne(Shop::class, 'id','shop_id');
+    }
+
+    public function plans(): hasOne
+    {
+        return $this->hasOne(PremiumPlans::class, 'id','plan_id');
     }
 
 

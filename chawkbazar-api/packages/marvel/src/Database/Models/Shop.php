@@ -130,4 +130,9 @@ class Shop extends Model
         return $this->hasOne(PremiumPlans::class,'id','premium_plan_id');
 
     }
+    public function subscription():hasOne{
+
+        return $this->hasOne(PremiumSubscriptions::class,'shop_id','id');
+
+    }
 }

@@ -44,7 +44,7 @@ class ShopController extends CoreController
 
     public function fetchShops(Request $request)
     {
-        return $this->repository->withCount(['orders', 'products'])->with(['owner.profile','country','plan'])->where('id', '!=', null);
+        return $this->repository->withCount(['orders', 'products'])->with(['owner.profile','country','plan','subscription'])->where('id', '!=', null);
     }
 
 
@@ -81,7 +81,7 @@ class ShopController extends CoreController
     public function show($slug, Request $request)
     {
         $shop = $this->repository
-            ->with(['categories', 'owner','plan'])
+            ->with(['categories', 'owner','plan','subscription'])
             ->withCount(['orders', 'products']);
         if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
                 $request->user()->hasPermissionTo(Permission::CEO)||

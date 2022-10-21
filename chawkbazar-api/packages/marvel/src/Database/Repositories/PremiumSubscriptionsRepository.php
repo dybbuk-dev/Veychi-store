@@ -12,19 +12,18 @@ use Marvel\Exceptions\MarvelException;
 class PremiumSubscriptionsRepository extends BaseRepository
 {
 
-
     private $dataArray=[
-        "provider", "url", "password", "domain","shop_id","purchase_date", "end_date"
-    ];
+        "provider", "url", "password","user", "domain"];
     public function Validations():array{
         return [
             'provider'=>'required',
+            'user'=>'required',
             'url'=>'required',
             'password'=>'required',
             'domain'=>'required',
-            'shop_id'=>'required|exists:shops,id',
+           /* 'shop_id'=>'required|exists:shops,id',
             'owner_id'=>'required|exists:shops,owner_id',
-            'days'=>'required|numeric|min:30|max:365'
+            'days'=>'required|numeric|min:30|max:365'*/
         ];
     }
 
@@ -48,7 +47,7 @@ class PremiumSubscriptionsRepository extends BaseRepository
     public function indexPremiumSubscriptions($request){
         if(!$this->isAdmin($request->user()))  throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
         $limit=$request->limit?:15;
-       return $this->paginate($limit);
+       return $this->with(['shops','plans'])->paginate($limit);
     }
 
     /**
@@ -56,12 +55,12 @@ class PremiumSubscriptionsRepository extends BaseRepository
      */
     public function showPremiumSubscription($request, $id){
         if($this->isAdmin($request->user())){
-            return $this->firstWhere('shop_id',$id);
+            return $this->with(['shops','plans'])->firstWhere('shop_id',$id);
         }
 
         $shop=Shop::firstWhere('owner_id',$request->user()->id);
         if(!$shop)  throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
-        return $this->firstWhere('shop_id',$shop->id);
+        return $this->with(['shops','plans'])->firstWhere('shop_id',$shop->id);
 
     }
 
@@ -76,33 +75,34 @@ class PremiumSubscriptionsRepository extends BaseRepository
     private function validate($request){
 
         $validation =Validator::make($request->all(),$this->Validations());
-        $shop = Shop::find($request->shop_id);
-        if(!$shop) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
-        if($shop->owner_id!==$request->user()->id) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.UNAUTHORIZED');
+       // if($shop->owner_id!==$request->user()->id) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.UNAUTHORIZED');
         if($validation->fails())   throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.VALIDATION_ERROR');
-        return $shop;
+       // return $shop;
     }
-    public function storeSubscription($request){
+/*    public function storeSubscription($request){
         $shop = $this->validate($request);
         if(!$shop)   throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
         $request->merge(['purchase_date'=>Carbon::now(),'end_date'=>Carbon::now()->addDays($request->days)]);
         $subscription=$this->create($request->only($this->dataArray));
         $this->makePremium($shop);
         return $subscription;
-    }
+    }*/
 
     public function updateSubscription($request){
         $this->validate($request);
-        $susbciption=$this->findOrFail($request->id);
-        $susbciption->url=$request->url;
-        $susbciption->provider=$request->provider;
-        $susbciption->password = $request->password;
-        $susbciption->domain = $request->domain;
-        $susbciption->shop_id = $request->shop_id;
-        $susbciption->purchase_date=Carbon::now();
-        $susbciption->end_date =Carbon::now()->addDays($request->days);
-        $susbciption->save();
-        return $susbciption;
+        $subscription=$this->find($request->id);
+        $subscription->url=$request->url;
+        $subscription->provider=$request->provider;
+        $subscription->password = $request->password;
+        $subscription->domain = $request->domain;
+        $subscription->user= $request->user;
+        /*
+        $subscription->shop_id = $request->shop_id;
+        $subscription->purchase_date=Carbon::now();
+        $subscription->end_date =Carbon::now()->addDays($request->days);
+        */
+        $subscription->save();
+        return $subscription;
     }
 
     /**
