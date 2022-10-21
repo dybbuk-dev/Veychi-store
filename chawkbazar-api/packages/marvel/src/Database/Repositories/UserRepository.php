@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Marvel\Database\Models\PremiumPlans;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\User;
 use Marvel\Enums\PaymentGatewayType;
@@ -138,6 +139,7 @@ class UserRepository extends BaseRepository
     /**
      * @throws MarvelException
      */
+
     public function makePremium($shop){
         $shop->premium=true;
         $shop->save();
@@ -153,20 +155,20 @@ class UserRepository extends BaseRepository
         if(!isset($stripeKey)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
         Stripe::setApiKey($stripeKey);
         $settings=Settings::first()->options;
+        $plan=PremiumPlans::firstOrFail($request->id);
         if (!$request->user()->hasPermissionTo(UserPermission::STORE_OWNER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
         if($request->user()->premium)throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
         $request['tracking_number'] = Str::random(12);
         $request['customer_id'] = $request->user()->id;
         try{
             $paymentIntent=PaymentIntent::create([
-                'amount'=>$settings["premium_price"],
+                'amount'=>$plan->price,
                 'currency'=>$settings["currency"],
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
             ]);
-            return ['clientSecret'=>$paymentIntent->client_secret,'amount'=>$settings["premium_price"], 'currency'=>$settings["currency"]];
-
+            return ['clientSecret'=>$paymentIntent->client_secret,'amount'=>$plan->price, 'currency'=>$settings["currency"]];
         }catch (\Exception $ex){
             throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.PAYMENT_FAILED');
         }

@@ -13,6 +13,7 @@ use Marvel\Http\Controllers\DisputeController;
 use Marvel\Http\Controllers\DNIDocumentController;
 use Marvel\Http\Controllers\LegalRepresentativeController;
 use Marvel\Http\Controllers\MarketingController;
+use Marvel\Http\Controllers\PremiumPlansController;
 use Marvel\Http\Controllers\PremiumSubscriptionsController;
 use Marvel\Http\Controllers\PrivacyPolicyController;
 use Marvel\Http\Controllers\ProductController;
@@ -236,6 +237,9 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN.'|'.Permi
     ]);
     Route::apiResource('premium-admin',PremiumSubscriptionsController::class,[
         'only'=>['index','show','update','destroy']
+    ]);
+    Route::apiResource('premium-plans',PremiumPlansController::class,[
+        'only'=>['index','show','update','destroy',"store"]
     ]);
     Route::get('orders/export/all',[OrderController::class,'allOrdersInStore']);
     Route::apiResource('privacy-policy', PrivacyPolicyController::class,[
