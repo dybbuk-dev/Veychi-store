@@ -161,7 +161,7 @@ class UserRepository extends BaseRepository
         try{
             $paymentIntent=PaymentIntent::create([
                 'amount'=>$plan->price,
-                'currency'=>'USD',//$settings["currency"],
+                'currency'=>$settings["currency"],
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
