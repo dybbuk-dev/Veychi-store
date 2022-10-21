@@ -63,6 +63,7 @@ class CreateNewMarvelTables extends Migration
             $table->boolean('premium')->nullable()->default(false);
             $table->bigInteger("approval_token_id")->unsigned()->nullable();
             $table->bigInteger("country_id")->unsigned()->nullable();
+            $table->bigInteger("premium_plan_id")->unsigned()->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->text('description')->nullable();
@@ -77,6 +78,9 @@ class CreateNewMarvelTables extends Migration
             $table->foreign('approval_token_id')
                 ->references('id')
                 ->on('approval_tokens');
+            $table->foreign('premium_subscriptions')
+                ->references('id')
+                ->on('premium_plan_id');
             $table->foreign('country_id')
                 ->references('id')
                 ->on('countries');

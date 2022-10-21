@@ -21,6 +21,7 @@ class Shop extends Model
         'cover_image' => 'json',
         'address' => 'json',
         'settings' => 'json',
+        'premium'=>'boolean'
     ];
     protected $fillable=[
         'approval_token_id',
@@ -32,8 +33,10 @@ class Shop extends Model
         'address',
         'settings',
         'country_id',
-        'owner_id'
+        'owner_id',
+        'premium_plan_id'
     ];
+
 
     /**
      * Return the sluggable configuration array for this model.
@@ -120,5 +123,11 @@ class Shop extends Model
     public function country(): hasOne
     {
         return $this->hasOne(Countries::class, 'id','country_id');
+    }
+
+    public function plan():hasOne{
+
+        return $this->hasOne(PremiumPlans::class,'id','premium_plan_id');
+
     }
 }

@@ -137,8 +137,9 @@ class UserRepository extends BaseRepository
      * @throws MarvelException
      */
 
-    public function makePremium($shop){
+    public function makePremium($shop,$plan_id){
         $shop->premium=true;
+        $shop->premium_plan_id=$plan_id;
         $shop->save();
         return $shop;
     }
