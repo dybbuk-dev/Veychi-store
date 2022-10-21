@@ -52,15 +52,19 @@ export default function ShopPage() {
   const handleOpen = () => {
     const premiumStatus = localStorage.getItem('premium');
     if (premiumStatus != '"true"')
-      return Swal.fire(
-        'Ups',
-        `Parece que aún no eres Premium.<br/>
+      return Swal.fire({
+        title: 'Ups',
+
+        html: `Parece que aún no eres Premium.<br/>
          * <a href='${
            window.location.origin +
            '/admin/es/chawkbazar-vendor-shop/premium-info'
          }' style="color:#5697FA">Hazte Premium</a> para poder generar tu QR!`,
-        'error'
-      );
+        icon: 'error',
+        showCancelButton: false,
+        confirmButtonColor: '#5697FA',
+        confirmButtonText: 'Ok',
+      });
     setOpen(true);
   };
   const handleClose = () => setOpen(false);

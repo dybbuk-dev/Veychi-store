@@ -1,7 +1,7 @@
-import Layout from "@components/layouts/admin";
-import CreateOrUpdateTaxForm from "@components/tax/tax-form";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Layout from '@components/layouts/admin';
+import CreateOrUpdateTaxForm from '@components/tax/tax-form';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function CreateTaxPage() {
   const { t } = useTranslation();
@@ -9,7 +9,7 @@ export default function CreateTaxPage() {
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">
-          {t("form:form-title-create-tax")}
+          {t('form:form-title-create-tax')}
         </h1>
       </div>
       <CreateOrUpdateTaxForm />
@@ -20,6 +20,6 @@ CreateTaxPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["table", "form", "common"])),
+    ...(await serverSideTranslations(locale, ['table', 'form', 'common'])),
   },
 });

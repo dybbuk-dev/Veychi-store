@@ -1,10 +1,10 @@
-import Navbar from "@components/layouts/navigation/top-navbar";
-import OwnerInformation from "@components/user/user-details";
-import MobileNavigation from "@components/layouts/navigation/mobile-navigation";
+import Navbar from '@components/layouts/navigation/top-navbar';
+import OwnerInformation from '@components/user/user-details';
+import MobileNavigation from '@components/layouts/navigation/mobile-navigation';
 
 const OwnerLayout: React.FC = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col transition-colors duration-150">
+    <div className="min-h-screen bg-white flex flex-col transition-colors duration-150">
       <Navbar />
       <MobileNavigation>
         <OwnerInformation />

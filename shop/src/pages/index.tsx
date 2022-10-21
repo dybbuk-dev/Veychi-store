@@ -20,12 +20,39 @@ import { getToken } from '@framework/utils/get-token';
 export { getStaticProps } from '@framework/ssr/homepage/modern';
 
 export default function Home() {
-  const [marketingImages, setMarketingImages] = useState([]);
+  const [marketingImages, setMarketingImages] = useState<any>([]);
+
   const masonryBanner = useMemo(() => {
-    return marketingImages.slice(0, 6);
+    return marketingImages.slice(0, 6).map((image: any) => ({
+      ...image,
+      image: {
+        ...image.image,
+        mobile: {
+          ...image.image.mobile,
+          url: image.image.mobile.url.split('/backend')[1],
+        },
+        desktop: {
+          ...image.image.desktop,
+          url: image.image.desktop.url.split('/backend')[1],
+        },
+      },
+    }));
   }, [marketingImages]);
   const promotionBanner = useMemo(() => {
-    return marketingImages.slice(6, 9);
+    return marketingImages.slice(6, 9).map((image: any) => ({
+      ...image,
+      image: {
+        ...image.image,
+        mobile: {
+          ...image.image.mobile,
+          url: image.image.mobile.url.split('/backend')[1],
+        },
+        desktop: {
+          ...image.image.desktop,
+          url: image.image.desktop.url.split('/backend')[1],
+        },
+      },
+    }));
   }, [marketingImages]);
   useEffect(() => {
     (async () => {

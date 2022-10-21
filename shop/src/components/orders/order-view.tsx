@@ -79,7 +79,11 @@ export default function OrderView({ order }: any) {
                             },
                           }
                         );
-                        router.push('/dispute/' + res.data.id);
+                        router.push(
+                          '/dispute/' +
+                            res.data.id +
+                            `?tracking_number=${order!.tracking_number}`
+                        );
                       } catch (e) {}
                     }
                   });

@@ -1,31 +1,31 @@
-import React, { useState } from "react";
-import Button from "@components/ui/button";
-import Counter from "@components/common/counter";
-import { getVariations } from "@framework/utils/get-variations";
-import { useCart } from "@store/quick-cart/cart.context";
-import usePrice from "@lib/use-price";
-import { generateCartItem } from "@utils/generate-cart-item";
-import { ProductAttributes } from "./product-attributes";
-import isEmpty from "lodash/isEmpty";
-import Link from "@components/ui/link";
-import Image from "next/image";
-import { toast } from "react-toastify";
-import { useWindowSize } from "@utils/use-window-size";
-import Carousel from "@components/ui/carousel/carousel";
-import { SwiperSlide } from "swiper/react";
-import { Attachment, Product } from "@framework/types";
-import isEqual from "lodash/isEqual";
-import VariationPrice from "@components/product/product-variant-price";
-import { useTranslation } from "next-i18next";
-import isMatch from "lodash/isMatch";
-import { ROUTES } from "@lib/routes";
+import React, { useState } from 'react';
+import Button from '@components/ui/button';
+import Counter from '@components/common/counter';
+import { getVariations } from '@framework/utils/get-variations';
+import { useCart } from '@store/quick-cart/cart.context';
+import usePrice from '@lib/use-price';
+import { generateCartItem } from '@utils/generate-cart-item';
+import { ProductAttributes } from './product-attributes';
+import isEmpty from 'lodash/isEmpty';
+import Link from '@components/ui/link';
+import Image from 'next/image';
+import { toast } from 'react-toastify';
+import { useWindowSize } from '@utils/use-window-size';
+import Carousel from '@components/ui/carousel/carousel';
+import { SwiperSlide } from 'swiper/react';
+import { Attachment, Product } from '@framework/types';
+import isEqual from 'lodash/isEqual';
+import VariationPrice from '@components/product/product-variant-price';
+import { useTranslation } from 'next-i18next';
+import isMatch from 'lodash/isMatch';
+import { ROUTES } from '@lib/routes';
 
 const productGalleryCarouselResponsive = {
-  "768": {
+  '768': {
     slidesPerView: 2,
     spaceBetween: 12,
   },
-  "0": {
+  '0': {
     slidesPerView: 1,
   },
 };
@@ -80,10 +80,10 @@ const ProductSingleDetails: React.FC<Props> = ({
 
     const item = generateCartItem(product!, selectedVariation);
     addItemToCart(item, quantity);
-    toast(t("add-to-cart"), {
-      type: "dark",
-      progressClassName: "fancy-progress-bar",
-      position: width > 768 ? "bottom-right" : "top-right",
+    toast(t('text-added-to-cart'), {
+      type: 'dark',
+      progressClassName: 'fancy-progress-bar',
+      position: width > 768 ? 'bottom-right' : 'top-right',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -139,7 +139,7 @@ const ProductSingleDetails: React.FC<Props> = ({
                     height={618}
                     src={
                       item?.original ??
-                      "/assets/placeholder/products/product-gallery.svg"
+                      '/assets/placeholder/products/product-gallery.svg'
                     }
                     alt={`${product?.name}--${index}`}
                     className="object-cover w-full"
@@ -155,7 +155,7 @@ const ProductSingleDetails: React.FC<Props> = ({
                   height={618}
                   src={
                     combineImages?.[0]?.original ??
-                    "/assets/placeholder/products/product-gallery.svg"
+                    '/assets/placeholder/products/product-gallery.svg'
                   }
                   alt={product?.name}
                   className="object-cover w-full"
@@ -177,7 +177,7 @@ const ProductSingleDetails: React.FC<Props> = ({
                   height={618}
                   src={
                     item?.original ??
-                    "/assets/placeholder/products/product-gallery.svg"
+                    '/assets/placeholder/products/product-gallery.svg'
                   }
                   alt={`${product?.name}--${index}`}
                   className="object-cover w-full"
@@ -192,7 +192,7 @@ const ProductSingleDetails: React.FC<Props> = ({
                   height={618}
                   src={
                     combineImages?.[0]?.original ??
-                    "/assets/placeholder/products/product-gallery.svg"
+                    '/assets/placeholder/products/product-gallery.svg'
                   }
                   alt={product?.name}
                   className="object-cover"
@@ -214,7 +214,16 @@ const ProductSingleDetails: React.FC<Props> = ({
               className="w-5"
               alt=""
             />
-            <p>{getReviewStar()}</p>
+            <p>{getReviewStar()}</p>{' '}
+            <div className="flex items-center pl-4 gap-2">
+              <span className=" text-gray-800 text-[1.2rem]">Visítanos</span>
+              <Link
+                href={`${ROUTES.SHOPS}/${product?.shop?.slug}`}
+                className="inline-block ltr:pr-1.5 rtl:pl-1.5 transition hover:underline hover:text-[#659ae9] ltr:last:pr-0 rtl:last:pl-0 text-[#5697FA]"
+              >
+                {product?.shop?.name}
+              </Link>
+            </div>
           </h2>
           <p className="text-body text-sm lg:text-base leading-6 lg:leading-8">
             {product?.description}
@@ -273,7 +282,7 @@ const ProductSingleDetails: React.FC<Props> = ({
                 />
               ) : (
                 <div className="text-base text-red-500 whitespace-nowrap ltr:lg:ml-7 rtl:lg:mr-7">
-                  {t("text-out-stock")}
+                  {t('text-out-stock')}
                 </div>
               )}
             </>
@@ -284,7 +293,7 @@ const ProductSingleDetails: React.FC<Props> = ({
               {selectedVariation?.is_disable ||
               selectedVariation.quantity === 0 ? (
                 <div className="text-base text-red-500 whitespace-nowrap ltr:lg:ml-7 rtl:lg:mr-7">
-                  {t("text-out-stock")}
+                  {t('text-out-stock')}
                 </div>
               ) : (
                 <Counter
@@ -305,7 +314,7 @@ const ProductSingleDetails: React.FC<Props> = ({
             onClick={addToCart}
             variant="slim"
             className={`w-full md:w-6/12 xl:w-full ${
-              !isSelected && "bg-gray-400 hover:bg-gray-400"
+              !isSelected && 'bg-gray-400 hover:bg-gray-400'
             }`}
             disabled={
               !isSelected ||
@@ -317,8 +326,8 @@ const ProductSingleDetails: React.FC<Props> = ({
             <span className="py-2 3xl:px-8">
               {product?.quantity ||
               (!isEmpty(selectedVariation) && selectedVariation?.quantity)
-                ? t("text-add-to-cart")
-                : t("text-out-stock")}
+                ? t('text-added-to-cart')
+                : t('text-out-stock')}
             </span>
           </Button>
         </div>
@@ -376,7 +385,7 @@ const ProductSingleDetails: React.FC<Props> = ({
 
             <li>
               <span className="font-semibold text-heading inline-block ltr:pr-2 rtl:pl-2">
-                {t("text-brand-colon")}
+                {t('text-brand-colon')}
               </span>
               <Link
                 href={`${ROUTES.BRAND}=${product?.type?.slug}`}
@@ -388,7 +397,7 @@ const ProductSingleDetails: React.FC<Props> = ({
 
             <li>
               <span className="font-semibold text-heading inline-block ltr:pr-2 rtl:pl-2">
-                {t("text-shop-colon")}
+                {t('text-shop-colon')}
               </span>
               <Link
                 href={`${ROUTES.SHOPS}/${product?.shop?.slug}`}

@@ -12,6 +12,7 @@ interface BannerProps {
   className?: string;
   classNameInner?: string;
   href: LinkProps['href'];
+  reverse?: boolean;
 }
 
 function getImage(deviceWidth: number, imgObj: any) {
@@ -25,6 +26,7 @@ const BannerCard: FC<BannerProps> = ({
   effectActive = false,
   classNameInner,
   href,
+  reverse,
 }) => {
   const { width } = useWindowSize();
   const { title, image, text, text_position, subtitle_position, subtitle } =
@@ -41,8 +43,10 @@ const BannerCard: FC<BannerProps> = ({
       >
         <Image
           src={
-            process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
-            selectedImage.url.slice(1)
+            !reverse
+              ? process.env.NEXT_PUBLIC_REST_API_ENDPOINT +
+                selectedImage.url.slice(1)
+              : selectedImage.url
           }
           width={selectedImage.width}
           height={selectedImage.height}
