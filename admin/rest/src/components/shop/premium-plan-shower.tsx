@@ -69,7 +69,13 @@ const NormalPlan = ({
   const { t } = useTranslation();
 
   return (
-    <div className="min-w-[200px] p-8 bg-white text-center rounded-3xl pr-16 shadow-xl">
+    <div
+      className="min-w-[200px] p-8 bg-white text-center rounded-3xl pr-16 "
+      style={{
+        boxShadow:
+          '0 10px 15px 5px rgb(0 0 0 / 0.1), 10 4px 6px -10px rgb(0 0 0 / 0.1)',
+      }}
+    >
       <h1
         className="text-black font-semibold text-2xl "
         style={{ minWidth: '200px' }}
