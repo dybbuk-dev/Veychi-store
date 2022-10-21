@@ -3,7 +3,7 @@
 namespace Marvel\Database\Repositories;
 
 use Carbon\Carbon;
-use Ignited\LaravelOmnipay\Facades\OmnipayFacade as Omnipay;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -11,9 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Marvel\Database\Models\PremiumPlans;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\User;
-use Marvel\Enums\PaymentGatewayType;
 use Prettus\Validator\Exceptions\ValidatorException;
-use Spatie\Permission\Models\Permission;
 use Marvel\Enums\Permission as UserPermission;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;
@@ -23,7 +21,6 @@ use Marvel\Database\Models\Address;
 use Marvel\Database\Models\Profile;
 use Marvel\Database\Models\Shop;
 use Marvel\Exceptions\MarvelException;
-use Spatie\Permission\Models\Role;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
@@ -155,9 +152,9 @@ class UserRepository extends BaseRepository
         if(!isset($stripeKey)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
         Stripe::setApiKey($stripeKey);
         $settings=Settings::first()->options;
-        $plan=PremiumPlans::firstOrFail($request->id);
+        $plan=PremiumPlans::findOrFail($request->id);
         if (!$request->user()->hasPermissionTo(UserPermission::STORE_OWNER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED');
-        if($request->user()->premium)throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
+
         $request['tracking_number'] = Str::random(12);
         $request['customer_id'] = $request->user()->id;
         try{
