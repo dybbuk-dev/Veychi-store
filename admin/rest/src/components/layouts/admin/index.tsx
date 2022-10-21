@@ -19,7 +19,7 @@ const AdminLayout: React.FC = ({ children }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col transition-colors duration-150">
+    <div className="min-h-screen bg-white flex flex-col transition-colors duration-150">
       <Navbar />
       <MobileNavigation>
         <CustomTreeview items={siteSettings.sidebarLinks.admin} userData={me} />
