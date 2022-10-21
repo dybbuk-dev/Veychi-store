@@ -509,7 +509,7 @@ class UserController extends CoreController
     public function makePremium(Request $request){
         $shop=Shop::find($request->shop_id);
         if(!$shop)   throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.SOMETHING_WENT_WRONG');
-       return $this->repository->makePremium($shop);
+       return $this->repository->makePremium($shop,$request->premium_plan_id);
     }
 
     public function premiumPaymentIntent(Request $request){

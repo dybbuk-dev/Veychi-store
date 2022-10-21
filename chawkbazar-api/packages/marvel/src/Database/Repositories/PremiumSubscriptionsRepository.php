@@ -109,10 +109,10 @@ class PremiumSubscriptionsRepository extends BaseRepository
      * @throws MarvelException
      */
     public function cancelPremium($request, $id){
-        if($request->user()->hasPermissionTo(Permission::STORE_OWNER)) throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.UNAUTHORIZED');
-        $shop=Shop::firstWhere('owner_id',$request->user()->id);
+        $shop=Shop::find($id);
         $shop->premium=false;
-        $this->delete($id);
+        $shop->premium_plan_id=null;
+        $shop->save();
     }
 
     public function model(): string
