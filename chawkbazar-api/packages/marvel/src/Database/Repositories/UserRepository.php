@@ -161,14 +161,15 @@ class UserRepository extends BaseRepository
         try{
             $paymentIntent=PaymentIntent::create([
                 'amount'=>$plan->price,
-                'currency'=>$settings["currency"],
+                'currency'=>'USD',//$settings["currency"],
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
             ]);
             return ['clientSecret'=>$paymentIntent->client_secret,'amount'=>$plan->price, 'currency'=>$settings["currency"]];
         }catch (\Exception $ex){
-            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.PAYMENT_FAILED');
+
+            throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.'.$ex->getMessage());
         }
 
 
