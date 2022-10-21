@@ -28,5 +28,6 @@ export const ROUTES = {
   TICKETS: '/tickets',
   TOKENS: '/shop-tokens',
   STAFFS: '/staffs',
+  PREMIUMPLANS: '/premium-plans',
   ADMINISTRATORS: '/administrators',
 };
