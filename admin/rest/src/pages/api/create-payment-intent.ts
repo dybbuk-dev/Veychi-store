@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 // This is your test secret API key.
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -13,18 +15,22 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { items } = req.body;
-
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: 'eur',
-    automatic_payment_methods: {
-      enabled: true,
+  console.log({
+    shop_id: req.query.shop_id,
+    premium_plan_id: req.query.premium_plan,
+  });
+  const response = await axios.post(
+    'users/premium/make-premium',
+    {
+      shop_id: req.query.shop_id,
+      premium_plan_id: req.query.premium_plan,
     },
-  });
-
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
+    {
+      headers: {
+        Authorization: 'Bearer ' + req.query.token,
+      },
+    }
+  );
+  console.log(response.data);
+  return res.redirect(307, req.query.callback_url as string);
 }

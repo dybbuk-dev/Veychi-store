@@ -4,11 +4,21 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import { Shop } from '@ts-types/generated';
 
-export default function CheckoutForm() {
+export default function CheckoutForm({
+  shopData,
+  selectedPremium,
+}: {
+  shopData: { shop: Shop };
+  selectedPremium: any;
+}) {
   const stripe = useStripe();
   const elements = useElements();
-
+  const router = useRouter();
+  console.log({ router });
   const [message, setMessage] = React.useState<null | string>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -44,7 +54,7 @@ export default function CheckoutForm() {
         }
       });
   }, [stripe]);
-
+  console.log({ shopData });
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -53,14 +63,26 @@ export default function CheckoutForm() {
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-
+    const tkn = Cookies.get('AUTH_CRED')!;
+    if (!tkn) return;
+    const { token } = JSON.parse(tkn);
     setIsLoading(true);
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
         return_url:
-          window.location.origin + '/es/chawkbazar-vendor-shop/premium-info',
+          window.location.origin +
+          router.basePath +
+          '/api/create-payment-intent' +
+          '?shop_id=' +
+          shopData.shop.id! +
+          '&token=' +
+          token +
+          '&premium_plan=' +
+          selectedPremium.id +
+          '&callback_url=' +
+          window.location.href,
       },
     });
 
