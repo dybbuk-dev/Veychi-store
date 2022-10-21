@@ -36,7 +36,9 @@ class PremiumSubscriptions extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->timestamps();
             $table->softDeletes();
-          
+            $table->foreign('shop_id')
+                ->references('id')
+                ->on('shops');
 
         });
     }

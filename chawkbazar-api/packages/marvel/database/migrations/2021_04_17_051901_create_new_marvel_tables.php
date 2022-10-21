@@ -78,9 +78,6 @@ class CreateNewMarvelTables extends Migration
             $table->foreign('approval_token_id')
                 ->references('id')
                 ->on('approval_tokens');
-            $table->foreign('premium_subscriptions')
-                ->references('id')
-                ->on('premium_plan_id');
             $table->foreign('country_id')
                 ->references('id')
                 ->on('countries');
