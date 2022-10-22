@@ -14,7 +14,7 @@ const OwnerLayout: React.FC = ({ children }) => {
         <aside className="shadow w-72 xl:w-76 hidden lg:block overflow-y-auto bg-white px-4 fixed start-0 bottom-0 h-full pt-22">
           <OwnerInformation />
         </aside>
-        <main className="w-full lg:ps-72 xl:ps-76">
+        <main className="w-full lg:ps-72 xl:ps-76 bg-white">
           <div className="p-5 md:p-8 overflow-y-auto h-full">{children}</div>
         </main>
       </div>
