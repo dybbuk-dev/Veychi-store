@@ -150,6 +150,34 @@ export default function CreateOrUpdatePremiumInfoForm({
             variant="outline"
             className="mb-5"
           />
+          <span className="text-red-700 flex items-start  gap-2 mb-2 text-[0.95rem]">
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 mt-[0.20rem]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                />
+              </svg>
+            </span>
+            <span className="mt-[0.1rem] text-red-500">
+              <b>IMPORTANTE:</b> Una vez guardada la información, no se podrá
+              cambiar.
+              {/* <span className="mb-1 text-black">
+                <br />* Registro: <b>Tipo A</b>
+                <br />* Host: @
+                <br />* Valor (apuntar al IP): <b>128.199.14.48</b>
+                <br />* TTL: <b>3600</b> o <b>Automático</b>
+              </span> */}
+            </span>
+          </span>
           <span className="text-red-700 flex items-start  gap-2 mb-2">
             <span>
               <svg
