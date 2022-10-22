@@ -22,7 +22,7 @@ class Company extends Model
 
     public function legal_representative(): HasOne
     {
-        return $this->hasOne(LegalRepresentative::class,'id','legal_representative_id');
+        return $this->hasOne(LegalRepresentative::class,'id','legal_representative_id')->with('dni_document');
     }
     public function dni_document():HasOne
     {
