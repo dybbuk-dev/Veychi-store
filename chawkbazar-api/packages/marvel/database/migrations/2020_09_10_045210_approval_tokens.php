@@ -11,6 +11,8 @@ class ApprovalTokens extends Migration
         Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
             $table->string('token',300);
+            $table->string('responsible',300)->nullable();
+            $table->date('validity');
             $table->timestamps();
             $table->softDeletes();
         });

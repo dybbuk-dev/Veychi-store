@@ -3,6 +3,7 @@
 
 namespace Marvel\Database\Repositories;
 
+use Carbon\Carbon;
 use Marvel\Database\Models\ApprovalTokens;
 use Marvel\Database\Models\Balance;
 use Marvel\Database\Models\Shop;
@@ -125,7 +126,7 @@ class ShopRepository extends BaseRepository
      * @throws Exception
      */
     public function approveShop($request, $shop){
-        $approvalToken=ApprovalTokens::where('token',$request->token)->first();
+        $approvalToken=ApprovalTokens::where([['token',"=",$request->token],['validity',">=",Carbon::now()]])->first();
         if($approvalToken){
             $shop->is_active=true;
             $shop->approval_token_id=$approvalToken->id;

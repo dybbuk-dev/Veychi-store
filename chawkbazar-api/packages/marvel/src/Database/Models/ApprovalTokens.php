@@ -14,8 +14,8 @@ class ApprovalTokens extends Model
 
     public $guarded = ["token","id"];
     protected $hidden=['deleted_at'];
-    protected $fillable =['token'];
-    public $timestamps = false;
+    protected $fillable =['token','responsible', 'validity'];
+    public $timestamps = true;
 
     /**
      * @return BelongsTo
