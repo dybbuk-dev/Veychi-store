@@ -75,9 +75,14 @@ export default function CreateOrUpdatePremiumInfoForm({
         );
         Swal.fire({
           title: t('common:text-perfect'),
-          text: t('common:successfully-updated'),
+          text: `<span> ${t(
+            'common:successfully-updated'
+          )}</span><br/><span>${t('common:text-help-domain-24-hours')}</span>`,
           icon: 'success',
           confirmButtonColor: '#5697FA',
+          html: `<span> ${t(
+            'common:successfully-updated'
+          )}</span><br/><span>${t('common:text-help-domain-24-hours')}</span>`,
         }).then(() => {
           window.location.reload();
         });
