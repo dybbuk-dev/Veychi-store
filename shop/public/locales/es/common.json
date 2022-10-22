@@ -250,6 +250,8 @@
   "text-delivery-schedule": "Programa de entrega",
   "text-no-delivery-time-found": "No se encontraron programas de entrega",
   "text-cod-message": "¡Pague después de recibir sus productos!",
+  "text-perfect": "Perfecto",
+
   "text-message-sub-order": "Este pedido tiene productos de varios proveedores. Así que dividimos este pedido en varios pedidos de proveedores.",
   "text-calculated-checkout": "Calculado al finalizar la compra",
   "text-no-brands-found": "No se encontraron marcas",

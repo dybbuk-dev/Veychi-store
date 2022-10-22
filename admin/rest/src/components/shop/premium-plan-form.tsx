@@ -73,7 +73,14 @@ export default function CreateOrUpdatePremiumInfoForm({
             },
           }
         );
-        window.location.reload();
+        Swal.fire({
+          title: t('common:text-perfect'),
+          text: t('common:successfully-updated'),
+          icon: 'success',
+          confirmButtonColor: '#5697FA',
+        }).then(() => {
+          window.location.reload();
+        });
       } catch (e) {}
     }
   };
@@ -143,6 +150,39 @@ export default function CreateOrUpdatePremiumInfoForm({
             variant="outline"
             className="mb-5"
           />
+          <span className="text-red-500 flex items-start  gap-2">
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-blue-500 mt-[0.20rem]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                />
+              </svg>
+            </span>
+            <span className="mb-1 text-[#5697FA]">
+              Para que tu dominio funcione debes de agregar en tu zona de DNS
+              del provedor de dominio web:
+              <span className="mb-1 text-black">
+                <br />* Registro: <b>Tipo A</b>
+                <br />* Host: @
+                <br />* Valor (apuntar al IP): <b>128.199.14.48</b>
+                <br />* TTL: <b>3600</b> o <b>Automático</b>
+              </span>
+            </span>
+          </span>
+          {/* <span className="mb-1">
+            Para que tu dominio funcione debes de agregar un registro de
+            tipo(Type) A, en el Nombre @ y valor colocamos la IP{' '}
+            <b>128.199.14.48</b> TTL 3600
+          </span> */}
         </Card>
       </div>
 
