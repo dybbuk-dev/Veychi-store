@@ -120,6 +120,8 @@
   "text-commission-rate": "Tasa de comisión administrativa",
   "text-current-balance": "Saldo disponible",
   "text-registered-since": "Registrado desde",
+  "text-perfect": "Perfecto",
+
   "text-payment-info": "Información de pago",
   "text-shop-dashboard": "Ver panel",
   "text-no-shop": "No se encontraron tiendas",
@@ -143,7 +145,7 @@
   "text-image": "Imagen",
   "text-account-no": "Número de cuenta",
   "text-no-address": "No se encontró dirección",
-  "text-withdrawal-info": "Información de retiro",
+  "text-withdrawal-info": "Información bancaria",
   "password-changed-successfully": "¡Cambió su contraseña con éxito!",
   "successfully-updated": "¡Se actualizó correctamente!",
   "successfully-created": "¡Creado con éxito!",

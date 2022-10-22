@@ -4,3 +4,9 @@
   font-weight: bold;
   font-size: 0.95rem;
 }
+
+.rc-table-content table .rc-table-thead .rc-table-cell {
+  background: #1f2937 !important;
+  color: white;
+  font-size: 0.85rem;
+}

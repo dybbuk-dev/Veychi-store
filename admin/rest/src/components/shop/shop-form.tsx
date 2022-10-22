@@ -212,8 +212,8 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
         </div>
         <div className="flex flex-wrap pb-8 border-b border-dashed border-gray-300 my-5 sm:my-8">
           <Description
-            title={t('form:shop-payment-info')}
-            details={t('form:payment-info-helper-text')}
+            title={t('form:shop-withdrawal-info')}
+            details={t('form:withdrawal-info-helper-text')}
             className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
           />
 

@@ -33,7 +33,7 @@ const ShopLayout: React.FC = ({ children }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col transition-colors duration-150">
+    <div className="min-h-screen bg-[rgba(0,0,0,0.005)] flex flex-col transition-colors duration-150">
       <Navbar />
       <MobileNavigation>
         <SidebarItemMap />

@@ -1,20 +1,20 @@
-import Alert from "@components/ui/alert";
-import Button from "@components/ui/button";
-import Input from "@components/ui/input";
-import PasswordInput from "@components/ui/password-input";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ROUTES } from "@utils/routes";
-import { useTranslation } from "next-i18next";
+import Alert from '@components/ui/alert';
+import Button from '@components/ui/button';
+import Input from '@components/ui/input';
+import PasswordInput from '@components/ui/password-input';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { ROUTES } from '@utils/routes';
+import { useTranslation } from 'next-i18next';
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import * as yup from "yup";
-import Link from "@components/ui/link";
-import { allowedRoles, hasAccess, setAuthCredentials } from "@utils/auth-utils";
+import Link from '@components/ui/link';
+import { allowedRoles, hasAccess, setAuthCredentials } from '@utils/auth-utils';
 // import { Permission } from "@ts-types/generated";
-import { useRegisterMutation } from "@data/user/use-register.mutation";
-import { FormValues } from "@ts-types/generated";
-import axios from "axios";
+import { useRegisterMutation } from '@data/user/use-register.mutation';
+import { FormValues } from '@ts-types/generated';
+import axios from 'axios';
 
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -45,23 +45,23 @@ const RegistrationForm = () => {
 
   const formValidationError = () => {
     return (
-      Object.values(getValues()).includes("") ||
-      Object.values(getValues().company).includes("") ||
-      Object.values(getValues().company.dni_document).includes("") ||
-      Object.values(getValues().company.legal_representative).includes("")
+      Object.values(getValues()).includes('') ||
+      Object.values(getValues().company).includes('') ||
+      Object.values(getValues().company.dni_document).includes('') ||
+      Object.values(getValues().company.legal_representative).includes('')
     );
   };
 
   async function onSubmit(values: any) {
     if (formValidationError()) {
-      alert("Please fill all the fields");
+      alert('Please fill all the fields');
       return;
     }
     if (
       values.company.dni_document.DNI_image.length !== 1 ||
       values.company.legal_representative.dni_document.DNI_image.length !== 1
     ) {
-      alert("Please upload DNI images");
+      alert('Please upload DNI images');
       return;
     }
     let parsedValues = { ...values };
@@ -74,7 +74,7 @@ const RegistrationForm = () => {
     parsedValues.company.legal_representative.dni_document.DNI_image =
       secondDni;
 
-    parsedValues.permission = "store_owner";
+    parsedValues.permission = 'store_owner';
 
     registerUser(
       {
@@ -89,15 +89,15 @@ const RegistrationForm = () => {
               router.push(ROUTES.DASHBOARD);
               return;
             }
-            setErrorMessage("form:error-enough-permission");
+            setErrorMessage('form:error-enough-permission');
           } else {
-            setErrorMessage("form:error-credential-wrong");
+            setErrorMessage('form:error-credential-wrong');
           }
         },
         onError: (error: any) => {
           Object.keys(error?.response?.data).forEach((field: any) => {
             setError(field, {
-              type: "manual",
+              type: 'manual',
               message: error?.response?.data[field],
             });
           });
@@ -108,122 +108,131 @@ const RegistrationForm = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className="flex flex-wrap gap-2 justify-center items-center flex-col rounded-[20px] "
+        style={{ border: '1px solid rgba(0,0,0,0.2)', padding: '1rem' }}
+      >
         <Input
-          label={t("form:input-label-name")}
-          {...register("name")}
+          label={t('form:input-label-name')}
+          {...register('name')}
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.name?.message!)}
         />
         <Input
-          label={t("form:input-label-email")}
-          {...register("email")}
+          label={t('form:input-label-email')}
+          {...register('email')}
           type="email"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <PasswordInput
-          label={t("form:input-label-password")}
-          {...register("password")}
+          label={t('form:input-label-password')}
+          {...register('password')}
           error={t(errors?.password?.message!)}
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
         />
         <Input
-          label={t("form:input-label-company-name")}
-          {...register("company.name")}
+          label={t('form:input-label-company-name')}
+          {...register('company.name')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-line-of-business")}
-          {...register("company.line_of_business")}
+          label={t('form:input-label-line-of-business')}
+          {...register('company.line_of_business')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-tax-country")}
-          {...register("company.tax_country")}
+          label={t('form:input-label-tax-country')}
+          {...register('company.tax_country')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-business-phone")}
-          {...register("company.business_phone")}
+          label={t('form:input-label-business-phone')}
+          {...register('company.business_phone')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-products-description")}
-          {...register("company.products_description")}
+          label={t('form:input-label-products-description')}
+          {...register('company.products_description')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-legal-representative-DNI")}
-          {...register("company.legal_representative.dni_document.DNI")}
+          label={t('form:input-label-legal-representative-DNI')}
+          {...register('company.legal_representative.dni_document.DNI')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-legal-representative-name")}
-          {...register("company.legal_representative.name")}
+          label={t('form:input-label-legal-representative-name')}
+          {...register('company.legal_representative.name')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-legal-representative-phone")}
-          {...register("company.legal_representative.phone")}
+          label={t('form:input-label-legal-representative-phone')}
+          {...register('company.legal_representative.phone')}
           type="tel"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-legal-representative-DNI-image")}
-          {...register("company.legal_representative.dni_document.DNI_image")}
+          label={t('form:input-label-legal-representative-DNI-image')}
+          {...register('company.legal_representative.dni_document.DNI_image')}
           type="file"
           accept="image/png, image/jpeg"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-DNI")}
-          {...register("company.dni_document.DNI")}
+          label={t('form:input-label-DNI')}
+          {...register('company.dni_document.DNI')}
           type="text"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
         <Input
-          label={t("form:input-label-DNI-image")}
-          {...register("company.dni_document.DNI_image")}
+          label={t('form:input-label-DNI-image')}
+          {...register('company.dni_document.DNI_image')}
           type="file"
           accept="image/png, image/jpeg"
           variant="outline"
-          className="mb-4"
+          className="mb-4 w-[100%] max-w-[600px]"
           // error={t(errors?.email?.message!)}
         />
 
-        <Button className="w-full" loading={loading} disabled={loading}>
-          {t("form:text-register")}
+        <Button
+          className="max-w-[400px] w-full"
+          loading={loading}
+          disabled={loading}
+        >
+          {t('form:text-register')}
         </Button>
 
         {errorMessage ? (
@@ -239,16 +248,16 @@ const RegistrationForm = () => {
       <div className="flex flex-col items-center justify-center relative text-sm text-heading mt-8 sm:mt-11 mb-6 sm:mb-8">
         <hr className="w-full" />
         <span className="absolute start-2/4 -top-2.5 px-2 -ms-4 bg-light">
-          {t("common:text-or")}
+          {t('common:text-or')}
         </span>
       </div>
       <div className="text-sm sm:text-base text-body text-center">
-        {t("form:text-already-account")}{" "}
+        {t('form:text-already-account')}{' '}
         <Link
           href={ROUTES.LOGIN}
           className="ms-1 underline text-accent font-semibold transition-colors duration-200 focus:outline-none hover:text-accent-hover focus:text-accent-hover hover:no-underline focus:no-underline"
         >
-          {t("form:button-label-login")}
+          {t('form:button-label-login')}
         </Link>
       </div>
     </>
