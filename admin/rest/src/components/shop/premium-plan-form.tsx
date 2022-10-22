@@ -284,7 +284,7 @@ export default function CreateOrUpdatePremiumInfoForm({
         >
           Cancelar Suscripción
         </Button>
-        <Button loading={false}>Editar Información</Button>
+        <Button loading={false}>Guardar</Button>
       </div>
     </form>
   );
