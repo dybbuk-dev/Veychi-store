@@ -236,7 +236,11 @@
   "shop-basic-info": "Basic Info",
   "shop-basic-info-help-text": "Add some basic info about your shop from here",
   "shop-payment-info": "Payment Info",
+  "shop-withdrawal-info": "Withdraw Info",
+
   "payment-info-helper-text": "Add your payment information from here",
+  "withdrawal-info-helper-text": "Add your withdraw information from here",
+
   "input-label-admin-commission-rate": "Commission rate for admin",
   "input-label-account-holder-name": "Account Holder Name",
   "input-label-account-holder-email": "Account Holder Email",
