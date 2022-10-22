@@ -110,7 +110,10 @@ export default function CreateOrUpdatePremiumInfoForm({
         <Card className="w-full border-none shadow-none px-5 py-2">
           <Input
             label={
-              t('form:input-label-domain') + ' ( Ej: https://example.com )'
+              <span>
+                {t('form:input-label-domain') + ' ( Ej: https://example.com )'}{' '}
+                <b>(Los datos deben ser fieles y exactos.)</b>
+              </span>
             }
             {...register('domain')}
             error={t(errors.rate?.message!)}
@@ -119,7 +122,12 @@ export default function CreateOrUpdatePremiumInfoForm({
             className="mb-5"
           />
           <Input
-            label={t('form:input-label-domain-provider') + ' ( Ej: GoDaddy )'}
+            label={
+              <span>
+                {t('form:input-label-domain-provider') + ' ( Ej: GoDaddy )'}{' '}
+                <b>(Los datos deben ser fieles y exactos.)</b>
+              </span>
+            }
             {...register('provider')}
             error={t(errors.country?.message!)}
             required
@@ -128,8 +136,11 @@ export default function CreateOrUpdatePremiumInfoForm({
           />
           <Input
             label={
-              t('form:input-label-domain-provider-url') +
-              ' ( Ej: https://www.godaddy.com )'
+              <span>
+                {t('form:input-label-domain-provider-url') +
+                  ' ( Ej: https://www.godaddy.com )'}{' '}
+                <b>(Los datos deben ser fieles y exactos.)</b>
+              </span>
             }
             {...register('url')}
             error={t(errors.country?.message!)}
@@ -139,7 +150,10 @@ export default function CreateOrUpdatePremiumInfoForm({
           />
           <Input
             label={
-              t('form:input-label-domain-user') + ' ( Ej: test@veychi.com )'
+              <span>
+                {t('form:input-label-domain-user') + ' ( Ej: test@veychi.com )'}{' '}
+                <b>(Los datos deben ser fieles y exactos.)</b>
+              </span>
             }
             {...register('user')}
             error={t(errors.country?.message!)}
@@ -148,7 +162,12 @@ export default function CreateOrUpdatePremiumInfoForm({
             className="mb-5"
           />
           <Input
-            label={t('form:input-label-domain-password') + ' ( Ej: Test321 )'}
+            label={
+              <span>
+                {t('form:input-label-domain-password') + ' ( Ej: Test321 )'}{' '}
+                <b>(Los datos deben ser fieles y exactos.)</b>
+              </span>
+            }
             {...register('password')}
             error={t(errors.country?.message!)}
             required
