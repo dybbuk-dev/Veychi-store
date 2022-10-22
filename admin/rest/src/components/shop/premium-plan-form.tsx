@@ -150,7 +150,7 @@ export default function CreateOrUpdatePremiumInfoForm({
             variant="outline"
             className="mb-5"
           />
-          <span className="text-red-500 flex items-start  gap-2">
+          <span className="text-red-700 flex items-start  gap-2 mb-2">
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +158,7 @@ export default function CreateOrUpdatePremiumInfoForm({
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6 text-blue-500 mt-[0.20rem]"
+                className="w-6 h-6 mt-[0.20rem]"
               >
                 <path
                   strokeLinecap="round"
@@ -167,17 +167,97 @@ export default function CreateOrUpdatePremiumInfoForm({
                 />
               </svg>
             </span>
-            <span className="mb-1 text-[#5697FA]">
+            <span className="mb-1 text-red-500">
               Para que tu dominio funcione debes de agregar en tu zona de DNS
               del provedor de dominio web:
-              <span className="mb-1 text-black">
+              {/* <span className="mb-1 text-black">
                 <br />* Registro: <b>Tipo A</b>
                 <br />* Host: @
                 <br />* Valor (apuntar al IP): <b>128.199.14.48</b>
                 <br />* TTL: <b>3600</b> o <b>Automático</b>
-              </span>
+              </span> */}
             </span>
           </span>
+          <ul className="mb-1 space-y-1 text-left text-gray-500 dark:text-gray-400">
+            <li className="flex items-center space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-[#5697FA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+
+              <span>
+                Registro: <b>Tipo A</b>
+              </span>
+            </li>
+            <li className="flex items-center space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-[#5697FA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+
+              <span>Host: @</span>
+            </li>
+            <li className="flex items-center space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-[#5697FA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+
+              <span>
+                Valor (apuntar al IP): <b>128.199.14.48</b>
+              </span>
+            </li>
+            <li className="flex items-center space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-[#5697FA]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+
+              <span>
+                TTL: <b>3600</b> o <b>Automático</b>
+              </span>
+            </li>
+          </ul>
           {/* <span className="mb-1">
             Para que tu dominio funcione debes de agregar un registro de
             tipo(Type) A, en el Nombre @ y valor colocamos la IP{' '}
