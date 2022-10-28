@@ -6,12 +6,15 @@ import SidebarItem from '@components/layouts/navigation/sidebar-item';
 import { siteSettings } from '@settings/site.settings';
 import { useTranslation } from 'next-i18next';
 import MobileNavigation from '@components/layouts/navigation/mobile-navigation';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import LegalPDF from '@components/shop/LegalPDF';
 
 const ShopLayout: React.FC = ({ children }) => {
   const { t } = useTranslation();
   const {
     query: { shop },
   } = useRouter();
+
   const { permissions: currentUserPermissions, ...rest } = getAuthCredentials();
 
   const SidebarItemMap = () => (
@@ -29,6 +32,7 @@ const ShopLayout: React.FC = ({ children }) => {
           );
         }
       )}
+      <LegalPDF />
     </Fragment>
   );
 
