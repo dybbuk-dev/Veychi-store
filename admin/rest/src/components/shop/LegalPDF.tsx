@@ -52,7 +52,10 @@ export default function PDFTest() {
   return (
     <PDFDownloadLink
       document={<Resume userData={userData!} />}
-      fileName="invoice.pdf"
+      fileName={
+        userData?.name + '-' + userData?.company?.name + '.pdf' ||
+        'legal_data.pdf'
+      }
       className="break-normal"
     >
       {({ loading }: any) =>
