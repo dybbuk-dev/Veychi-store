@@ -4,6 +4,7 @@ namespace Marvel\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 use League\Csv\CannotInsertRecord;
 use Marvel\Database\Models\Shop;
 use Marvel\Database\Repositories\CompanyRepository;
@@ -522,5 +523,13 @@ class UserController extends CoreController
         $fields=['name','email','status','customer_contact','total','tracking_number','amount'];
         $data=User::join('orders','users.id',"=",'orders.customer_id')->withoutGlobalScope('order')->get($fields);
          $this->repository->arrayToCsv($data,null,$fields);
+    }
+
+    public function storeOwnerInfo($id){
+        $validation =Validator::make(["id"=>$id],['id'=>'required|exists:users,id']);
+        if($validation->fails())  throw new MarvelException(config('shop.app_notice_domain') . 'ERROR.NOT_FOUND');
+        return $this->repository->with(['shops','company'=>function($q){
+            return $q->with(['dni_document','legal_representative']);
+        }])->find($id);
     }
 }

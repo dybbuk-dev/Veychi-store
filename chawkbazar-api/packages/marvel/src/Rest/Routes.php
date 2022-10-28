@@ -216,6 +216,8 @@ Route::group(
             'only' => ['index','show','store', 'update', 'destroy']
         ]);
 
+        Route::get('owner-info/{id}','Marvel\Http\Controllers\UserController@storeOwnerInfo');
+
         Route::apiResource('countries', CountryController::class, [
             'only' => ['index','show']
         ]);
@@ -238,6 +240,7 @@ Route::group(['middleware' => ['permission:' . Permission::SUPER_ADMIN.'|'.Permi
     Route::apiResource('premium-admin',PremiumSubscriptionsController::class,[
         'only'=>['index','show','update','destroy']
     ]);
+    Route::get('admin-owner-info/{id}','Marvel\Http\Controllers\UserController@storeOwnerInfo');
     Route::apiResource('premium-plans',PremiumPlansController::class,[
         'only'=>['index','show','update','destroy',"store"]
     ]);
