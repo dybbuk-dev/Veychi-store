@@ -1,17 +1,17 @@
 /* eslint-disable react/no-array-index-key */
 
-import React from 'react';
-import { Text, View, StyleSheet } from '@react-pdf/renderer';
+import React from "react";
+import { Text, View, StyleSheet } from "@react-pdf/renderer";
 
-import Title from './Title';
-import List, { Item } from './List';
+import Title from "./Title";
+import List, { Item } from "./List";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 30,
     paddingLeft: 15,
-    '@media max-width: 400': {
+    "@media max-width: 400": {
       paddingTop: 10,
       paddingLeft: 0,
     },
@@ -22,18 +22,18 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 11,
-    fontFamily: 'Lato Italic',
+    fontFamily: "Lato Italic",
   },
   detailContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   detailLeftColumn: {
-    flexDirection: 'column',
+    flexDirection: "column",
     marginLeft: 10,
     marginRight: 10,
   },
   detailRightColumn: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flexGrow: 9,
   },
   bulletPoint: {
@@ -41,27 +41,27 @@ const styles = StyleSheet.create({
   },
   details: {
     fontSize: 10,
-    fontFamily: 'Lato',
+    fontFamily: "Lato",
   },
   headerContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   leftColumn: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flexGrow: 9,
   },
   rightColumn: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flexGrow: 1,
-    alignItems: 'flex-end',
-    justifySelf: 'flex-end',
+    alignItems: "flex-end",
+    justifySelf: "flex-end",
   },
   title: {
     fontSize: 11,
-    color: 'black',
-    textDecoration: 'none',
-    fontFamily: 'Lato Bold',
+    color: "black",
+    textDecoration: "none",
+    fontFamily: "Lato Bold",
   },
 });
 
@@ -73,16 +73,16 @@ const ExperienceEntry = ({ label, value }) => {
           <Text style={styles.title}>{label}</Text>
         </View>
         <View style={styles.rightColumn}>
-          <Text style={styles.date}>{value}</Text>
+          <Text style={styles.date}>{value}</Text>{" "}
         </View>
       </View>
     </View>
   );
 };
 
-const Experience = ({ userData }) => (
+const InfoUser = ({ userData }) => (
   <View style={styles.container}>
-    <Title>Información</Title>
+    <Title>Información del Usuario</Title>
     <ExperienceEntry label="Nombre" value={userData.name} />
     <ExperienceEntry label="Email" value={userData.email} />
     <ExperienceEntry
@@ -118,4 +118,4 @@ const Experience = ({ userData }) => (
   </View>
 );
 
-export default Experience;
+export default InfoUser;

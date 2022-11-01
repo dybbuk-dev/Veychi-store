@@ -1,4 +1,4 @@
-import { useShopQuery } from '@data/shop/use-shop.query';
+import { useShopQuery } from "@data/shop/use-shop.query";
 import {
   Page,
   Text,
@@ -7,14 +7,15 @@ import {
   StyleSheet,
   Image,
   PDFDownloadLink,
-} from '@react-pdf/renderer';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
-import Resume from './resume';
+} from "@react-pdf/renderer";
+import { Shop } from "@ts-types/generated";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import Resume from "./resume";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 export default function PDFTest() {
@@ -30,37 +31,37 @@ export default function PDFTest() {
 
     (async () => {
       try {
-        const tkn = Cookies.get('AUTH_CRED')!;
+        const tkn = Cookies.get("AUTH_CRED")!;
         if (!tkn) return;
         const { token } = JSON.parse(tkn);
         const res: any = await axios.get(
-          'owner-info/' + shopData?.shop.owner_id,
+          "owner-info/" + shopData?.shop.owner_id,
           {
             headers: {
-              Authorization: 'Bearer ' + token,
+              Authorization: "Bearer " + token,
             },
           }
         );
-        setUserData(res.data);
+        setUserData({ ...res.data, currentShop: shopData });
       } catch (e) {
         console.log(e);
       }
     })();
   }, [shopData]);
-  if (!userData) return <span> {t('common:text-loading')}</span>;
+  if (!userData) return <span> {t("common:text-loading")}</span>;
   if (!userData?.company) return <span></span>;
   return (
     <PDFDownloadLink
       document={<Resume userData={userData!} />}
       fileName={
-        userData?.name + '-' + userData?.company?.name + '.pdf' ||
-        'legal_data.pdf'
+        userData?.name + "-" + userData?.company?.name + ".pdf" ||
+        "legal_data.pdf"
       }
       className="break-normal"
     >
       {({ loading }: any) =>
         loading ? (
-          t('common:text-loading')
+          t("common:text-loading")
         ) : (
           <span className="flex w-full items-center text-base text-body-dark text-start focus:text-accent gap-4 cursor-pointer hover:text-gray-400">
             <svg
@@ -157,4 +158,5 @@ export interface IUserCompanyData {
       };
     };
   };
+  currentShop: Shop;
 }

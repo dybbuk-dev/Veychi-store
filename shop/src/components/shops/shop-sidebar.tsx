@@ -1,15 +1,15 @@
-import Image from 'next/image';
-import Text from '@components/ui/text';
-import * as socialIcons from 'react-share';
-import { formatAddress } from '@lib/format-address';
-import { getIcon } from '@lib/get-icon';
-import { useTranslation } from 'next-i18next';
-import isEmpty from 'lodash/isEmpty';
-import cn from 'classnames';
-import { productPlaceholder } from '@lib/placeholders';
-import Map from './shop-sidebar-map';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import Image from "next/image";
+import Text from "@components/ui/text";
+import * as socialIcons from "react-share";
+import { formatAddress } from "@lib/format-address";
+import { getIcon } from "@lib/get-icon";
+import { useTranslation } from "next-i18next";
+import isEmpty from "lodash/isEmpty";
+import cn from "classnames";
+import { productPlaceholder } from "@lib/placeholders";
+import Map from "./shop-sidebar-map";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 interface ShopSidebarProps {
   data: any;
@@ -24,18 +24,25 @@ const ShopSidebar: React.FC<ShopSidebarProps> = ({ data, className }) => {
       try {
         if (isEmpty(formatAddress(data?.address))) return;
         const res = await axios.get(
-          'http://api.positionstack.com/v1/forward?access_key=d11a0733cdde6206d498bd975ff6a347&query=' +
-            formatAddress(data?.address)
+          `https://address-from-to-latitude-longitude.p.rapidapi.com/geolocationapi?address=` +
+            formatAddress(data?.address),
+          {
+            headers: {
+              "X-RapidAPI-Key": process.env.NEXT_PUBLIC_POSITION_STACK,
+              "X-RapidAPI-Host":
+                "address-from-to-latitude-longitude.p.rapidapi.com",
+            },
+          }
         );
         setLocation({
-          lat: res.data.data[0].latitude,
-          lng: res.data.data[0].longitude,
+          lat: res.data.Results[0].latitude,
+          lng: res.data.Results[0].longitude,
         });
       } catch (e) {}
     })();
   }, [data]);
   return (
-    <div className={cn('flex flex-col pt-10 lg:pt-14 px-6', className)}>
+    <div className={cn("flex flex-col pt-10 lg:pt-14 px-6", className)}>
       <div className="text-center w-full border-b border-gray-300 pb-8">
         <div className="w-32 lg:w-auto h-32 lg:h-auto mx-auto">
           <Image
@@ -63,8 +70,8 @@ const ShopSidebar: React.FC<ShopSidebarProps> = ({ data, className }) => {
                 iconList: socialIcons,
                 iconName: item?.icon,
                 size: 25,
-                round: 'round',
-                className: 'transition-all hover:opacity-90',
+                round: "round",
+                className: "transition-all hover:opacity-90",
               })}
             </a>
           ))}
@@ -74,12 +81,12 @@ const ShopSidebar: React.FC<ShopSidebarProps> = ({ data, className }) => {
         {/* Address */}
         <div className="block">
           <h4 className="text-heading font-semibold text-sm mb-1.5">
-            {t('text-address-colon')}
+            {t("text-address-colon")}
           </h4>
           {!isEmpty(formatAddress(data?.address)) ? (
             <Text>{formatAddress(data?.address)}</Text>
           ) : (
-            t('common:text-no-address')
+            t("common:text-no-address")
           )}
         </div>
 
@@ -91,11 +98,11 @@ const ShopSidebar: React.FC<ShopSidebarProps> = ({ data, className }) => {
               <>
                 <Text>{data?.settings?.contact}</Text>
                 <button className="font-semibold text-sm text-heading transition-all hover:opacity-80 flex-shrink-0">
-                  {t('text-call-now')}
+                  {t("text-call-now")}
                 </button>
               </>
             ) : (
-              t('text-no-contact')
+              t("text-no-contact")
             )}
           </div>
         </div>
@@ -104,7 +111,7 @@ const ShopSidebar: React.FC<ShopSidebarProps> = ({ data, className }) => {
         {data?.settings?.website && (
           <div className="block">
             <h4 className="text-heading font-semibold text-sm mb-1.5">
-              {t('text-website-colon')}
+              {t("text-website-colon")}
             </h4>
             <div className="flex items-center justify-between">
               <Text>{data?.settings?.website}</Text>
@@ -114,7 +121,7 @@ const ShopSidebar: React.FC<ShopSidebarProps> = ({ data, className }) => {
                 rel="noreferrer"
                 className="font-semibold text-sm text-heading transition-all hover:opacity-80 flex-shrink-0"
               >
-                {t('text-visit-site')}
+                {t("text-visit-site")}
               </a>
             </div>
           </div>
