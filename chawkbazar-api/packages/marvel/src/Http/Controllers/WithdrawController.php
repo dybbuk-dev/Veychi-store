@@ -195,7 +195,7 @@ class WithdrawController extends CoreController
      */
     public function exportWithdraws(Request $request){
         try{
-            $fields=["name","amount","status","created_at","email","bank","account"];
+            $fields=["Nombre","Cantidad","Estado","Fecha del pedido","Email","Nombre del Banco","Número de Cuenta",'Tipo de cuenta'];
             $collection_data=new Collection();
             $raw_data= DB::select("SELECT
         shops.`name`,
@@ -204,7 +204,8 @@ class WithdrawController extends CoreController
         withdraws.created_at,
    	balances.payment_info->> '$.email'  AS email,
 	balances.payment_info->> '$.bank'  AS bank,
-	balances.payment_info->> '$.account'  AS 'account'
+	balances.payment_info->> '$.account'  AS 'account',
+	balances.payment_info->> '$.accountType'  AS 'accountType'
     FROM
         shops
         INNER JOIN withdraws ON shops.id = withdraws.shop_id
