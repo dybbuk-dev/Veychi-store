@@ -1,23 +1,23 @@
-import Card from '@components/common/card';
-import Layout from '@components/layouts/admin';
-import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import WithdrawList from '@components/withdraw/withdraw-list';
-import { adminOnly } from '@utils/auth-utils';
-import { useWithdrawsQuery } from '@data/withdraw/use-withdraws.query';
-import { useState } from 'react';
-import { SortOrder } from '@ts-types/generated';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import * as XLSX from 'xlsx';
-import moment from 'moment';
+import Card from "@components/common/card";
+import Layout from "@components/layouts/admin";
+import ErrorMessage from "@components/ui/error-message";
+import Loader from "@components/ui/loader/loader";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import WithdrawList from "@components/withdraw/withdraw-list";
+import { adminOnly } from "@utils/auth-utils";
+import { useWithdrawsQuery } from "@data/withdraw/use-withdraws.query";
+import { useState } from "react";
+import { SortOrder } from "@ts-types/generated";
+import axios from "axios";
+import Cookies from "js-cookie";
+import * as XLSX from "xlsx";
+import moment from "moment";
 
 export default function WithdrawsPage() {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
-  const [orderBy, setOrder] = useState('created_at');
+  const [orderBy, setOrder] = useState("created_at");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const {
     data,
@@ -32,24 +32,24 @@ export default function WithdrawsPage() {
 
   const handleExport = async () => {
     try {
-      const tkn = Cookies.get('AUTH_CRED')!;
+      const tkn = Cookies.get("AUTH_CRED")!;
       if (!tkn) return;
       const { token } = JSON.parse(tkn);
       const res = await axios.get(
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'withdraws/export/all',
+        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + "withdraws/export/all",
         {
           headers: {
-            Authorization: 'Bearer ' + token,
+            Authorization: "Bearer " + token,
           },
         }
       );
-      const dateNow = moment(new Date()).format('YYYY-DD-MM');
+      const dateNow = moment(new Date()).format("YYYY-DD-MM");
+      console.log({ data: res.data });
       saveXLSXData!(res.data, `retiros_${dateNow}.csv`);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
-  if (loading) return <Loader text={t('common:text-loading')} />;
+  if (loading) return <Loader text={t("common:text-loading")} />;
   if (error) return <ErrorMessage message={error.message} />;
 
   function handlePagination(current: any) {
@@ -60,7 +60,7 @@ export default function WithdrawsPage() {
       <Card className="flex flex-col md:flex-row items-center justify-between mb-8 w-full">
         <div className="flex items-center justify-content-between w-full">
           <h1 className="text-lg font-semibold text-heading">
-            {t('common:sidebar-nav-item-withdraws')}
+            {t("common:sidebar-nav-item-withdraws")}
           </h1>
         </div>
         <button
@@ -88,17 +88,17 @@ WithdrawsPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['table', 'common', 'form'])),
+    ...(await serverSideTranslations(locale, ["table", "common", "form"])),
   },
 });
 export const saveXLSXData = (function () {
-  if (typeof document === 'undefined') return;
-  const a = document.createElement('a');
+  if (typeof document === "undefined") return;
+  const a = document.createElement("a");
   document.body.appendChild(a);
   //@ts-ignore
-  a.style = 'display: none';
+  a.style = "display: none";
   return function (data: any, fileName: any) {
-    const blob = new Blob([data], { type: 'octet/stream' }),
+    const blob = new Blob([data], { type: "octet/stream" }),
       url = window.URL.createObjectURL(blob);
     a.href = url;
     a.download = fileName;
