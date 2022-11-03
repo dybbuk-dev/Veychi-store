@@ -15,6 +15,7 @@ import { useState } from "react";
 import FileInput from "@components/ui/file-input";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
+import xlsx from "json-as-xlsx";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 type FormValues = {
@@ -160,7 +161,19 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
             ]}
           /> */}
           <h2 className="block text-body-dark font-semibold text-sm leading-none mb-3 mt-4">
-            Contrato:
+            Contrato{" "}
+            {defaultValues?.contract ? (
+              <a
+                href={defaultValues.contract}
+                target="_blank"
+                style={{ color: "#5697FA" }}
+              >
+                (Ver contrato actual)
+              </a>
+            ) : (
+              <span className="text-red-500">(Sin contrato)</span>
+            )}
+            :
           </h2>
           <FileInput
             name={"contract"}

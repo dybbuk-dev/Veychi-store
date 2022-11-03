@@ -1,5 +1,4 @@
 import AdministratorEditForm from "@components/administrators/administrator-edit-form";
-import AdministratorCreateForm from "@components/administrators/administrator-form";
 import Layout from "@components/layouts/admin";
 import axios from "axios";
 import Cookies from "js-cookie";

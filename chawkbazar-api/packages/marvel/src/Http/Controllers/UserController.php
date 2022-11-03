@@ -156,12 +156,11 @@ class UserController extends CoreController
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ];
-        if(in_array(Permission::STAFF,$permissions,true)){
+        
             if(isset($request->salary))$user["salary"]= $request->salary;
-            if(isset($request->contract))$user["contract"]=$this->repository
-                ->base64ImageResolver($request->contract,Str::slug(Carbon::now()."-".$request->name."-contract"));
+            if(isset($request->contract))$user["contract"] = $request->contract
 
-        }
+        
         $user = $this->repository->create($user);
 
         if(in_array(Permission::STORE_OWNER,$permissions,true)){

@@ -4375,6 +4375,13 @@ jsesc@~0.5.0:
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-0.5.0.tgz"
   integrity "sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0= sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA=="
 
+json-as-xlsx@^2.4.6:
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/json-as-xlsx/-/json-as-xlsx-2.4.6.tgz#00b5419bf424d7b71f86ceeb246779b32b2a46a2"
+  integrity sha512-yPxImNYZou44PheeLG8gmf8PTth+wQub7o0Q2VE22PNzuBY0CjQYSchqAUiS4bV/GkFWjVsbwhFlyPpZJAg5Ow==
+  dependencies:
+    xlsx "^0.18.5"
+
 json-parse-even-better-errors@^2.3.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz"

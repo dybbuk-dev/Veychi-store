@@ -30,6 +30,7 @@
     "dayjs": "^1.10.7",
     "framer-motion": "4.1.17",
     "js-cookie": "^3.0.1",
+    "json-as-xlsx": "^2.4.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "next": "11.1.2",

@@ -13,6 +13,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import * as XLSX from "xlsx";
 import moment from "moment";
+import Swal from "sweetalert2";
+import xlsx from "json-as-xlsx";
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 export default function WithdrawsPage() {
   const { t } = useTranslation();
@@ -29,24 +32,42 @@ export default function WithdrawsPage() {
     sortedBy,
     orderBy,
   });
-
   const handleExport = async () => {
     try {
       const tkn = Cookies.get("AUTH_CRED")!;
       if (!tkn) return;
       const { token } = JSON.parse(tkn);
-      const res = await axios.get(
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + "withdraws/export/all",
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
+
+      const { data: withdraws } = await axios.get("/withdraws?limit=10000", {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      });
+
+      let shops: any = {};
+      for (const { shop, ...rest } of withdraws.data) {
+        if (shops[shop.slug]) continue;
+
+        const { data: shopInfo } = await axios.get(
+          `/shops/${shop.slug}?limit=10000`,
+          {
+            headers: {
+              authorization: "Bearer " + token,
+            },
+          }
+        );
+        shops[shop.slug] = shopInfo;
+        console.log("calld");
+      }
+      const populatedWithdraws = withdraws.data.map(
+        ({ shop, ...rest }: any) => ({ ...rest, shop: shops[shop.slug] })
       );
-      const dateNow = moment(new Date()).format("YYYY-DD-MM");
-      console.log({ data: res.data });
-      saveXLSXData!(res.data, `retiros_${dateNow}.csv`);
-    } catch (error) {}
+      saveXLSX({ data: populatedWithdraws });
+      console.log({ populatedWithdraws });
+    } catch (e) {
+      console.error(e);
+      Swal.fire("Ups!", "No se pudo exportar la información.", "error");
+    }
   };
 
   if (loading) return <Loader text={t("common:text-loading")} />;
@@ -106,3 +127,106 @@ export const saveXLSXData = (function () {
     window.URL.revokeObjectURL(url);
   };
 })();
+let excelSettings = {
+  extraLength: 3, // A bigger number means that columns will be wider
+  writeOptions: {}, // Style options from https://github.com/SheetJS/sheetjs#writing-options
+};
+
+const saveXLSX = ({ data: initial }: any) => {
+  const data = initial.map((data: any) => ({
+    shopName: data?.shop?.name || " ",
+    amount: data?.amount || " ",
+    status: data?.status || " ",
+    payment_method: data?.payment_method || " ",
+    details: data?.details || " ",
+    note: data?.note || " ",
+    created_at: data?.created_at || " ",
+    paymentName: data?.shop?.balance?.payment_info?.name || " ",
+    accountType: data?.shop?.balance?.payment_info?.accountType || " ",
+    email: data?.shop?.balance?.payment_info?.email || " ",
+    bank: data?.shop?.balance?.payment_info?.bank || " ",
+    account: data?.shop?.balance?.payment_info?.account || " ",
+    iban: data?.shop?.balance?.payment_info?.iban || " ",
+    swift: data?.shop?.balance?.payment_info?.swift || " ",
+  }));
+  const columns = [
+    {
+      label: "Nombre",
+      value: "shopName",
+    },
+    {
+      label: "Monto",
+      value: "amount",
+    },
+    {
+      label: "Estado",
+      value: "status",
+    },
+    {
+      label: "Método de Pago",
+      value: "payment_method",
+    },
+    {
+      label: "Detalles",
+      value: "details",
+    },
+    {
+      label: "Nota",
+      value: "note",
+    },
+    {
+      label: "Fecha del pedido",
+      value: "created_at",
+    },
+    {
+      label: "Nombre del titular de la cuenta",
+      value: "paymentName",
+    },
+    {
+      label: "Tipo de cuenta",
+      value: "accountType",
+    },
+    {
+      label: "Email",
+      value: "email",
+    },
+    {
+      label: "Nombre del Banco",
+      value: "bank",
+    },
+    {
+      label: "Número de Cuenta",
+      value: "account",
+    },
+    {
+      label: "IBAN",
+      value: "iban",
+    },
+    {
+      label: "SWIFT",
+      value: "swift",
+    },
+  ].map(({ label, value }: any) => ({
+    label,
+    value,
+  }));
+  const content = data.map((row: any) => {
+    const formattedRow: any = {};
+    columns.forEach((column: any) => {
+      formattedRow[column.value] = row[column.value];
+    });
+    return formattedRow;
+  });
+
+  let excel = [
+    {
+      sheet: "retiros-" + moment().format("DD-MM-YYYY"),
+      columns,
+      content,
+    },
+  ];
+  xlsx(excel, {
+    ...excelSettings,
+    fileName: "retiros-" + moment().format("DD-MM-YYYY"),
+  });
+};

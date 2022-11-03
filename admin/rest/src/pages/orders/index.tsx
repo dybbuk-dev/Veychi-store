@@ -1,27 +1,28 @@
-import Card from '@components/common/card';
-import Layout from '@components/layouts/admin';
-import Search from '@components/common/search';
-import OrderList from '@components/order/order-list';
-import { useState } from 'react';
-import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
-import { useOrdersQuery } from '@data/order/use-orders.query';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { SortOrder } from '@ts-types/generated';
-import { adminOnly } from '@utils/auth-utils';
-import { getToken } from '../../../../../shop/src/framework/rest/utils/get-token';
-import Cookies from 'js-cookie';
-import { saveXLSXData } from '../withdraws';
-import moment from 'moment';
-import axios from 'axios';
-import { fetchMe } from '@data/user/use-me.query';
+import Card from "@components/common/card";
+import Layout from "@components/layouts/admin";
+import Search from "@components/common/search";
+import OrderList from "@components/order/order-list";
+import { useState } from "react";
+import ErrorMessage from "@components/ui/error-message";
+import Loader from "@components/ui/loader/loader";
+import { useOrdersQuery } from "@data/order/use-orders.query";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { SortOrder } from "@ts-types/generated";
+import { adminOnly } from "@utils/auth-utils";
+import { getToken } from "../../../../../shop/src/framework/rest/utils/get-token";
+import Cookies from "js-cookie";
+import { saveXLSXData } from "../withdraws";
+import moment from "moment";
+import axios from "axios";
+import { fetchMe } from "@data/user/use-me.query";
+import xlsx from "json-as-xlsx";
 
 export default function Orders() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
-  const [orderBy, setOrder] = useState('created_at');
+  const [orderBy, setOrder] = useState("created_at");
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
   const {
@@ -33,7 +34,7 @@ export default function Orders() {
     page,
     text: searchTerm,
   });
-  if (loading) return <Loader text={t('common:text-loading')} />;
+  if (loading) return <Loader text={t("common:text-loading")} />;
   if (error) return <ErrorMessage message={error.message} />;
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
@@ -44,27 +45,26 @@ export default function Orders() {
   }
   const handleExport = async () => {
     try {
-      const tkn = Cookies.get('AUTH_CRED')!;
+      const tkn = Cookies.get("AUTH_CRED")!;
       if (!tkn) return;
       let queryStr =
-        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + 'orders/export/all';
+        process.env.NEXT_PUBLIC_REST_API_ENDPOINT + "orders/export/all";
       const { token } = JSON.parse(tkn);
       const res = await axios.get(queryStr, {
         headers: {
-          Authorization: 'Bearer ' + token,
+          Authorization: "Bearer " + token,
         },
       });
-      const dateNow = moment(new Date()).format('YYYY-DD-MM');
+      const dateNow = moment(new Date()).format("YYYY-DD-MM");
       saveXLSXData!(res.data, `ordenes_${dateNow}.csv`);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   return (
     <>
       <Card className="flex flex-col md:flex-row items-center justify-between mb-8">
         <div className="md:w-1/4 mb-4 md:mb-0 ">
           <h1 className="text-lg font-semibold text-heading">
-            {t('form:input-label-orders')}
+            {t("form:input-label-orders")}
           </h1>
         </div>
 
@@ -98,6 +98,6 @@ Orders.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['table', 'common', 'form'])),
+    ...(await serverSideTranslations(locale, ["table", "common", "form"])),
   },
 });
