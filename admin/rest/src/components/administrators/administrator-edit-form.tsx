@@ -13,6 +13,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import FileInput from "@components/ui/file-input";
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 type FormValues = {
@@ -49,6 +51,7 @@ const defaultValues = {
 
 const AdministratorEditForm = ({ defaultValues }: any) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -66,13 +69,23 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
     console.log({ data });
     const tkn = Cookies.get("AUTH_CRED")!;
 
+    if (!data?.name)
+      return Swal.fire("Ups!", "Debes agregar un nombre", "error");
+    if (!data?.email)
+      return Swal.fire("Ups!", "Debes agregar un email", "error");
+    if (!data?.salary)
+      return Swal.fire("Ups!", "Debes agregar un salario", "error");
+    if (!data?.contract && !defaultValues?.contract)
+      return Swal.fire("Ups!", "Debes agregar un contrato", "error");
     if (!tkn) return;
     const { token } = JSON.parse(tkn);
     try {
       let body: any = {
         name: data.name,
         salary: parseInt(data.salary || "0"),
-        contract: data.contract.thumbnail,
+        contract: data?.contract?.thumbnail
+          ? data?.contract?.thumbnail
+          : defaultValues?.contract,
       };
       if (data.email !== defaultValues.email) body.email = data.email;
       const res = await axios.put("/users/" + defaultValues.id, body, {
@@ -80,8 +93,22 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
           authorization: "Bearer " + token,
         },
       });
+      Swal.fire({
+        title: "Perfecto!",
+        text: "Información actualizada correctamente!",
+        icon: "success",
+        confirmButtonColor: "#5697FA",
+        confirmButtonText: "Ok!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/administrators");
+        }
+      });
+
       console.log(res.data);
-    } catch (e) {}
+    } catch (e) {
+      Swal.fire("Ups", "Tuvimos un problema!", "error");
+    }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -146,7 +173,7 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
 
       <div className="mb-4 text-end">
         <Button loading={loading} disabled={loading}>
-          {t("form:button-label-create-administrator")}
+          {t("form:button-label-edit-administrator")}
         </Button>
       </div>
     </form>

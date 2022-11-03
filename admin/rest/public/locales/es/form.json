@@ -194,6 +194,8 @@
   "input-forgot-password-label": "¿Se te olvidó tu contraseña?",
   "button-label-create-customer": "Crear cliente",
   "button-label-create-administrator": "Crear Staff",
+  "button-label-edit-administrator": "Actualizar Staff",
+
   "form-title-information": "Información",
   "customer-form-info-help-text": "Agregue la información de su cliente y cree un nuevo cliente desde aquí",
   "coupon-image-helper-text": "Sube la imagen de tu cupón aquí",
