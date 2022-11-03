@@ -158,7 +158,7 @@ class UserController extends CoreController
         ];
         
             if(isset($request->salary))$user["salary"]= $request->salary;
-            if(isset($request->contract))$user["contract"] = $request->contract
+            if(isset($request->contract))$user["contract"] = $request->contract;
 
         
         $user = $this->repository->create($user);

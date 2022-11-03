@@ -20,7 +20,9 @@
     "@reach/portal": "^0.16.0",
     "@react-google-maps/api": "^2.4.1",
     "@react-pdf/renderer": "3.0.0",
+    "@stripe/react-stripe-js": "^1.14.2",
     "@stripe/stripe-js": "^1.38.1",
+    "add": "^2.0.6",
     "apexcharts": "^3.28.3",
     "axios": "^0.21.4",
     "body-scroll-lock": "^4.0.0-beta.0",
@@ -60,6 +62,7 @@
     "sweetalert2": "^11.4.37",
     "use-local-storage": "^2.3.6",
     "xlsx": "^0.18.5",
+    "yarn": "^1.22.19",
     "yup": "^0.32.9"
   },
   "devDependencies": {
