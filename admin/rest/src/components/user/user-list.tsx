@@ -15,8 +15,15 @@ type IProps = {
   onPagination: (current: number) => void;
   onSort: (current: any) => void;
   onOrder: (current: string) => void;
+  edit?: boolean;
 };
-const CustomerList = ({ customers, onPagination, onSort, onOrder }: IProps) => {
+const CustomerList = ({
+  customers,
+  onPagination,
+  onSort,
+  onOrder,
+  edit = false,
+}: IProps) => {
   const { data, paginatorInfo } = customers!;
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
@@ -100,6 +107,7 @@ const CustomerList = ({ customers, onPagination, onSort, onOrder }: IProps) => {
               <ActionButtons
                 id={id}
                 userStatus={true}
+                {...{ [edit ? "editUrl" : ""]: `/administrators/${id}` }}
                 isUserActive={is_active}
                 showAddWalletPoints={false}
               />

@@ -109,10 +109,10 @@ class UserRepository extends BaseRepository
                     Profile::create($profile);
                 }
             }
-            if(isset($request->contract)){
+            /* if(isset($request->contract)){
               $request["contract"]=$this
                     ->base64ImageResolver($request->contract,Str::slug(Carbon::now()."-".$request->name."-contract"));
-            }
+            } */
             $user->update($request->only($this->dataArray));
             $user->profile = $user->profile;
             $user->address = $user->address;

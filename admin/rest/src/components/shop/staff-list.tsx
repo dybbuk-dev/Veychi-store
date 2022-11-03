@@ -6,6 +6,7 @@ import Pagination from "@components/ui/pagination";
 import { UserPaginator, SortOrder } from "@ts-types/generated";
 import { useState } from "react";
 import TitleWithSort from "@components/ui/title-with-sort";
+import { EditIcon } from "../icons/edit copy";
 
 type IProps = {
   staffs: UserPaginator | null | undefined;
@@ -79,7 +80,14 @@ const StaffList = ({ staffs, onPagination, onSort, onOrder }: IProps) => {
       key: "actions",
       align: alignRight,
       render: (id: string) => {
-        return <ActionButtons id={id} deleteModalView="DELETE_STAFF" />;
+        return (
+          <ActionButtons
+            id={id}
+            deleteModalView="DELETE_STAFF"
+            detailsUrl=""
+            editUrl={"testtt"}
+          />
+        );
       },
     },
   ];
