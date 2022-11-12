@@ -39,7 +39,7 @@ const ApproveShopView = () => {
             {...register("admin_commission_rate", {
               required: "You must need to set your commission rate",
             })}
-            defaultValue="10"
+            defaultValue="12.5"
             variant="outline"
             className="mb-4"
             error={t(errors.admin_commission_rate?.message!)}
