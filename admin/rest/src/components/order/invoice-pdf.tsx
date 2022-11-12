@@ -51,8 +51,9 @@ export default function InvoicePdf({ order }: { order: Order }) {
                   {order.tracking_number}
                 </Text>
               </Text>
+              {console.log(order?.shop?.logo?.original)}
               <Image
-                src={"https://veychi.com/_next/image?url=https%3A%2F%2Fveychi.com%2Fbackend%2Fstorage%2F324%2FLogo-veychi-icono-1-1024x962.png&w=96&q=75"}
+                src={order?.shop?.logo?.original}
                 style={{
                   height: '60px',
                   width: '60px',
