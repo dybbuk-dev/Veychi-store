@@ -108,6 +108,11 @@ export declare type Order = {
   dispute: any[];
   billing_address?: Maybe<UserAddress>;
   shipping_address?: Maybe<UserAddress>;
+  shop: {
+    logo:{
+      original:string
+    }
+  };
 };
 export declare type OrderStatus = {
   id: Scalars['ID'];
