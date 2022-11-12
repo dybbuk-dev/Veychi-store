@@ -56,15 +56,15 @@ class OrderController extends CoreController
                 $user->hasPermissionTo(Permission::MANAGER_RH)||
                 $user->hasPermissionTo(Permission::SHAREHOLDER)||
                 $user->hasPermissionTo(Permission::MARKETING)) && (!isset($request->shop_id) || $request->shop_id === 'undefined')) {
-            return $this->repository->with(['children','statusVoucher','dispute'])->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
+            return $this->repository->with(['children','statusVoucher','dispute'])->with('shop')->where('id', '!=', null)->where('parent_id', '=', null); //->paginate($limit);
         } else if ($this->repository->hasPermission($user, $request->shop_id)) {
             if ($user && $user->hasPermissionTo(Permission::STORE_OWNER)) {
-                return $this->repository->with(['children','statusVoucher','dispute'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
+                return $this->repository->with(['children','statusVoucher','dispute'])->with('shop')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
             } elseif ($user && $user->hasPermissionTo(Permission::STAFF)) {
-                return $this->repository->with(['children','statusVoucher','dispute'])->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
+                return $this->repository->with(['children','statusVoucher','dispute'])->with('shop')->where('shop_id', '=', $request->shop_id)->where('parent_id', '!=', null); //->paginate($limit);
             }
         } else {
-            return $this->repository->with(['children','statusVoucher','dispute'])->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
+            return $this->repository->with(['children','statusVoucher','dispute'])->with('shop')->where('customer_id', '=', $user->id)->where('parent_id', '=', null); //->paginate($limit);
         }
     }
 
