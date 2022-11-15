@@ -67,7 +67,6 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
   });
 
   async function onSubmit(data: any) {
-    console.log({ data });
     const tkn = Cookies.get("AUTH_CRED")!;
 
     if (!data?.name)
