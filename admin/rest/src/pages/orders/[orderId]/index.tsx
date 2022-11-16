@@ -165,7 +165,7 @@ export default function OrderDetailsPage() {
 					</Button>
 				</form>
 			</div>
-				<div>
+				<div className="my-5 lg:my-10 flex justify-center items-center">
 					<label>Vounchers</label>
 					{data?.order?.status_voucher?.map((vouncher : any) => (
 						<Image src={vouncher?.attachments?.url}
