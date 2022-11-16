@@ -79,9 +79,14 @@ class ShopController extends CoreController
      * @return JsonResponse
      */
     public function show($slug, Request $request)
-    {
-        $shop = $this->repository
-            ->with(['categories', 'owner','plan','subscription'])
+    {   
+     /*
+     $shop->with('orders.dispute');
+     $shop->with('orders');
+     $shop = $this->repository
+     */
+       $shop = $this->repository
+            ->with(['categories', 'owner','plan','subscription', 'orders', 'orders.dispute'])
             ->withCount(['orders', 'products']);
         if ($request->user() && ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)||
                 $request->user()->hasPermissionTo(Permission::CEO)||

@@ -172,15 +172,16 @@ class OrderController extends CoreController
     /**
      * @throws MarvelException
      */
-    public function changeOrderStatus($request,$order, $status, $voucher)
+    public function changeOrderStatus($request,$order, $status)
     {
         $status_in_repository=OrderStatus::find($status);
         if($status_in_repository->requires_proof_voucher){
-            if($voucher){
+            if($request['voucher']){
+
                 VoucherStatusMedia::create([
                     'id_order'=>$order->id,
                     'id_order_status'=>$status_in_repository->id,
-                    'id_attachment'=>$voucher
+                    'id_attachment'=>$request['voucher']
                 ]);
             }else{
              return response(config('shop.app_notice_domain') . 'ERROR.NOT_AUTHORIZED',400);

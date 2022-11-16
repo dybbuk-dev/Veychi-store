@@ -46,7 +46,7 @@ class Order extends Model
             ->withTimestamps();
     }
 
-    public function dispute(): HasMany {
+    public function dispute(): hasMany {
         return $this->hasMany(Dispute::class,'purchase_id','id');
     }
 
