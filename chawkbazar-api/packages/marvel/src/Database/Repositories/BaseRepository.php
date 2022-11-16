@@ -215,6 +215,26 @@ abstract class BaseRepository extends Repository implements CacheableInterface
         return false;
     }
 
+    public function hasAllPermission($user)
+    {
+        if ($user && ($user->hasPermissionTo(Permission::SUPER_ADMIN)||
+                        $user->hasPermissionTo(Permission::CUSTOMER)||
+                        $user->hasPermissionTo(Permission::STORE_OWNER)||
+                        $user->hasPermissionTo(Permission::STAFF)||
+                        $user->hasPermissionTo(Permission::CEO)||
+                        $user->hasPermissionTo(Permission::MANAGEMENT)||
+                        $user->hasPermissionTo(Permission::LEGAL)||
+
+                        $user->hasPermissionTo(Permission::MANAGER_RH)||
+                        $user->hasPermissionTo(Permission::SHAREHOLDER)||
+                        $user->hasPermissionTo(Permission::MARKETING)
+                    )
+        ) {
+            return true;
+        } 
+        return false;
+    }
+
     function csvToArray($filename = '', $delimiter = ',')
     {
         if (!file_exists($filename) || !is_readable($filename))
