@@ -136,12 +136,15 @@ const AdministratorCreateForm = () => {
             name="permission"
             control={control}
             options={[
+              { value: "staff", label: "Staff" },
               { value: "shareholder", label: "Accionista" },
               { value: "CEO", label: "CEO" },
               { value: "manager_rh", label: "Manager RH" },
               { value: "marketing", label: "Marketing" },
               { value: "management", label: "Administración" },
               { value: "legal", label: "Legal" },
+              { value: "customer", label: "Empleado" },
+              { value: "super_admin", label: "Super Admin" },
             ]}
           />
           <h2 className="block text-body-dark font-semibold text-sm leading-none mb-3 mt-4">

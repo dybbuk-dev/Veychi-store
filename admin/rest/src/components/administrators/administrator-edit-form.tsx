@@ -1,13 +1,9 @@
 import Button from "@components/ui/button";
 import Input from "@components/ui/input";
-import PasswordInput from "@components/ui/password-input";
 import { useForm } from "react-hook-form";
 import Card from "@components/common/card";
 import Description from "@components/ui/description";
-import { useCreateUserMutation } from "@data/user/use-user-create.mutation";
 import { useTranslation } from "next-i18next";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { customerValidationSchema } from "../user/user-validation-schema";
 import SelectInput from "@components/ui/select-input";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -15,7 +11,6 @@ import { useState } from "react";
 import FileInput from "@components/ui/file-input";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
-import xlsx from "json-as-xlsx";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
 type FormValues = {
@@ -23,7 +18,7 @@ type FormValues = {
   email: string;
   password: string;
   salary: number;
-  permission: string;
+  permissions: { name: string }[];
   line_of_business: string;
   physical_address: string;
   fiscal_address: string;
@@ -43,13 +38,6 @@ type LegalRepresentative = {
   phone: string;
 };
 
-const defaultValues = {
-  email: "",
-  password: "",
-  salary: 0,
-  permission: "staff",
-};
-
 const AdministratorEditForm = ({ defaultValues }: any) => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -57,7 +45,6 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
   const {
     register,
     handleSubmit,
-    setError,
     control,
 
     /*     formState: { errors },
@@ -65,9 +52,7 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
   } = useForm<FormValues>({
     defaultValues,
   });
-
   async function onSubmit(data: any) {
-    console.log({ data });
     const tkn = Cookies.get("AUTH_CRED")!;
 
     if (!data?.name)
@@ -147,19 +132,23 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
             variant="outline"
             className="mb-4"
           />
-          {/* <SelectInput
+
+          <SelectInput
+            {...register("permissions.0.name")}
             defaultValue={{ value: "staff", label: "Staff" }}
-            name="permission"
             control={control}
             options={[
+              { value: "staff", label: "Staff" },
               { value: "shareholder", label: "Accionista" },
               { value: "CEO", label: "CEO" },
               { value: "manager_rh", label: "Manager RH" },
               { value: "marketing", label: "Marketing" },
               { value: "management", label: "Administración" },
               { value: "legal", label: "Legal" },
+              { value: "customer", label: "Empleado" },
+              { value: "super_admin", label: "Super Admin" },
             ]}
-          /> */}
+          />
           <h2 className="block text-body-dark font-semibold text-sm leading-none mb-3 mt-4">
             Contrato{" "}
             {defaultValues?.contract ? (

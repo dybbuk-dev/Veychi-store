@@ -1,16 +1,16 @@
-import { Table } from '@components/ui/table';
-import ActionButtons from '@components/common/action-buttons';
-import { SortOrder, Tax } from '@ts-types/generated';
-import { ROUTES } from '@utils/routes';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@utils/locals';
-import { useState } from 'react';
-import TitleWithSort from '@components/ui/title-with-sort';
-import Swal from 'sweetalert2';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import moment from 'moment';
+import { Table } from "@components/ui/table";
+import ActionButtons from "@components/common/action-buttons";
+import { SortOrder, Tax } from "@ts-types/generated";
+import { ROUTES } from "@utils/routes";
+import { useTranslation } from "next-i18next";
+import { useIsRTL } from "@utils/locals";
+import { useState } from "react";
+import TitleWithSort from "@components/ui/title-with-sort";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { useRouter } from "next/router";
+import moment from "moment";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
 
@@ -47,51 +47,51 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
   });
   const columns = [
     {
-      title: t('table:table-item-id'),
-      dataIndex: 'id',
-      key: 'id',
-      align: 'center',
+      title: t("table:table-item-id"),
+      dataIndex: "id",
+      key: "id",
+      align: "center",
       width: 62,
     },
     {
-      title: 'Órden',
-      dataIndex: 'order',
-      key: 'order',
-      align: 'center',
+      title: "Órden",
+      dataIndex: "order",
+      key: "order",
+      align: "center",
     },
     {
-      title: 'Título',
-      dataIndex: 'title',
-      key: 'title',
-      align: 'center',
+      title: "Título",
+      dataIndex: "title",
+      key: "title",
+      align: "center",
     },
     {
-      title: 'Precio',
-      dataIndex: 'price',
-      key: 'price',
-      align: 'center',
+      title: "Precio",
+      dataIndex: "price",
+      key: "price",
+      align: "center",
     },
     {
-      title: 'Popular',
-      dataIndex: 'popular',
-      key: 'popular',
-      align: 'center',
+      title: "Popular",
+      dataIndex: "popular",
+      key: "popular",
+      align: "center",
       render: (id: boolean) => {
-        return <div>{id ? 'Sí' : 'No'}</div>;
+        return <div>{id ? "Sí" : "No"}</div>;
       },
     },
     {
-      title: 'Rasgos',
-      dataIndex: 'id',
-      key: 'traits',
-      align: 'center',
+      title: "Rasgos",
+      dataIndex: "id",
+      key: "traits",
+      align: "center",
       render: (id: string) => {
         const foundPlan = taxes!.find((tax: any) => tax.id == id)!;
         const parsedTraits = foundPlan.traits;
         return (
           <div>
             {parsedTraits.map((trait: any) => (
-              <div> - {trait || ''} </div>
+              <div> - {trait || ""} </div>
             ))}
           </div>
         );
@@ -100,10 +100,10 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
     },
 
     {
-      title: t('table:table-item-actions'),
-      dataIndex: 'id',
-      key: 'actions',
-      align: 'center',
+      title: t("table:table-item-actions"),
+      dataIndex: "id",
+      key: "actions",
+      align: "center",
       render: (id: string) => (
         <div className="flex items-center justify-center gap-2 ">
           <svg
@@ -117,16 +117,16 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
               Swal.fire(deleteSwalConfig as any).then(async (result) => {
                 if (result.isDenied) {
                   try {
-                    const tkn = Cookies.get('AUTH_CRED')!;
+                    const tkn = Cookies.get("AUTH_CRED")!;
                     if (!tkn) return;
                     const { token } = JSON.parse(tkn);
 
                     const res = await axios.delete(
-                      '/premium-plans/' + id,
+                      "/premium-plans/" + id,
 
                       {
                         headers: {
-                          Authorization: 'Bearer ' + token,
+                          Authorization: "Bearer " + token,
                         },
                       }
                     );
@@ -143,7 +143,10 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
             />
           </svg>
 
-          {/*  <ActionButtons id={id} editUrl={`${ROUTES.PREMIUMPLANS}/edit/${id}`} /> */}
+          <ActionButtons
+            id={id}
+            editUrl={`${ROUTES.PREMIUMPLANS}/edit/${id}`}
+          />
         </div>
       ),
       width: 200,
@@ -154,7 +157,7 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
       {/* @ts-ignore */}
       <Table
         columns={columns as any}
-        emptyText={t('table:empty-table-data')}
+        emptyText={t("table:empty-table-data")}
         data={taxes}
         rowKey="id"
         scroll={{ x: 900 }}
@@ -165,11 +168,11 @@ const PremiumList = ({ taxes, onSort, onOrder }: IProps) => {
 
 export default PremiumList;
 export const deleteSwalConfig = {
-  title: '¿Estás seguro que quieres borrar el plan?',
-  icon: 'warning',
+  title: "¿Estás seguro que quieres borrar el plan?",
+  icon: "warning",
   showConfirmButton: false,
   showDenyButton: true,
   showCancelButton: true,
   denyButtonText: `Borrar Plan`,
-  cancelButtonText: 'Cancelar',
+  cancelButtonText: "Cancelar",
 };
