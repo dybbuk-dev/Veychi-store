@@ -24,7 +24,6 @@ export default function EditStaffPage() {
           authorization: "Bearer " + token,
         },
       });
-      console.log({ data: res.data });
       setUserData(res.data);
     } catch (e) {
     } finally {
