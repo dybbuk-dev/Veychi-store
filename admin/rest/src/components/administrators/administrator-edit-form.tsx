@@ -18,7 +18,7 @@ type FormValues = {
   email: string;
   password: string;
   salary: number;
-  permissions: { name: string }[];
+  permission: string;
   line_of_business: string;
   physical_address: string;
   fiscal_address: string;
@@ -134,7 +134,7 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
           />
 
           <SelectInput
-            {...register("permissions.0.name")}
+            {...register("permission")}
             defaultValue={{ value: "staff", label: "Staff" }}
             control={control}
             options={[
