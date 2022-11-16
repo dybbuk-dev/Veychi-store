@@ -88,6 +88,7 @@ export default function ShopPage() {
     cover_image,
     description,
     products_count,
+    orders,
     orders_count,
     balance,
     address,
@@ -300,6 +301,33 @@ export default function ShopPage() {
                       {t('common:text-commission-rate')}
                     </p>
                   </div>
+                </div>
+
+                <div className="flex items-center py-3 px-4 border-b border-gray-100">
+                    <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-[#D59066] text-light">
+                      <CubeIcon width={16} />
+                    </div>
+
+                    <div className="ml-3">
+                      <p className="text-lg font-semibold text-sub-heading mb-0.5">
+               
+
+                        {
+                          orders && orders?.reduce((total, order) => {
+
+
+                            if(order?.dispute?.length > 0 && order?.dispute[0]?.status === "opened"){
+                              return total + 1;
+                            }
+                              return total + 0;
+
+                            }, 0)
+                        }
+                      </p>
+                      <p className="text-sm text-muted mt-0">
+                        {t('common:text-disputes-quantity')}
+                      </p>
+                    </div>
                 </div>
               </div>
             </div>
