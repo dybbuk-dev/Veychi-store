@@ -507,6 +507,7 @@ export declare type UpdateOrder = {
   delivery_time?: Maybe<Scalars['String']>;
   billing_address?: Maybe<UserAddressInput>;
   shipping_address?: Maybe<UserAddressInput>;
+  voucher?: Maybe<AttachmentInput>;
 };
 export declare type CreateOrder = {
   tracking_number: Scalars['String'];
@@ -830,6 +831,7 @@ export declare type Shop = {
   owner?: Maybe<User>;
   staffs?: Maybe<Array<Maybe<User>>>;
   is_active?: Maybe<Scalars['Boolean']>;
+  orders?: dispute[];
   orders_count?: Maybe<Scalars['Int']>;
   products_count?: Maybe<Scalars['Int']>;
   balance?: Maybe<Balance>;
@@ -844,6 +846,17 @@ export declare type Shop = {
   created_at?: Maybe<Scalars['DateTime']>;
   updated_at?: Maybe<Scalars['DateTime']>;
 };
+
+export declare type dispute = {
+  dispute: any;
+  id?: Maybe<Scalars['ID']>;
+  purchase_id?: Maybe<Scalars['ID']>;
+  status?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  deleted_at?: Maybe<Scalars['DateTime']>;
+};
+
 
 export declare type PaymentInfo = {
   account?: Maybe<Scalars['String']>;

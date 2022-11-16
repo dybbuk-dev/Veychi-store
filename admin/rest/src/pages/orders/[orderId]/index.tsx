@@ -6,6 +6,9 @@ import ProgressBox from "@components/ui/progress-box/progress-box";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Button from "@components/ui/button";
+import ButtonMaterial from '@mui/material/Button';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { getFormattedImage } from "@utils/get-formatted-image";
 import ErrorMessage from "@components/ui/error-message";
 import { siteSettings } from "@settings/site.settings";
 import usePrice from "@utils/use-price";
@@ -20,9 +23,11 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import SelectInput from "@components/ui/select-input";
 import { useIsRTL } from "@utils/locals";
+import FileInput from "@components/ui/file-input";
 
 type FormValues = {
 	order_status: any;
+	voucher: any;
 };
 export default function OrderDetailsPage() {
 	const { t } = useTranslation();
@@ -37,21 +42,19 @@ export default function OrderDetailsPage() {
 		error,
 	} = useOrderQuery(query.orderId as string);
 
-	const {
-		handleSubmit,
-		control,
+	const {handleSubmit,control,watch,formState: { errors },} = useForm<FormValues>({defaultValues: { order_status: data?.order?.status?.id ?? "" },});
+	const form_status_values = watch("order_status");
+	const form_voucher_values = watch("voucher");
 
-		formState: { errors },
-	} = useForm<FormValues>({
-		defaultValues: { order_status: data?.order?.status?.id ?? "" },
-	});
+	console.log({form_voucher_values})
+	const ChangeStatus = ({ order_status, voucher }: FormValues) => {
 
-	const ChangeStatus = ({ order_status }: FormValues) => {
 		updateOrder({
 			variables: {
 				id: data?.order?.id as string,
 				input: {
 					status: order_status?.id as string,
+					voucher: voucher?.id,
 				},
 			},
 		});
@@ -148,7 +151,10 @@ export default function OrderDetailsPage() {
 							options={orderStatusData?.order_statuses?.data}
 							placeholder={t("form:input-placeholder-order-status")}
 						/>
-
+						{form_status_values.requires_proof_voucher === 1 && 
+						<div><FileInput name="voucher" control={control} multiple={false} /></div>
+						}
+						{(option: any) => option.requires_proof_voucher}
 						<ValidationError message={t(errors?.order_status?.message)} />
 					</div>
 					<Button loading={updating}>
