@@ -38,15 +38,28 @@ class ProductController extends CoreController
      */
     public function index(Request $request)
     {
-        
-        $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
-        'customerReviews'=>function($q){
-            return $q->with('user');
+        error_log($request->search);
+        $shop_id = $request->search;
+        //get the las character in shop_id
+        $shop_id = substr($shop_id, -1);
+        if ($this->repository->hasPermission($request->user(), $shop_id)) {
+            $limit = $request->limit ?   $request->limit : 15;
+            return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
+            'customerReviews'=>function($q){
+                return $q->with('user');
+            }
+            ])
+            ->paginate($limit);
+        } else {
+            $limit = $request->limit ?   $request->limit : 15;
+            return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
+            'customerReviews'=>function($q){
+                return $q->with('user');
+            }
+            ])
+            ->where('status', '!=', 'draft')
+            ->paginate($limit);
         }
-        ])
-        ->where('status', '!=', 'draft')
-        ->paginate($limit);
     }
 
     /**
