@@ -85,7 +85,9 @@ class UserController extends CoreController
      * @return array
      */
     public function update(UserUpdateRequest $request, $id)
+    
     {
+   
         if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
             $user = $this->repository->findOrFail($id);
             return $this->repository->updateUser($request, $user);

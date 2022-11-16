@@ -89,6 +89,7 @@ class UserRepository extends BaseRepository
 
     public function updateUser($request, $user)
     {
+  
         try {
             if (isset($request['address']) && count($request['address'])) {
                 foreach ($request['address'] as $address) {
@@ -109,10 +110,13 @@ class UserRepository extends BaseRepository
                     Profile::create($profile);
                 }
             }
-            /* if(isset($request->contract)){
-              $request["contract"]=$this
-                    ->base64ImageResolver($request->contract,Str::slug(Carbon::now()."-".$request->name."-contract"));
-            } */
+       
+            $permissions = [Permission::CUSTOMER];
+            if (isset($request->permission)) {
+                $permissions[] = isset($user->permission->value) ? $ $user->permission->value : $ $user->permission;
+            }
+            $user->givePermissionTo($permissions);
+            
             $user->update($request->only($this->dataArray));
             $user->profile = $user->profile;
             $user->address = $user->address;
