@@ -40,6 +40,7 @@ type LegalRepresentative = {
 
 const AdministratorEditForm = ({ defaultValues }: any) => {
   const { t } = useTranslation();
+  console.log(defaultValues);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const {
@@ -61,14 +62,15 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
       return Swal.fire("Ups!", "Debes agregar un email", "error");
     if (!data?.salary)
       return Swal.fire("Ups!", "Debes agregar un salario", "error");
-    if (!data?.contract && !defaultValues?.contract)
-      return Swal.fire("Ups!", "Debes agregar un contrato", "error");
+    // if (!data?.contract && !defaultValues?.contract)
+    //   return Swal.fire("Ups!", "Debes agregar un contrato", "error");
     if (!tkn) return;
     const { token } = JSON.parse(tkn);
     try {
       let body: any = {
         name: data.name,
         salary: parseInt(data.salary || "0"),
+        permission: data.permission.value,
         contract: data?.contract?.thumbnail
           ? data?.contract?.thumbnail
           : defaultValues?.contract,
@@ -90,8 +92,6 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
           router.push("/administrators");
         }
       });
-
-      console.log(res.data);
     } catch (e) {
       Swal.fire("Ups", "Tuvimos un problema!", "error");
     }
@@ -164,12 +164,12 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
             )}
             :
           </h2>
-          <FileInput
+          {/* <FileInput
             name={"contract"}
             control={control}
             multiple={false}
             accept={"application/pdf"}
-          />
+          /> */}
         </Card>
       </div>
 
