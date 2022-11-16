@@ -6,8 +6,6 @@ import ProgressBox from "@components/ui/progress-box/progress-box";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Button from "@components/ui/button";
-import ButtonMaterial from '@mui/material/Button';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { getFormattedImage } from "@utils/get-formatted-image";
 import ErrorMessage from "@components/ui/error-message";
 import { siteSettings } from "@settings/site.settings";
@@ -167,6 +165,16 @@ export default function OrderDetailsPage() {
 					</Button>
 				</form>
 			</div>
+				<div>
+					<label>Vounchers</label>
+					{data?.order?.status_voucher?.map((vouncher : any) => (
+						<Image src={vouncher?.attachments?.url}
+						layout="fill"
+						width={40}
+						height={40}
+						/>
+					))}
+				</div>
 
 			<div className="my-5 lg:my-10 flex justify-center items-center">
 				<ProgressBox

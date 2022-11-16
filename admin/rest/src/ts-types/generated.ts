@@ -113,7 +113,14 @@ export declare type Order = {
       original: string;
     };
   };
+  status_voucher: Maybe<Array<attachments>>;
 };
+
+export declare type attachments = {
+  url: string,
+};
+
+
 export declare type OrderStatus = {
   id: Scalars["ID"];
   name: Scalars["String"];
