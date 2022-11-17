@@ -89,7 +89,7 @@ class UserController extends CoreController
     {
    
         if ($request->user()->hasPermissionTo(Permission::SUPER_ADMIN)) {
-            $user = $this->repository->findOrFail($id);
+            $user = $this->repository->with(['permissions'])->findOrFail($id);
             return $this->repository->updateUser($request, $user);
         } elseif ($request->user()->id == $id) {
             $user = $request->user();
