@@ -38,43 +38,44 @@ class ProductController extends CoreController
      */
     public function index(Request $request)
     {
-        if($request->search != ""){ //to get and specifict shop
-                $shop_id = $request->search;
-                //get the las character in shop_id
-                $shop_id = substr($shop_id, -1);
 
-            if ($this->repository->hasAllPermission($request->user(), $shop_id)) {
-                // is here when admin is in own shop
-                $limit = $request->limit ?   $request->limit : 15;
-                return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
-                'customerReviews'=>function($q){
-                    return $q->with('user');
+        $shop_id = $request->search;
+        //get the las character in shop_id
+        $shop_id = substr($shop_id, -1);
+            if ((int) $shop_id > 0  && isset($shop_id)) {
+                if ($this->repository->hasAllPermission($request->user())) {
+                    // admin
+
+                    $limit = $request->limit ?   $request->limit : 15;
+                    return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
+                    'customerReviews'=>function($q){
+                        return $q->with('user');
+                    }
+                    ])
+                    ->paginate($limit);
                 }
-                ])
-                ->paginate($limit);
-            } else {
-                // is here when visit from shop
-                $limit = $request->limit ?   $request->limit : 15;
-                return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
-                'customerReviews'=>function($q){
-                    return $q->with('user');
+            }else{
+                if ($shop_id != "") {
+                    // custumer
+                    $limit = $request->limit ?   $request->limit : 15;
+                    return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
+                    'customerReviews'=>function($q){
+                        return $q->with('user');
+                    }
+                    ])
+                    ->where('status', '!=', 'draft')
+                    ->paginate($limit);
+                }else{
+                     // add super admin
+                     $limit = $request->limit ?   $request->limit : 15;
+                     return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
+                     'customerReviews'=>function($q){
+                         return $q->with('user');
+                     }
+                     ])
+                     ->paginate($limit);
                 }
-                ])
-                ->where('status', '!=', 'draft')
-                ->paginate($limit);
             }
-        }else{
-            // is here when superadmin
-            if ($this->repository->hasAllPermission($request->user())) {
-                $limit = $request->limit ?   $request->limit : 15;
-                return $this->repository->withCount('orders')->with(['type', 'shop', 'categories', 'tags', 'variations.attribute',
-                'customerReviews'=>function($q){
-                    return $q->with('user');
-                }
-                ])
-                ->paginate($limit);
-            }
-        }
     }
 
     /**
