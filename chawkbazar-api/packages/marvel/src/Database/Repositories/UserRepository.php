@@ -89,7 +89,7 @@ class UserRepository extends BaseRepository
 
     public function updateUser($request, $user)
     {
-  
+
         try {
             if (isset($request['address']) && count($request['address'])) {
                 foreach ($request['address'] as $address) {
@@ -110,13 +110,48 @@ class UserRepository extends BaseRepository
                     Profile::create($profile);
                 }
             }
-       
-            $permissions = [Permission::CUSTOMER];
-            if (isset($request->permission)) {
-                $permissions[] = isset($user->permission->value) ? $ $user->permission->value : $ $user->permission;
+
+ $user->permissions()->sync([]);
+
+            $permissions =$request->permission;
+            switch ($permissions) {
+                case 'super_admin':
+                    $user->givePermissionTo(UserPermission::SUPER_ADMIN);
+                    break;
+                case 'CEO':
+                    # code...
+                    $user->givePermissionTo(UserPermission::CEO);
+                    break;
+                case 'staff':
+                    # code...
+                    $user->givePermissionTo(UserPermission::CEO);
+                    break;
+                case 'management':
+                    # code...
+                    $user->givePermissionTo(UserPermission::MANAGEMENT);
+                    break;
+                case 'legal':
+                    # code...
+                     $user->givePermissionTo(UserPermission::LEGAL);
+                    break;
+                case 'manager_rh':
+                    # code...
+                     $user->givePermissionTo(UserPermission::MANAGER_RH);
+                    break;
+                case 'shareholder':
+                    # code...
+                    $user->givePermissionTo(UserPermission::SHAREHOLDER);
+                    break;
+                case 'marketing':
+                    # code...
+                    $user->givePermissionTo(UserPermission::SUPER_ADMIN);
+                    break;
+
+                default:
+                $user->givePermissionTo(UserPermission::CUSTOMER);
+                    break;
             }
-            $user->givePermissionTo($permissions);
-            
+
             $user->update($request->only($this->dataArray));
             $user->profile = $user->profile;
             $user->address = $user->address;
