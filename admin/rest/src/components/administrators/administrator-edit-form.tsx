@@ -62,8 +62,8 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
       return Swal.fire("Ups!", "Debes agregar un email", "error");
     if (!data?.salary)
       return Swal.fire("Ups!", "Debes agregar un salario", "error");
-    // if (!data?.contract && !defaultValues?.contract)
-    //   return Swal.fire("Ups!", "Debes agregar un contrato", "error");
+    if (!data?.contract && !defaultValues?.contract)
+      return Swal.fire("Ups!", "Debes agregar un contrato", "error");
     if (!tkn) return;
     const { token } = JSON.parse(tkn);
     try {
@@ -164,12 +164,12 @@ const AdministratorEditForm = ({ defaultValues }: any) => {
             )}
             :
           </h2>
-          {/* <FileInput
+          <FileInput
             name={"contract"}
             control={control}
             multiple={false}
             accept={"application/pdf"}
-          /> */}
+          />
         </Card>
       </div>
 
