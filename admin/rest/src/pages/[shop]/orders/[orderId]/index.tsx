@@ -22,6 +22,8 @@ import { useOrderStatusesQuery } from '@data/order-status/use-order-statuses.que
 import { useOrderQuery } from '@data/order/use-order.query';
 import { Attachment } from '@ts-types/generated';
 import Link from 'next/link';
+import FileInput from "@components/ui/file-input";
+
 import { useEffect, useMemo, useState } from 'react';
 type FormValues = {
   order_status: any;
@@ -40,14 +42,10 @@ export default function OrderDetailsPage() {
     error,
   } = useOrderQuery(query.orderId as string);
 
-  const {
-    handleSubmit,
-    control,
-
-    formState: { errors },
-  } = useForm<FormValues>({
+  const { handleSubmit,watch,control,formState: { errors }, } = useForm<FormValues>({
     defaultValues: { order_status: data?.order?.status ?? '' },
   });
+  const form_status_values = watch("order_status");
 
   const ChangeStatus = ({ order_status }: FormValues) => {
     updateOrder({
@@ -176,7 +174,9 @@ export default function OrderDetailsPage() {
                 required: 'Status is required',
               }}
             />
-
+            {form_status_values.requires_proof_voucher === 1 && 
+						<div><FileInput name="voucher" control={control} multiple={false} /></div>
+						}
             <ValidationError message={t(errors?.order_status?.message)} />
           </div>
           <Button loading={updating}>
@@ -189,6 +189,26 @@ export default function OrderDetailsPage() {
           </Button>
         </form>
       </div>
+
+      <div className="my-5 lg:my-10 flex-column justify-center items-center">
+					<label>Vounchers</label>
+					<br/>
+					{data?.order?.status_voucher?.map((vouncher : any) => (
+						<a className="m-2 " 
+						  style={{
+							height: '100%',
+							width:'fit-content',
+							display: 'flex',
+							alignItems: 'flex-end',
+						  }}
+						  href={vouncher?.attachments?.url} target="_blank">
+							<Image src={vouncher?.attachments?.url}
+							width={40}
+							height={40}
+							/>
+						</a>
+					))}
+				</div>
 
       <div className="my-5 lg:my-10 flex justify-center items-center">
         <ProgressBox

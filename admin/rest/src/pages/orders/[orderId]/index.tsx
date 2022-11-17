@@ -22,6 +22,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import SelectInput from "@components/ui/select-input";
 import { useIsRTL } from "@utils/locals";
 import FileInput from "@components/ui/file-input";
+import { Link } from "react-scroll";
 
 type FormValues = {
 	order_status: any;
@@ -42,9 +43,6 @@ export default function OrderDetailsPage() {
 
 	const {handleSubmit,control,watch,formState: { errors },} = useForm<FormValues>({defaultValues: { order_status: data?.order?.status?.id ?? "" },});
 	const form_status_values = watch("order_status");
-	const form_voucher_values = watch("voucher");
-
-	console.log({form_voucher_values})
 	const ChangeStatus = ({ order_status, voucher }: FormValues) => {
 
 		updateOrder({
@@ -152,7 +150,6 @@ export default function OrderDetailsPage() {
 						{form_status_values.requires_proof_voucher === 1 && 
 						<div><FileInput name="voucher" control={control} multiple={false} /></div>
 						}
-						{(option: any) => option.requires_proof_voucher}
 						<ValidationError message={t(errors?.order_status?.message)} />
 					</div>
 					<Button loading={updating}>
@@ -165,14 +162,23 @@ export default function OrderDetailsPage() {
 					</Button>
 				</form>
 			</div>
-				<div className="my-5 lg:my-10 flex justify-center items-center">
+				<div className="my-5 lg:my-10 flex-column justify-center items-center">
 					<label>Vounchers</label>
+					<br/>
 					{data?.order?.status_voucher?.map((vouncher : any) => (
-						<Image src={vouncher?.attachments?.url}
-						layout="fill"
-						width={40}
-						height={40}
-						/>
+						<a className="m-2 " 
+						  style={{
+							height: '100%',
+							width:'fit-content',
+							display: 'flex',
+							alignItems: 'flex-end',
+						  }}
+						  href={vouncher?.attachments?.url} target="_blank">
+							<Image src={vouncher?.attachments?.url}
+							width={40}
+							height={40}
+							/>
+						</a>
 					))}
 				</div>
 
