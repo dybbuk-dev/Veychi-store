@@ -42,6 +42,7 @@ export default function Categories() {
   function handlePagination(current: any) {
     setPage(current);
   }
+  console.log(data);
   return (
     <>
       <Card className="flex flex-col mb-8">

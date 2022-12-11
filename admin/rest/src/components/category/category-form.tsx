@@ -104,6 +104,7 @@ export default function CreateOrUpdateCategoriesForm({
       icon: values.icon?.value || "",
       parent: values?.parent?.id ?? null,
     };
+    console.log(input.banner_image);
     if (initialValues) {
       updateCategory({
         variables: {

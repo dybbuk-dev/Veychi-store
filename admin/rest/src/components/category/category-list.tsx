@@ -50,6 +50,7 @@ const CategoryList = ({
 		},
 	});
 
+
 	const columns = [
 		{
 			title: t("table:table-item-id"),
@@ -93,6 +94,7 @@ const CategoryList = ({
 			align: "center",
 
 			render: (images: Attachment[]) => {
+				console.log(images);
 				if (!images?.length) return null;
 
         return (

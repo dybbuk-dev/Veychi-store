@@ -310,7 +310,7 @@ export default function ShopPage() {
 
                     <div className="ml-3">
                       <p className="text-lg font-semibold text-sub-heading mb-0.5">
-               
+
 
                         {
                           orders && orders?.reduce((total, order) => {
@@ -426,7 +426,7 @@ function TransitionsModal({ handleClose, open, data }: any) {
 
   const baseURL = React.useMemo(() => {
     if (!data) return '';
-    return 'https://www.veychi.com/shops/' + data.shop.slug;
+    return 'http:localhost:3003/shops/' + data.shop.slug;
   }, [data]);
   return (
     <div>
