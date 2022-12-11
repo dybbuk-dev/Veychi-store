@@ -94,7 +94,6 @@ const CategoryList = ({
 			align: "center",
 
 			render: (images: Attachment[]) => {
-				console.log(images);
 				if (!images?.length) return null;
 
         return (
