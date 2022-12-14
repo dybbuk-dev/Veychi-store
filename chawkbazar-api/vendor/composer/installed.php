@@ -3,7 +3,7 @@
         'name' => 'redq/marvel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9c1cc9bee548e5f8b1b105675f544464e5a4e8ac',
+        'reference' => '44930b369ad2f61549338d9f32e97534c776957e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1303,7 +1303,7 @@
         'redq/marvel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9c1cc9bee548e5f8b1b105675f544464e5a4e8ac',
+            'reference' => '44930b369ad2f61549338d9f32e97534c776957e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
