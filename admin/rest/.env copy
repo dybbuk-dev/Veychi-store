@@ -1,0 +1,34 @@
+# REST API endpoint
+NEXT_PUBLIC_REST_API_ENDPOINT="http://127.0.0.1:8000"
+
+# Shop site url to fetch banners and menus
+NEXT_PUBLIC_SITE_URL="http://localhost:3002"
+
+# Stripe API key for payment
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_51IPXbiAIuXzkUKhobNzsx05bAR5VDgZJuJLWDjF98oM8jCJ5ZM4tFuqSxcd5OSZlMZ1k1Vxudtfcqy0yN4wljcIv00SiJzJAar 
+STRIPE_SECRET_KEY=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 
+
+# Social Authentication
+NEXTAUTH_URL="http://localhost:3002"
+SECRET= 32a12fa32a8cc90396347669dce5cd5bdb34cf8ff7bd984a70d5b5f01642b57c
+
+GOOGLE_ID=1099180645852-8o04e0e91lov7govf8uc4scqhcvoa8jf.apps.googleusercontent.com
+GOOGLE_SECRET=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
+
+FACEBOOK_ID=
+FACEBOOK_SECRET=
+
+# Add your google map api key here
+NEXT_PUBLIC_GOOGLE_MAP_API_KEY=AIzaSyDu5MNkinB4TmnyRixzuu9SIbUeZY-dPGo
+
+# Add your instagram api key here
+NEXT_PUBLIC_INSTAGRAM_BASIC_DISPLAY_USER_TOKEN=
+
+# Add your mailchimp contact form action url
+NEXT_PUBLIC_MAILCHIMP_URL=
+
+# Revalidate Time
+REVALIDATE_DURATION=120
+
+
+NEXT_PUBLIC_POSITION_STACK=f59e1ad7aemsh2c4f3bb100a678dp15a289jsn8e924052893e
